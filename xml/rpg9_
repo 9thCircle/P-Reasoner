@@ -1,0 +1,766 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE Ontology [
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY xml "http://www.w3.org/XML/1998/namespace" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://9thcircle.it/ontologies/role-playing-games"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     ontologyIRI="http://9thcircle.it/ontologies/role-playing-games">
+    <Prefix name="" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#Age"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Attribute"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#AttributeType"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#AttributeTypeType"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#AttributeValue"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#AttributeValueType"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Character"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CharacterSheet"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Class"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Game"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#GameMaster"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#InheritableType"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#NonPlayingCharacter"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Person"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Player"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#PlayingCharacter"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#PlayingPlayer"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Role"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Spectator"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#belongsToGame"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#belongsToGameAsNonPlayingCharacter"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#belongsToGameAsPlayingCharacter"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#controlsCharacter"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasCharacter"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasCharacterSheet"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasRole"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isControlledByPlayer"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isFliedToCharacter"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isPartecipatedByGameMaster"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isPartecipatedByPlayer"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isParticipatedBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#knows"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#partecipatesAsGameMasterIn"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#partecipatesAsPlayerIn"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#partecipatesIn"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Age"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#GameMasterRole"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#PlayerRole"/>
+    </Declaration>
+    <EquivalentClasses>
+        <Class IRI="#CharacterSheet"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isFliedToCharacter"/>
+            <Class IRI="#Character"/>
+        </ObjectSomeValuesFrom>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#GameMaster"/>
+        <ObjectMinCardinality cardinality="1">
+            <ObjectProperty IRI="#partecipatesAsGameMasterIn"/>
+            <Class IRI="#Game"/>
+        </ObjectMinCardinality>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#NonPlayingCharacter"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Character"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#belongsToGameAsNonPlayingCharacter"/>
+                <Class IRI="#Game"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#Player"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasRole"/>
+            <Class IRI="#Role"/>
+        </ObjectSomeValuesFrom>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#PlayingCharacter"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Character"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#belongsToGameAsPlayingCharacter"/>
+                <Class IRI="#Game"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#PlayingPlayer"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#partecipatesAsPlayerIn"/>
+            <Class IRI="#Game"/>
+        </ObjectSomeValuesFrom>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#PlayingPlayer"/>
+        <ObjectMinCardinality cardinality="1">
+            <ObjectProperty IRI="#controlsCharacter"/>
+            <Class IRI="#PlayingCharacter"/>
+        </ObjectMinCardinality>
+    </EquivalentClasses>
+    <SubClassOf>
+        <Class IRI="#Age"/>
+        <Class IRI="#AttributeType"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#AttributeTypeType"/>
+        <Class IRI="#InheritableType"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#AttributeValueType"/>
+        <Class IRI="#Class"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#AttributeValueType"/>
+        <Class IRI="#InheritableType"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Character"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#belongsToGame"/>
+            <Class IRI="#Game"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Character"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasCharacterSheet"/>
+            <Class IRI="#CharacterSheet"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CharacterSheet"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#isFliedToCharacter"/>
+            <Class IRI="#Character"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Game"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasCharacter"/>
+            <Class IRI="#Character"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Game"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isParticipatedBy"/>
+            <Class IRI="#Person"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#GameMaster"/>
+        <Class IRI="#Person"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#GameMaster"/>
+        <ObjectHasValue>
+            <ObjectProperty IRI="#hasRole"/>
+            <NamedIndividual IRI="#GameMasterRole"/>
+        </ObjectHasValue>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#InheritableType"/>
+        <Class IRI="#Class"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#NonPlayingCharacter"/>
+        <Class IRI="#Character"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#NonPlayingCharacter"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#belongsToGameAsNonPlayingCharacter"/>
+            <Class IRI="#Game"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#NonPlayingCharacter"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#isControlledByPlayer"/>
+            <Class IRI="#GameMaster"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Person"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#knows"/>
+            <Class IRI="#Person"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Person"/>
+        <ObjectHasSelf>
+            <ObjectProperty IRI="#knows"/>
+        </ObjectHasSelf>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Player"/>
+        <Class IRI="#Person"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Player"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#hasRole"/>
+            <Class IRI="#Role"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PlayingCharacter"/>
+        <Class IRI="#Character"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PlayingCharacter"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#belongsToGameAsPlayingCharacter"/>
+            <Class IRI="#Game"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PlayingCharacter"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#isControlledByPlayer"/>
+            <Class IRI="#PlayingPlayer"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PlayingPlayer"/>
+        <Class IRI="#Person"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PlayingPlayer"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#partecipatesAsPlayerIn"/>
+            <Class IRI="#Game"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PlayingPlayer"/>
+        <ObjectHasValue>
+            <ObjectProperty IRI="#hasRole"/>
+            <NamedIndividual IRI="#PlayerRole"/>
+        </ObjectHasValue>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Spectator"/>
+        <Class IRI="#Person"/>
+    </SubClassOf>
+    <DisjointClasses>
+        <Class IRI="#NonPlayingCharacter"/>
+        <Class IRI="#PlayingCharacter"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#Player"/>
+        <Class IRI="#Spectator"/>
+    </DisjointClasses>
+    <ClassAssertion>
+        <Class IRI="#AttributeTypeType"/>
+        <NamedIndividual IRI="#Age"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Role"/>
+        <NamedIndividual IRI="#GameMasterRole"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Role"/>
+        <NamedIndividual IRI="#PlayerRole"/>
+    </ClassAssertion>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#belongsToGameAsNonPlayingCharacter"/>
+        <ObjectProperty IRI="#belongsToGame"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#belongsToGameAsPlayingCharacter"/>
+        <ObjectProperty IRI="#belongsToGame"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasRole"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isPartecipatedByGameMaster"/>
+        <ObjectProperty IRI="#isParticipatedBy"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isPartecipatedByPlayer"/>
+        <ObjectProperty IRI="#isParticipatedBy"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#partecipatesAsGameMasterIn"/>
+        <ObjectProperty IRI="#partecipatesIn"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#partecipatesAsPlayerIn"/>
+        <ObjectProperty IRI="#partecipatesIn"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#partecipatesIn"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#belongsToGame"/>
+        <ObjectProperty IRI="#hasCharacter"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#controlsCharacter"/>
+        <ObjectProperty IRI="#isControlledByPlayer"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#hasCharacterSheet"/>
+        <ObjectProperty IRI="#isFliedToCharacter"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#isPartecipatedByGameMaster"/>
+        <ObjectProperty IRI="#partecipatesAsGameMasterIn"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#isPartecipatedByPlayer"/>
+        <ObjectProperty IRI="#partecipatesAsPlayerIn"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#isParticipatedBy"/>
+        <ObjectProperty IRI="#partecipatesIn"/>
+    </InverseObjectProperties>
+    <FunctionalObjectProperty>
+        <ObjectProperty IRI="#belongsToGame"/>
+    </FunctionalObjectProperty>
+    <FunctionalObjectProperty>
+        <ObjectProperty IRI="#belongsToGameAsNonPlayingCharacter"/>
+    </FunctionalObjectProperty>
+    <FunctionalObjectProperty>
+        <ObjectProperty IRI="#belongsToGameAsPlayingCharacter"/>
+    </FunctionalObjectProperty>
+    <FunctionalObjectProperty>
+        <ObjectProperty IRI="#hasCharacterSheet"/>
+    </FunctionalObjectProperty>
+    <FunctionalObjectProperty>
+        <ObjectProperty IRI="#isControlledByPlayer"/>
+    </FunctionalObjectProperty>
+    <FunctionalObjectProperty>
+        <ObjectProperty IRI="#isFliedToCharacter"/>
+    </FunctionalObjectProperty>
+    <SymmetricObjectProperty>
+        <ObjectProperty IRI="#knows"/>
+    </SymmetricObjectProperty>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#belongsToGame"/>
+        <Class IRI="#Character"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#controlsCharacter"/>
+        <Class IRI="#Player"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#hasCharacter"/>
+        <Class IRI="#Game"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#hasCharacterSheet"/>
+        <Class IRI="#Character"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isControlledByPlayer"/>
+        <Class IRI="#Character"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isFliedToCharacter"/>
+        <Class IRI="#CharacterSheet"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#knows"/>
+        <Class IRI="#Person"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#partecipatesAsGameMasterIn"/>
+        <Class IRI="#GameMaster"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#partecipatesAsPlayerIn"/>
+        <Class IRI="#PlayingPlayer"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#belongsToGame"/>
+        <Class IRI="#Game"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#controlsCharacter"/>
+        <Class IRI="#Character"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#hasCharacter"/>
+        <Class IRI="#Character"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#hasCharacterSheet"/>
+        <Class IRI="#CharacterSheet"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isControlledByPlayer"/>
+        <Class IRI="#Player"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isFliedToCharacter"/>
+        <Class IRI="#Character"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isPartecipatedByGameMaster"/>
+        <Class IRI="#GameMaster"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isPartecipatedByPlayer"/>
+        <Class IRI="#PlayingPlayer"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isParticipatedBy"/>
+        <Class IRI="#Person"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#knows"/>
+        <Class IRI="#Person"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#partecipatesIn"/>
+        <Class IRI="#Game"/>
+    </ObjectPropertyRange>
+    <DisjointObjectProperties>
+        <ObjectProperty IRI="#isPartecipatedByGameMaster"/>
+        <ObjectProperty IRI="#isPartecipatedByPlayer"/>
+    </DisjointObjectProperties>
+    <DisjointObjectProperties>
+        <ObjectProperty IRI="#partecipatesAsGameMasterIn"/>
+        <ObjectProperty IRI="#partecipatesAsPlayerIn"/>
+    </DisjointObjectProperties>
+    <DLSafeRule>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#Character"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Game"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Player"/>
+                <Variable IRI="urn:swrl#p"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#belongsToGame"/>
+                <Variable IRI="urn:swrl#ch"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#controlsCharacter"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ObjectPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#partecipatesIn"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#Character"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Game"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Player"/>
+                <Variable IRI="urn:swrl#p"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#belongsToGame"/>
+                <Variable IRI="urn:swrl#ch"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#controlsCharacter"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#partecipatesAsGameMasterIn"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#belongsToGameAsNonPlayingCharacter"/>
+                <Variable IRI="urn:swrl#ch"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#Character"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Game"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Player"/>
+                <Variable IRI="urn:swrl#p"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#belongsToGame"/>
+                <Variable IRI="urn:swrl#ch"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#controlsCharacter"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#partecipatesAsPlayerIn"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#belongsToGameAsPlayingCharacter"/>
+                <Variable IRI="urn:swrl#ch"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#Character"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Game"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Player"/>
+                <Variable IRI="urn:swrl#p"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#belongsToGameAsNonPlayingCharacter"/>
+                <Variable IRI="urn:swrl#ch"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#controlsCharacter"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ObjectPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#partecipatesAsGameMasterIn"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#Character"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Game"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Player"/>
+                <Variable IRI="urn:swrl#p"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#belongsToGameAsPlayingCharacter"/>
+                <Variable IRI="urn:swrl#ch"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#controlsCharacter"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#ch"/>
+            </ObjectPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#partecipatesAsPlayerIn"/>
+                <Variable IRI="urn:swrl#p"/>
+                <Variable IRI="urn:swrl#g"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#Age</IRI>
+        <Literal xml:lang="it" datatypeIRI="&rdf;PlainLiteral">Age</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#Attribute</IRI>
+        <Literal xml:lang="it" datatypeIRI="&rdf;PlainLiteral">Attribute</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#AttributeType</IRI>
+        <Literal xml:lang="it" datatypeIRI="&rdf;PlainLiteral">AttributeType</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#AttributeTypeType</IRI>
+        <Literal xml:lang="it" datatypeIRI="&rdf;PlainLiteral">AttributeTypeType</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#AttributeValue</IRI>
+        <Literal xml:lang="it" datatypeIRI="&rdf;PlainLiteral">AttributeValue</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#AttributeValueType</IRI>
+        <Literal xml:lang="it" datatypeIRI="&rdf;PlainLiteral">AttributeValueType</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#Class</IRI>
+        <Literal xml:lang="it" datatypeIRI="&rdf;PlainLiteral">Class</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#InheritableType</IRI>
+        <Literal xml:lang="it" datatypeIRI="&rdf;PlainLiteral">InheritableType</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#PlayingPlayer</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">A Playing Player is a player that have an active part in a game; however, she is not responsable of storytelling and game mechanics</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Role</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Every game admits a set of Roles that determines what players can do regarding storytelling and game mechanics. Typically, playing and game mastering roles are the most used.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#hasRole</IRI>
+        <Literal datatypeIRI="&xsd;string">This property refer to the axiom about each Player involved in a Game must have at least one role</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#knows</IRI>
+        <Literal datatypeIRI="&xsd;string">The &apos;knows&apos; property refers to axiom that each participants to a game knows themselves, eventually each other.</Literal>
+    </AnnotationAssertion>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 3.2.5.1928) http://owlapi.sourceforge.net -->
+
