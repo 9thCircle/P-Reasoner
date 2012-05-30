@@ -57,8 +57,8 @@ if (empty($_GET['file']) === FALSE) {
 	$syntax = empty($_GET['syntax']) === TRUE ? $_GET['syntax'] : NULL;
 	
 	$infModel = $_GET['reasoner'] === 'InfModelF' ?
-		ModelFactory::getInfModelF('onto://InfModelF/') : 
-		ModelFactory::getInfModelB('onto://InfModelB/');
+		ModelFactory::getInfModelF('onto://InfModelF/', TRUE) : 
+		ModelFactory::getInfModelB('onto://InfModelB/', TRUE);
 	
 	$infModel->startProfile();
 	$infModel->load($_GET['file'], $syntax);

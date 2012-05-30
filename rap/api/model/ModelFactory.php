@@ -132,10 +132,10 @@ class ModelFactory
 	* @return	object	MemModel
 	* @access	public
 	*/
-	public static function getInfModelF($baseURI = NULL)
+	public static function getInfModelF($baseURI = NULL, $profile = FALSE)
 	{
         require_once RDFAPI_INCLUDE_DIR . 'infModel/InfModelF.php';
-		$mod = new InfModelF($baseURI);
+		$mod = new InfModelF($baseURI, $profile);
 		return $mod;
 	}
 

@@ -4,7 +4,7 @@ require_once 'inc.php';
 
 
 // use InfModelF
-$infModel = ModelFactory::getInfModelF('onto://InfModelF/');
+$infModel = ModelFactory::getInfModelF('onto://InfModelF/', TRUE);
 $infModel->startProfile();
 
 

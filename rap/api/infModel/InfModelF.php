@@ -22,7 +22,6 @@
 
 class InfModelF extends InfModel 
 {
-
 	/**
 	* Array that holds the position of the infered statements in the model.
 	*
@@ -30,7 +29,6 @@ class InfModelF extends InfModel
 	* @access	private
 	*/	
 	private $infPos;
-	
 	
 	/**
 	* Variable that influences the habbit when adding statements. 
@@ -46,14 +44,24 @@ class InfModelF extends InfModel
     * Constructor
 	* You can supply a base_uri.
     *
-    * @param string $baseURI 
+    * @param string $baseURI
+	* @param bool $profile
 	* @access	public
-    */		
-	public function __construct($baseURI = NULL)
+    */
+	public function __construct($baseURI = NULL, $profile = FALSE)
 	{
+		/*. float .*/  $start = (float)microtime(TRUE);
+		
 		parent::__construct($baseURI);
 		$this->infPos = array();
-		$this->inferenceEnabled = TRUE;	
+		$this->inferenceEnabled = TRUE;
+		
+		// profile
+		if ($profile === TRUE) {
+			$end = (float)microtime(TRUE);
+			$this->startProfile();
+			$this->profileAction('InfModelF::__construct', '', $start, $end);
+		}
 	}
 
 	/**
@@ -405,11 +413,12 @@ class InfModelF extends InfModel
 	* with an identifier already existing in this model, a new blankNode is generated.
 	*
 	* @param	object Model	$model 
+	* @param    bool $applyInference
 	* @access	public
 	* @throws phpErrpr
 	*
 	*/
-	public function addModel(Model $model)  
+	public function addModel(Model $model, $applyInference = TRUE)  
 	{
 		/*. float .*/  $start = (float)microtime(TRUE);
 		
@@ -419,7 +428,7 @@ class InfModelF extends InfModel
 	 	$this->inferenceEnabled = FALSE;
 	 	parent::addModel($model);
 	 	$this->inferenceEnabled = TRUE;
-	 	$this->applyInference();
+#		$this->applyInference();
 		
 		// profile
 		if ($this->isProfiling() === TRUE) {

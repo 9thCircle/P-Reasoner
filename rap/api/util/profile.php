@@ -68,7 +68,6 @@ class Profile implements IteratorAggregate
 		$out .= "\t\t\t" . '<td>&nbsp;</td>' . "\n";
 		$out .= "\t\t\t" . '<td><strong>Action</strong></td>' . "\n";
 		$out .= "\t\t\t" . '<td><strong>Result</strong></td>' . "\n";
-		$out .= "\t\t\t" . '<td><strong>Start Time</strong></td>' . "\n";
 		$out .= "\t\t\t" . '<td><strong>Duration</strong></td>' . "\n";
 		$out .= "\t\t" . '</tr>' . "\n";
 		$out .= "\t" . '</thead>' . "\n";
@@ -80,7 +79,6 @@ class Profile implements IteratorAggregate
 			$out .= "\t\t\t" . '<td>' . (string)$i . "\n";
 			$out .= "\t\t\t" . '<td>' . htmlspecialchars($this->recordset[$i]->getAction()) . '</td>' . "\n";
 			$out .= "\t\t\t" . '<td>' . htmlspecialchars($this->recordset[$i]->getResult()) . '&nbsp;</td>' . "\n";
-			$out .= "\t\t\t" . '<td>' . (string)$this->recordset[$i]->getStart() . '</td>' . "\n";
 			$out .= "\t\t\t" . '<td>' . sprintf('%f', $this->recordset[$i]->getDuration()) . '</td>' . "\n";
 			$out .= "\t\t" . '</tr>' . "\n";
 		}
