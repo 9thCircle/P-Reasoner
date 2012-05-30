@@ -69,6 +69,8 @@ class InfModelF extends InfModel
 	*/
 	public function add(Statement $statement)
 	{
+		/*. float .*/  $start = (float)microtime(TRUE);
+		
 		parent::add($statement);
 		if ($this->inferenceEnabled) {
 			foreach ($this->entailStatement($statement) as $state) {
@@ -84,6 +86,11 @@ class InfModelF extends InfModel
 			if (in_array($statement->getLabelPredicate(),$this->supportedInference)) {
 				$this->applyInference();
 			}
+		}
+		
+		// profile
+		if ($this->isProfiling() === TRUE) {
+			$this->profileAction('InfModelF::add', '', $start, (float)microtime(TRUE));
 		}
 	}
 	
@@ -102,6 +109,9 @@ class InfModelF extends InfModel
 	*/	
 	public function addWithoutDuplicates(Statement $statement) 
 	{
+		/*. bool .*/   $r = FALSE;
+		/*. float .*/  $start = (float)microtime(TRUE);
+		
 		if(!$this->contains($statement)) {
 		 	parent::add($statement);
 		 	if ($this->inferenceEnabled) {
@@ -116,10 +126,17 @@ class InfModelF extends InfModel
 				if (in_array($statement->getLabelPredicate(), $this->supportedInference)) {
 					$this->applyInference();
 				}
-		 	}
-			return TRUE;
-		 }
-		 return FALSE;
+			}
+			$r = TRUE;
+		}
+		$r =  FALSE;
+		
+		// profile
+		if ($this->isProfiling() === TRUE) {
+			$this->profileAction('InfModelF::addWithoutDuplicates', '', $start, (float)microtime(TRUE));
+		}
+		 
+		 return $r;
 	}
 	
 	/**
@@ -130,6 +147,8 @@ class InfModelF extends InfModel
 	 */		
 	private function applyInference()
 	{
+		/*. float .*/ $start = (float)microtime(TRUE);
+		
 		//check every statement in the model
 		foreach ($this->triples as $statement) {
 			//gat all statements, that it recursively entails
@@ -138,9 +157,14 @@ class InfModelF extends InfModel
 					parent::add($statement);
 					//add the InfStatement position to the index
 					end($this->triples);
-					$this->infPos[]=key($this->triples);
+					$this->infPos[] = key($this->triples);
 				}
 			}
+		}
+		
+		// profile
+		if ($this->isProfiling() === TRUE) {
+			$this->profileAction('InfModelF::applyInference', '', $start, (float)microtime(TRUE));
 		}
 	}
 	
@@ -152,10 +176,10 @@ class InfModelF extends InfModel
 	  * @return   array of statements
 	  * @access	public
 	  */
-	public function entailStatement (Statement &$statement)
+	public function entailStatement (Statement $statement)
 	{
 		$infStatementsIndex = array();
-		return $this->entailStatementRec($statement,$infStatementsIndex);
+		return $this->entailStatementRec($statement, $infStatementsIndex);
 	}
 	
 	/**
@@ -241,7 +265,7 @@ class InfModelF extends InfModel
 	{
 		// $stream is not supported
 		if ($stream !== FALSE) {
-			trigger_error('$stram param is not supported in InfModelF and must be FALSE.', E_USER_ERROR);
+			trigger_error('$stream param is not supported in InfModelF and must be FALSE.', E_USER_ERROR);
 		}
 		
 		//Disable entailing to increase performance
@@ -318,6 +342,9 @@ class InfModelF extends InfModel
 	*/
 	public function remove(Statement $statement)
 	{
+		/*. bool .*/   $r = FALSE;
+		/*. float .*/  $start = (float)microtime(TRUE);
+		
 		//If the statement is in the model
 		if($this->contains($statement)) {
 			$inferenceRulesWereTouched = FALSE;
@@ -357,10 +384,17 @@ class InfModelF extends InfModel
 				$this->removeInfered();
 				$this->applyInference();
 			}
-			return true;
+			$r = TRUE;
 		} else {
-			return false;	
+			$r = FALSE;	
 		}
+		
+		// profile
+		if ($this->isProfiling() === TRUE) {
+			$this->profileAction('InfModelF::remove', '', $start, (float)microtime(TRUE));
+		}
+		
+		return $r;
 	}
 	
 	/** 
@@ -377,6 +411,8 @@ class InfModelF extends InfModel
 	*/
 	public function addModel(Model $model)  
 	{
+		/*. float .*/  $start = (float)microtime(TRUE);
+		
 		// Inferences are processed after the whole model is added
 		// (this increases performance).
 		
@@ -384,6 +420,11 @@ class InfModelF extends InfModel
 	 	parent::addModel($model);
 	 	$this->inferenceEnabled = TRUE;
 	 	$this->applyInference();
+		
+		// profile
+		if ($this->isProfiling() === TRUE) {
+			$this->profileAction('InfModelF::addModel', '', $start, (float)microtime(TRUE));
+		}
 	}
 }
 

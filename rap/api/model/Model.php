@@ -1,5 +1,4 @@
 <?php
-require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
 
 // ----------------------------------------------------------------------------------
 // Class: Model
@@ -21,7 +20,7 @@ require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
  */
 class Model extends Object
 {
-    /**
+	/**
     * Base URI of the Model.
     * Affects creating of new resources and serialization syntax.
     *
@@ -43,9 +42,9 @@ class Model extends Object
     *   @var Parser
     */
     protected $queryParser = NULL;
-
-
-
+	
+	
+	
     /**
     * Notice for people who are used to work with older versions of RAP.
     *

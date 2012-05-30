@@ -57,14 +57,10 @@
 	function hasNext()
 	{
   		if ($this->position == -1) { 
-  			if(current($this->triples) != NULL) {
-  				return TRUE;	
-  			} else {
-  				return FALSE;
-  			}
+  			return (current($this->triples) != NULL);
   		}
 		
-  		if (next($this->triples)!=NULL ) {
+  		if (next($this->triples) != NULL ) {
   			prev($this->triples);		
   			return TRUE;
 		} else {

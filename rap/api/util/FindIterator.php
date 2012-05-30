@@ -42,13 +42,13 @@
 	* 
 	* @var		Object Subject,Predicate,Object
 	* @access	private
-	*/	
-
+	*/
+	
     protected $nSubject;
     protected $nPredicate;
     protected $nObject;
-   
-    
+	
+	
    /**
     * Constructor
     *

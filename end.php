@@ -14,6 +14,9 @@ echo '<hr/><h3>writeRdfToString</h3>';
 echo '<hr/><h3>toStringIncludingTriples</h3>';
 @$infModel->toStringIncludingTriples();
 
+echo '<hr/><h3>Profile</h3>';
+echo $infModel->getProfile()->getHTMLTable();
+
 // no fatal errors
 echo '<p>&gt;&gt; END OF FILE</p>';
 

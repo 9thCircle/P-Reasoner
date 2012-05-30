@@ -48,7 +48,8 @@ class InfRule
 	*/	
  	private $entailment;
 	
- 	
+	
+	
    /**
     * Constructor
 	* 
@@ -73,23 +74,8 @@ class InfRule
 	* @access	public
 	* @throws	PhpError
 	*/	
- 	public function setTrigger($subject, $predicate, $object)
+ 	public function setTrigger(Node $subject = NULL, Node $predicate = NULL, Node $object = NULL)
  	{
- 		//throw an error if subject, predicate, or object are neither 
- 		//node, nor null.
-		if(!is_a($subject,'Node') && $subject != null) 
-			trigger_error(RDFAPI_ERROR . '(class: Infrule; method: 
-				setTrigger): $subject has to be null or of class Node'
-				, E_USER_ERROR);
-		if(!is_a($predicate,'Node') && $predicate != null) 
-			trigger_error(RDFAPI_ERROR . '(class: Infrule; method: 
-				setTrigger): $predicate has to be null or of class Node'
-				, E_USER_ERROR);
-		if(!is_a($object,'Node') && $object != null) 
-			trigger_error(RDFAPI_ERROR . '(class: Infrule; method: 
-				setTrigger): $object has to be null or of class Node'
-				, E_USER_ERROR);
- 			
  		//set the trigger
 		$this->trigger['s'] = $subject;
 		$this->trigger['p'] = $predicate;
@@ -106,7 +92,7 @@ class InfRule
    	* @param	object Node OR NULL	$object
 	* @access	public
 	* @throws	PhpError
-	*/	 	
+	*/
 	public function setEntailment($subject, $predicate, $object)
 	{
 		//throw an error if subject, predicate, or object are neither node, 
@@ -124,11 +110,11 @@ class InfRule
 				setEntailment): $object has to be <s>,<p>,or <o> or of class Node'
 				, E_USER_ERROR);
 		
-		$this->entailment['s']=$subject;	
-		$this->entailment['p']=$predicate;
-		$this->entailment['o']=$object;
+		$this->entailment['s']  = $subject;	
+		$this->entailment['p']  = $predicate;
+		$this->entailment['o']  = $object;
 	}
- 
+	
  	/**
 	* Checks, if the statement satisfies the trigger.
 	*
@@ -137,7 +123,7 @@ class InfRule
 	* @access	public
 	* @throws	PhpError
 	*/
- 	public function checkTrigger($statement)
+ 	public function checkTrigger(Statement $statement)
  	{
  		// for each element, check if it equals the proper statement's element
  		// or it's NULL
@@ -166,23 +152,23 @@ class InfRule
 	* @access	public
 	* @throws	PhpError
 	*/ 	
- 	public function checkEntailment ($subject, $predicate, $object)
+ 	public function checkEntailment (Node $subject = NULL, Node $predicate = NULL, Node $object = NULL)
  	{
 		//true, if $subject is null, the entailment's subject matches
 		//anything, or the $subject equals the entailment-subject.
- 		$matchesS=	$subject ==  null ||
+ 		$matchesS=	$subject ===  NULL ||
 		 			!is_a($this->entailment['s'],'Node') ||
 		 			$this->entailment['s']->equals($subject);
 
 		//true, if $predicate is null, the entailment's predicate matches 
 		//anything, or the $predicate equals the entailment-predicate.		 			
-		 $matchesP=	$predicate ==  null ||
+		 $matchesP=	$predicate ===  NULL ||
 		 			!is_a($this->entailment['p'],'Node') ||
 		 			$this->entailment['p']->equals($predicate);
 
 		//true, if $object is null, the entailment's object matches 
 		//anything, or the $object equals the entailment-object.		 					 			
-		$matchesO=	$object ==  null ||
+		$matchesO=	$object ===  NULL ||
 		 			!is_a($this->entailment['o'],'Node') ||
 		 			$this->entailment['o']->equals($object);
   		
@@ -199,64 +185,61 @@ class InfRule
 	* @access	public
 	* @throws	PhpError
 	*/  	
- 	public function entail(& $statement)
+ 	public function entail(Statement $statement)
  	{
  		//if the entailment's subject is <s>,<p>,or <o>, put the statements 
  		//subject,predicate,or object into the subject of the 
  		//entailed statement. If the entailment's subject is a node, 
  		//add that node to the statement.	
-	 	switch ($this->entailment['s'])
-		{
-		case '<s>':
-		 	$entailedSubject=$statement->getSubject();
-	 	break;
-		case '<p>':
-		 	$entailedSubject=$statement->getPredicate();
-		break;	
- 		case '<o>':
-	 		$entailedSubject=$statement->getObject();
-	 	break;
-		default:
-		 	$entailedSubject=$this->entailment['s'];
-		};
+	 	switch ($this->entailment['s']) {
+			case '<s>':
+				$entailedSubject=$statement->getSubject();
+			break;
+			case '<p>':
+				$entailedSubject=$statement->getPredicate();
+			break;	
+			case '<o>':
+				$entailedSubject=$statement->getObject();
+			break;
+			default:
+				$entailedSubject=$this->entailment['s'];
+		}
 		
  		//if the entailment's predicate is <s>,<p>,or <o>, put the 
  		//statements subject,predicate,or object into the predicate of 
  		//the entailed statement. If the entailment's predicate is a node, 
  		//add that node to the statement.			
-		switch ($this->entailment['p'])
-		{
-		case '<s>':
-		 	$entailedPredicate=$statement->getSubject();
-	 	break;
-		case '<p>':
-		 	$entailedPredicate=$statement->getPredicate();
-	 	break;	
- 		case '<o>':
-	 		$entailedPredicate=$statement->getObject();
-	 	break;
-		default:
-		 	$entailedPredicate=$this->entailment['p'];
-		};
+		switch ($this->entailment['p']) {
+			case '<s>':
+				$entailedPredicate=$statement->getSubject();
+			break;
+			case '<p>':
+				$entailedPredicate=$statement->getPredicate();
+			break;	
+			case '<o>':
+				$entailedPredicate=$statement->getObject();
+			break;
+			default:
+				$entailedPredicate=$this->entailment['p'];
+		}
 		
  		//if the entailment's object is <s>,<p>,or <o>, put the 
  		//statements subject,predicate,or object into the object of 
  		//the entailed statement. If the entailment's object is a node,
  		//add that node to the statement.			
-		switch ($this->entailment['o'])
-		{
-		case '<s>':
-		 	$entailedObject=$statement->getSubject();
-	 	break;
-		case '<p>':
-		 	$entailedObject=$statement->getPredicate();
-	 	break;	
-	 	case '<o>':
-		 	$entailedObject=$statement->getObject();
-	 	break;
-		default:
-		 	$entailedObject=$this->entailment['o'];
-		};
+		switch ($this->entailment['o']) {
+			case '<s>':
+				$entailedObject=$statement->getSubject();
+			break;
+			case '<p>':
+				$entailedObject=$statement->getPredicate();
+			break;	
+			case '<o>':
+				$entailedObject=$statement->getObject();
+			break;
+			default:
+				$entailedObject=$this->entailment['o'];
+		}
 		
 		//return the infered statement
 		return new InfStatement($entailedSubject, $entailedPredicate, $entailedObject);
@@ -273,54 +256,51 @@ class InfRule
 	* @access	public
 	* @throws	PhpError
 	*/  	 	
- 	public function getModifiedFind( $subject, $predicate, $object)
+ 	public function getModifiedFind(Node $subject = NULL, Node $predicate = NULL, Node $object = NULL)
  	{			
- 		$findSubject=$this->trigger['s'];
- 		$findPredicate=$this->trigger['p'];
- 		$findObject=$this->trigger['o'];
+ 		$findSubject    = $this->trigger['s'];
+ 		$findPredicate  = $this->trigger['p'];
+ 		$findObject     = $this->trigger['o'];
  		
- 		switch ($this->entailment['s'])
- 			{
+ 		switch ($this->entailment['s']) {
  			case '<s>':
- 			 	$findSubject=$subject;
+ 			 	$findSubject    = $subject;
 		 	break;
  			case '<p>':
- 			 	$findPredicate=$subject;
+ 			 	$findPredicate  = $subject;
 		 	break;	
 		 	case '<o>':
-			 	$findObject=$subject;
+			 	$findObject     = $subject;
 		 	break;
- 			};
+ 		}
  			
- 		switch ($this->entailment['p'])
- 			{
+ 		switch ($this->entailment['p']) {
  			case '<s>':
- 			 	$findSubject=$predicate;
+ 			 	$findSubject    = $predicate;
 		 	break;
  			case '<p>':
- 			 	$findPredicate=$predicate;
+ 			 	$findPredicate  = $predicate;
 		 	break;	
 		 	case '<o>':
-			 	$findObject=$predicate;
+			 	$findObject     = $predicate;
 	 		break;
- 			};
- 			
- 		switch ($this->entailment['o'])
- 			{
+ 		}
+ 		
+ 		switch ($this->entailment['o']) {
  			case '<s>':
- 			 	$findSubject=$object;
+ 			 	$findSubject    = $object;
 		 	break;
  			case '<p>':
- 			 	$findPredicate=$object;
+ 			 	$findPredicate  = $object;
 		 	break;	
 		 	case '<o>':
-			 	$findObject=$object;
+			 	$findObject     = $object;
 		 	break;
- 			};
-	
+ 		}
+		
  		return array('s' => $findSubject,
 			 	     'p' => $findPredicate,
-			 		 'o' => $findObject );	
+			 		 'o' => $findObject);	
  	}
  	
  	public function getTrigger()

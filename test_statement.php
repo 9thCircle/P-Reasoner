@@ -5,6 +5,7 @@ require_once 'inc.php';
 
 // use InfModelF
 $infModel = ModelFactory::getInfModelF('onto://InfModelF/');
+$infModel->startProfile();
 
 
 // standard RDFS / OWL

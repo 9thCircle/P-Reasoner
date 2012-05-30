@@ -54,10 +54,13 @@
 if (empty($_GET['file']) === FALSE) {
 	require_once 'inc.php';
 	
-	$infModel = $_GET['reasoner'] === 'InfModelF' ? ModelFactory::getInfModelF('onto://InfModelF/') : 
+	$syntax = empty($_GET['syntax']) === TRUE ? $_GET['syntax'] : NULL;
+	
+	$infModel = $_GET['reasoner'] === 'InfModelF' ?
+		ModelFactory::getInfModelF('onto://InfModelF/') : 
 		ModelFactory::getInfModelB('onto://InfModelB/');
 	
-	$syntax = empty($_GET['syntax']) === TRUE ? $_GET['syntax'] : NULL;
+	$infModel->startProfile();
 	$infModel->load($_GET['file'], $syntax);
 	
 	require_once 'end.php';

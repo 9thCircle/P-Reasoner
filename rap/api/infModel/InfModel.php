@@ -67,6 +67,7 @@ class InfModel extends MemModel
 	protected $infRulesEntailIndex;
 	
 	
+	
    /**
     * Constructor
 	* You can supply a base_uri
