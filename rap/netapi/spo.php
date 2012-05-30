@@ -19,8 +19,8 @@
  * @access	public
  */
 
-function spoQuery($model,$serializer,$remove=false,$modelId=false){
-
+function spoQuery($model, $serializer, $remove = FALSE, $modelId = FALSE)
+{
   // Get SPO query from HTTP request
   if (isset($_REQUEST['s'])) {
 	$subject = new Resource($_REQUEST['s']);
@@ -40,13 +40,10 @@ function spoQuery($model,$serializer,$remove=false,$modelId=false){
   	$object = NULL;
   }
   if (isset($_REQUEST['closure'])) {
-     if (strtoupper($_REQUEST['closure']) == "TRUE" ) {
-	   $closure = True;
-     } else {
-  	   $closure = False;
+     $closure = (strtoupper($_REQUEST['closure']) === "TRUE" ) ? TRUE : FALSE;
      }
   } else {
-      $closure = False;
+      $closure = FALSE;
   }
 
   $outm = new MemModel();
@@ -54,37 +51,29 @@ function spoQuery($model,$serializer,$remove=false,$modelId=false){
   $it = $resultmodel->getStatementIterator();
   while ($it->hasNext()){
 	$stmt = $it->next();
-	if($remove)
-	{
+	if($remove) {
 		$model->remove($stmt);
-		
-	}
-	else
-	{
-		$outm->add(new Statement($stmt->getSubject(),$stmt->predicate(), $stmt->object()));
-		if (is_a($stmt->object(),'BlankNode') && $closure == True) {
-		  getBNodeClosure($stmt->object(),$model,$outm);
+	} else {
+		$outm->add(new Statement($stmt->getSubject(),$stmt->getPredicate(), $stmt->getObject()));
+		if (is_a($stmt->getObject(),'BlankNode') && $closure == TRUE) {
+		  getBNodeClosure($stmt->getObject(),$model,$outm);
 		}
-		if (is_a($stmt->getSubject(),'BlankNode') && $closure == True) {
+		if (is_a($stmt->getSubject(),'BlankNode') && $closure == TRUE) {
 		  getBNodeClosure($stmt->getSubject(),$model,$outm);
 		}
 	}
   }
-  if($remove)
-  { 
-  	    
-	  	if(substr($modelId,0,5)=="file:"){
-	  		$model->saveAs(substr($modelId,5));
+  if ($remove) {
+	  	if(substr($modelId, 0, 5) === 'file:'){
+	  		$model->saveAs(substr($modelId, 5));
 	  	}
-  	  	if($resultmodel->size()>0){
+  	  	if($resultmodel->size() > 0){
   	  		header('200 - OK');
-	  		echo "200 - OK";
+	  		echo '200 - OK';
   	  	}else{
-  	  		echo "No matching statements";
+  	  		echo 'No matching statements';
   	  	}
-  }
-  else
-  {
+  } else {
 	  echo $serializer->Serialize($outm);
   }
   $outm->close();

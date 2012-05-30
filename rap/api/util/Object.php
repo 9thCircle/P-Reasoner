@@ -16,22 +16,22 @@
  * @package utility
  *
  **/
- class Object {
-
-  /**
-   * Serializes a object into a string
-   *
-   * @access	public
-   * @return	string		
-   */    
-	function toString() {
-    	$objectvars = get_object_vars($this);
-		foreach($objectvars as $key => $value) 
-			$content .= $key ."='". $value. "'; ";
-		return "Instance of " . get_class($this) ."; Properties: ". $content;
+ class Object
+ {
+	/**
+	 * Serializes a object into a string
+	 *
+	 * @access	public
+	 * @return	string		
+	 */
+	public function toString()
+	{
+		$objectvars = get_object_vars($this);
+		foreach($objectvars as $key => $value) {
+			$content .= $key . '=\'' . $value. '\'; ';
+		}
+		return 'Instance of ' . get_class($this) . '; Properties: ' . $content;
 	}
-
- }
-
+}
 
 ?>

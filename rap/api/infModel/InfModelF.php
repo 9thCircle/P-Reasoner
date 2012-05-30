@@ -29,7 +29,7 @@ class InfModelF extends InfModel
 	* @var		array
 	* @access	private
 	*/	
-	var $infPos;
+	private $infPos;
 	
 	
 	/**
@@ -39,7 +39,7 @@ class InfModelF extends InfModel
 	* @var		boolean
 	* @access	private
 	*/
-	var $inferenceEnabled;
+	private $inferenceEnabled;
 	
 		
    	/**
@@ -49,11 +49,11 @@ class InfModelF extends InfModel
     * @param string $baseURI 
 	* @access	public
     */		
-	function InfModelF($baseURI = NULL)
+	public function __construct($baseURI = NULL)
 	{
-		parent::InfModel($baseURI);
-		$this->infPos=array();
-		$this->inferenceEnabled=true;	
+		parent::__construct($baseURI);
+		$this->infPos = array();
+		$this->inferenceEnabled = TRUE;	
 	}
 
 	/**
@@ -67,30 +67,26 @@ class InfModelF extends InfModel
 	* @access	public
 	* @throws	PhpError 
 	*/
-	function add ($statement)
+	public function add(Statement $statement)
 	{
 		parent::add($statement);
-		if ($this->inferenceEnabled)
-		{
-			foreach ($this->entailStatement($statement) as $state)
-			{
+		if ($this->inferenceEnabled) {
+			foreach ($this->entailStatement($statement) as $state) {
 				//a addWithoutDublicates construct
-				if(!$this->contains($state))
-				{
-			
+				if(!$this->contains($state)) {
 					parent::add($state);
 					//save the position of the infered statements
 					end($this->triples);
 					$this->infPos[]=key($this->triples);
-				};
-			}; 
-		//apply the complete inference to the model, if the added statement was able to add a rule
-		if (in_array($statement->getLabelPredicate(),$this->supportedInference))
-			$this->applyInference();
+				}
+			}
+			//apply the complete inference to the model, if the added statement was able to add a rule
+			if (in_array($statement->getLabelPredicate(),$this->supportedInference)) {
+				$this->applyInference();
+			}
 		}
 	}
 	
- 
 	/**
 	* Checks if a new statement is already in the MemModel and adds 
 	* the statement, if it is not in the MemModel.
@@ -104,120 +100,107 @@ class InfModelF extends InfModel
 	* @access	public
 	* @throws	PhpError 
 	*/	
-	 function addWithoutDuplicates(& $statement) 
-	 {
-		if(!$this->contains($statement))
-		{
+	public function addWithoutDuplicates(Statement $statement) 
+	{
+		if(!$this->contains($statement)) {
 		 	parent::add($statement);
-		 	if ($this->inferenceEnabled)
-		 	{
-				foreach ($this->entailStatement($statement) as $statement)
-				{
-					if(!$this->contains($statement))
-						{
-							parent::add($statement);
-							//save the position of the infered statements
-							end($this->triples);
-							$this->infPos[]=key($this->triples);
-						};
-				};
-			if (in_array($statement->getLabelPredicate(),$this->supportedInference))
-				$this->applyInference();
+		 	if ($this->inferenceEnabled) {
+				foreach ($this->entailStatement($statement) as $statement) {
+					if(!$this->contains($statement)) {
+						parent::add($statement);
+						//save the position of the infered statements
+						end($this->triples);
+						$this->infPos[] = key($this->triples);
+					}
+				}
+				if (in_array($statement->getLabelPredicate(), $this->supportedInference)) {
+					$this->applyInference();
+				}
 		 	}
-			return true;
+			return TRUE;
 		 }
-		 return false;
-	 }
-
+		 return FALSE;
+	}
 	
-
 	/**
-	* Entails every statement and adds the entailments if not already 
-	* in the model.
-	*
-	* @access	private
-	*/		
-	function applyInference()
+	 * Entails every statement and adds the entailments if not already 
+	 * in the model.
+	 *
+	 * @access	private
+	 */		
+	private function applyInference()
 	{
 		//check every statement in the model
-		foreach ($this->triples as $statement)
-		{
+		foreach ($this->triples as $statement) {
 			//gat all statements, that it recursively entails
-			foreach ($this->entailStatement($statement) as $statement)
-			{
-				if (!$this->contains($statement))
-				{
+			foreach ($this->entailStatement($statement) as $statement) {
+				if (!$this->contains($statement)) {
 					parent::add($statement);
 					//add the InfStatement position to the index
 					end($this->triples);
 					$this->infPos[]=key($this->triples);
-				};
-			};
-		};
+				}
+			}
+		}
 	}
 	
- 
 	/**
-	* Entails a statement by recursively using the _entailStatementRec 
-	* method.
-	* 
-	* @param	object Statement	$statement
-	* @return   array of statements
-	* @access	public
-	*/			
-	function entailStatement (& $statement)
+	  * Entails a statement by recursively using the entailStatementRec 
+	  * method.
+	  * 
+	  * @param	object Statement	$statement
+	  * @return   array of statements
+	  * @access	public
+	  */
+	public function entailStatement (Statement &$statement)
 	{
-		$infStatementsIndex=array();
-		return $this->_entailStatementRec($statement,$infStatementsIndex);
+		$infStatementsIndex = array();
+		return $this->entailStatementRec($statement,$infStatementsIndex);
 	}
-
+	
 	/**
-	* Recursive method, that checks the statement with the trigger of 
-	* every rule. If the trigger matches and entails new statements, 
-	* those statements are recursively infered too.
-	* The $infStatementsIndex array holds lready infered statements 
-	* to prevent infinite loops.
-	*
-	* 
-	* @param	object Statement $statement
-	* @param	array $infStatementsIndex
-	* @return   array of statements
-	* @access	private
-	*/
-	function _entailStatementRec ( $statement,& $infStatementsIndex)
+	 * Recursive method, that checks the statement with the trigger of 
+	 * every rule. If the trigger matches and entails new statements, 
+	 * those statements are recursively infered too.
+	 * The $infStatementsIndex array holds lready infered statements 
+	 * to prevent infinite loops.
+	 *
+	 * 
+	 * @param	object Statement $statement
+	 * @param	array $infStatementsIndex
+	 * @return   array of statements
+	 * @access	private
+	 */
+	private function entailStatementRec (Statement $statement, &$infStatementsIndex)
 	{
 		$infStatements = array();
 		$return = array();
 		
 		//dont entail statements about the supported inference-schema
-		if (!in_array($statement->getLabelPredicate(),$this->supportedInference))
-		{
+		if (!in_array($statement->getLabelPredicate(),$this->supportedInference)) {
 			//check only the rules, that were returned by the index
-			foreach ($this->_findRuleTriggerInIndex($statement) as $key )
-			{
+			foreach ($this->_findRuleTriggerInIndex($statement) as $key ) {
 				$infRule=$this->infRules[$key];
 	
 				$stateString=$key.serialize($statement);
 				//If the statement wasn't infered before
-				if (!in_array($stateString,$infStatementsIndex))
-				{
+				if (!in_array($stateString,$infStatementsIndex)) {
 					$infStatementsIndex[]=$stateString;
 					//Check, if the Statements triggers this rule
-					if($infRule->checkTrigger($statement))
-					{
+					if($infRule->checkTrigger($statement)) {
 						$infStatement=$infRule->entail($statement);
 						#if(!$this->contains($infStatement))
-						{
+						#{
 							$return[]=$infStatement;
 							$return=array_merge($return,
-												$this->_entailStatementRec($infStatement, 
+												$this->entailStatementRec($infStatement, 
 																			$infStatementsIndex));
-						};	
-																		
-					};
-				};
-			};
-		};	
+						#}
+					}
+				}
+			}
+		}
+		
 		return $return;
 	}
 	
@@ -227,56 +210,61 @@ class InfModelF extends InfModel
 	*
 	* @access	public
 	*/	 
-	function removeInfered()
+	public function removeInfered()
 	{
-		$indexTmp=$this->indexed;
+		$indexTmp = $this->indexed;
 		$this->index(-1);
-		foreach ($this->infPos as $key)
-		{
+		foreach ($this->infPos as $key) {
 			unset($this->triples[$key]);
-		};
-		$this->infPos=array();
+		}
+		$this->infPos = array();
 		$this->index($indexTmp);
-	}	
-	 
-	 
+	}
+	
 	/**
-	* Load a model from a file containing RDF, N3 or N-Triples.
-	* This function recognizes the suffix of the filename (.n3 or .rdf) and
-	* calls a suitable parser, if no $type is given as string 
-	* ("rdf" "n3" "nt");
-	* If the model is not empty, the contents of the file is added to 
-	* this DbModel.
-	*
-	* While loading the model, the inference entailing is disabled, but 
-	* new inference rules are added to increase performance.
-	* 
-	* @param 	string 	$filename
-	* @param 	string 	$type
-	* @access	public
-	*/
-	function load($filename, $type = NULL) 
+	 * Load a model from a file containing RDF, N3 or N-Triples.
+	 * This function recognizes the suffix of the filename (.n3 or .rdf) and
+	 * calls a suitable parser, if no $type is given as string 
+	 * ("rdf" "n3" "nt");
+	 * If the model is not empty, the contents of the file is added to 
+	 * this DbModel.
+	 *
+	 * While loading the model, the inference entailing is disabled, but 
+	 * new inference rules are added to increase performance.
+	 * 
+	 * @param 	string 	$filename
+	 * @param 	string 	$type
+	 * @param 	string 	$stream		Not supported in InfModelF. Don't use it.
+	 * @access	public
+	 */
+	public function load($filename, $type = NULL, $stream = FALSE) 
 	{
+		// $stream is not supported
+		if ($stream !== FALSE) {
+			trigger_error('$stram param is not supported in InfModelF and must be FALSE.', E_USER_ERROR);
+		}
+		
 		//Disable entailing to increase performance
-	 	$this->inferenceEnabled=false;
-	 	parent::load($filename, $type);
+	 	$this->inferenceEnabled = FALSE;
+	 	parent::load($filename, $type, FALSE);
 	 	//Enable entailing
-	 	$this->inferenceEnabled=true;
+	 	$this->inferenceEnabled = TRUE;
 	 	//Entail all statements
 	 	$this->applyInference();
  	}
 	
 	/**
-	* Short Dump of the InfModelF.
-	*
-	* @access	public 
-	* @return	string 
-	*/  
-	function toString() {
-	   return 'InfModelF[baseURI=' . $this->getBaseURI() . ';  
-	   			size=' . $this->size(true) . ']';
+	 * Short Dump of the InfModelF.
+	 *
+	 * @access	public 
+	 * @return	string 
+	 */  
+	public function toString()
+	{
+		return 'InfModelF[baseURI=' . $this->getBaseURI() . ';' . "\n" .
+			'size=' . $this->size(true) . ']';
 	}
-		
+	
 	/**
 	* Create a MemModel containing all the triples (including inferred 
 	* statements) of the current InfModelF.
@@ -284,17 +272,17 @@ class InfModelF extends InfModel
 	* @return object MemModel
 	* @access public
 	*/
-	function & getMemModel() 
+	public static function getMemModel() 
 	{
-		$return= new MemModel();
+		$return = new MemModel();
 		$return->setBaseURI($this->baseURI);
-		foreach ($this->triples as $statement)
+		foreach ($this->triples as $statement) {
 			$return->add($statement);
-		
+		}
 		$return->addParsedNamespaces($this->getParsedNamespaces());	
 		return $return;
 	}
-	  
+	
 	/**
 	* Create a MemModel containing only the base triples 
 	* (without inferred statements) of the current InfModelF.
@@ -302,17 +290,18 @@ class InfModelF extends InfModel
 	* @return object MemModel
 	* @access public
 	*/
-	function  getBaseMemModel() 
+	public static function getBaseMemModel() 
 	{
-		$return= new MemModel();
+		$return = new MemModel();
 		$return->setBaseURI($this->baseURI);
-		foreach ($this->triples as $key => $statement)
-			if (!in_array($key,$this->infPos))
+		foreach ($this->triples as $key => $statement) {
+			if (!in_array($key,$this->infPos)) {
 				$return->add($statement);
+			}
+		}
 		$retun->addParsedNamespaces($this->getParsedNamespaces());
 		return $return;
 	}
-	
 	
 	/**
 	* Removes the triple from the MemModel. 
@@ -327,36 +316,32 @@ class InfModelF extends InfModel
 	* @access	public
 	* @throws	PhpError
 	*/
-	function remove($statement)
+	public function remove(Statement $statement)
 	{
 		//If the statement is in the model
-		if($this->contains($statement))
-		{
-			$inferenceRulesWereTouched=false;
+		if($this->contains($statement)) {
+			$inferenceRulesWereTouched = FALSE;
 			//If the statement was able to add inference rules
-			if (in_array($statement->getLabelPredicate(),$this->supportedInference))
-			{
-				$statementPositions=$this->_removeFromInference($statement);
-				$inferenceRulesWereTouched=true;
-			} else 
-			//get the position of all matching statements
-			{
-				$statementPositions=array();
+			if (in_array($statement->getLabelPredicate(),$this->supportedInference)) {
+				$statementPositions = $this->_removeFromInference($statement);
+				$inferenceRulesWereTouched = TRUE;
+			} else {
+				//get the position of all matching statements
+				
+				$statementPositions = array();
 				//find the positions of the statements
-				$statementPosition=-1;
-				do
-				{
-					
+				$statementPosition = -1;
+				do {
 					$statementPosition =
-					$this->findFirstMatchOff($statement->getSubject(),
+						$this->findFirstMatchOff($statement->getSubject(),
 												$statement->getPredicate(),
 												$statement->getObject(),
-												$statementPosition+1);
+												$statementPosition + 1);
 												
-					if ($statementPosition!=-1)
-						$statementPositions[]=$statementPosition;							
-												
-				}	while ($statementPosition != -1);			
+					if ($statementPosition != -1) {
+						$statementPositions[] = $statementPosition;							
+					}
+				} while ($statementPosition != -1);			
 			}
 			
 			//remove matching statements
@@ -367,15 +352,13 @@ class InfModelF extends InfModel
 				if (in_array($statementPosition,$this->infPos))
 					unset ($this->infPos[$statementPosition]);
 			}
-			if ($inferenceRulesWereTouched)
-			{
+			if ($inferenceRulesWereTouched) {
 				//remove the statement and re-entail the model
 				$this->removeInfered();
 				$this->applyInference();
 			}
 			return true;
-		} else 
-		{
+		} else {
 			return false;	
 		}
 	}
@@ -392,15 +375,16 @@ class InfModelF extends InfModel
 	* @throws phpErrpr
 	*
 	*/
-	function addModel(&$model)  
+	public function addModel(Model $model)  
 	{
-		//Disable entailing to increase performance
-	 	$this->inferenceEnabled=false;
+		// Inferences are processed after the whole model is added
+		// (this increases performance).
+		
+	 	$this->inferenceEnabled = FALSE;
 	 	parent::addModel($model);
-	 	//Enable entailing
-	 	$this->inferenceEnabled=true;
-	 	//Entail all statements
+	 	$this->inferenceEnabled = TRUE;
 	 	$this->applyInference();
 	}
-};
+}
+
 ?>

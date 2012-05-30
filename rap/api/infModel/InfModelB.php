@@ -30,7 +30,7 @@ class InfModelB extends InfModel
 	* @var		array
 	* @access	private
 	*/
- 	var $findDeadEnds;
+ 	protected $findDeadEnds;
  	
  		
    	/**
@@ -40,10 +40,10 @@ class InfModelB extends InfModel
     * @param string $baseURI 
 	* @access	public
     */	
- 	function InfModelB($baseURI = null)
+ 	public function __construct($baseURI = NULL)
  	{
- 		parent::InfModel($baseURI);
- 		$this->findDeadEnds=array();	
+ 		parent::__construct($baseURI);
+ 		$this->findDeadEnds = array();	
  	}
 	
 	/**
@@ -55,11 +55,11 @@ class InfModelB extends InfModel
 	* @access	public
 	* @throws	PhpError 
 	*/ 	
- 	function add($statement)
+ 	public function add(Statement $statement)
  	{
  		parent::add($statement);
  		//Reset the found dead-ends.
- 		$this->findDeadEnds=array();	
+ 		$this->findDeadEnds = array();	
  	}
  	
 	/**
@@ -81,19 +81,18 @@ class InfModelB extends InfModel
 	* @access	public
 	* @throws	PhpError
 	*/
-    function find($subject,$predicate,$object) 
+    function find($subject, $predicate, $object) 
     {
-    	$searchStringIndex=array();
-    	$resultModel=new MemModel();
+    	$searchStringIndex = array();
+    	$resultModel = new MemModel();
     	
     	//add all infered statements without duplicates to the result model
-    	foreach ($this->_infFind($subject,$predicate,$object,array())as $statement)
-    	{
+    	foreach ($this->_infFind($subject,$predicate,$object,array())as $statement) {
     		$resultModel->addWithoutDuplicates($statement);	
-    	};
+    	}
     	return $resultModel;
     }
-
+	
 	/**
  	* This is the main inference method of the InfModelB
  	* The algorithm works as follows:
@@ -132,45 +131,40 @@ class InfModelB extends InfModel
 	* @return	object array Statements
 	* @access	private
 	*/
-    function _infFind ($subject,$predicate,$object, $searchStringIndex, $findOnlyFirstMatching = false, $offset = 0,$resultCount = 0 )
+    protected function _infFind ($subject, $predicate, $object, $searchStringIndex, $findOnlyFirstMatching = FALSE, $offset = 0, $resultCount = 0 )
     {
     	$return=array();
     	//Find all matching statements in the base statements
     	$findResult=parent::find($subject,$predicate,$object);
     	//For all found statements
-		foreach ($findResult->triples as $statement)
-			{
-				$return[]=$statement;
-				$resultCount++;
+		foreach ($findResult->triples as $statement) {
+			$return[]=$statement;
+			$resultCount++;
 
-				//Return, if only the firstMatchingStatement was wanted
-				if ($findOnlyFirstMatching && $resultCount > $offset)
-					return $return;
-			};
-			
+			//Return, if only the firstMatchingStatement was wanted
+			if ($findOnlyFirstMatching && $resultCount > $offset) {
+				return $return;
+			}
+		}
+		
 		//Don't infer statements about the schema (rdfs:subClass, etc..)
 		//is false
-    	if ($predicate == null || 
-    		(is_a($predicate,'Node') && 
-    		!in_array($predicate->getLabel(),$this->supportedInference))
-    		)
-    		//Check only Rules, that the EntailmentIndex returned.
-       		foreach ($this->_findRuleEntailmentInIndex($subject,$predicate,$object) as $ruleKey)
-    		{
-	    		$infRule=$this->infRules[$ruleKey];
+    	if ($predicate === NULL || 
+    		(is_a($predicate,'Node') && !in_array($predicate->getLabel(), $this->supportedInference)))
+    		//Check only Rules, that the EntailmentIndex returned
+       		foreach ($this->_findRuleEntailmentInIndex($subject,$predicate,$object) as $ruleKey) {
+	    		$infRule = $this->infRules[$ruleKey];
 				$serializedRuleStatement=$ruleKey.serialize($subject).serialize($predicate).serialize($object);
 	    		//If it is to ontology loop and no dead-end
 	    		if (!in_array($serializedRuleStatement, $searchStringIndex) && 
-	    			!in_array($serializedRuleStatement, $this->findDeadEnds))
-				{	
+	    			!in_array($serializedRuleStatement, $this->findDeadEnds)) {	
 					//Keep this distinct rule query cobination for 
 					//this branch to detect loops
 	    			$searchStringIndex[]=$serializedRuleStatement;	
 					
 	    			//If the rule is able to deliver statements that match 
 	    			//this query
-		    		if ($infRule->checkEntailment($subject,$predicate,$object))
-		    		{
+		    		if ($infRule->checkEntailment($subject,$predicate,$object)) {
 		    			//Get a modified find-query, that matches statements, 
 		    			//that trigger this rule
 		    			$modefiedFind=$infRule->getModifiedFind($subject,$predicate,$object);
@@ -183,10 +177,8 @@ class InfModelB extends InfModel
 		    											$offset,
 		    											$resultCount) ;
 						//If it deliverd statements that matches the trigger
-		    			if (isset($infFindResult[0]))
-						{
-							foreach ($infFindResult as $statement)
-			    			{	
+		    			if (isset($infFindResult[0])) {
+							foreach ($infFindResult as $statement) {	
 			    				//Entail the statements and check, if they are not about the 
 			    				//ontology
 			    				$newStatement=$infRule->entail($statement);
@@ -194,8 +186,7 @@ class InfModelB extends InfModel
 		    						//Check if, the entailed statements are, what we are looking for
 				    				if($this->_nodeEqualsFind($subject,$newStatement->getSubject()) && 
 				    					$this->_nodeEqualsFind($predicate,$newStatement->getPredicate()) && 
-				    					$this->_nodeEqualsFind($object,$newStatement->getObject() ) )
-				    				{
+				    					$this->_nodeEqualsFind($object,$newStatement->getObject() ) ) {
 				    					//Add to results
 			    						$return[]=$newStatement;
 			    						$resultCount++;
@@ -205,8 +196,7 @@ class InfModelB extends InfModel
 											return $return;
 				    				}
 					   		}
-						} else 
-						{
+						} else {
 							//If there were no results of the rule-query-combination, 
 							//mark this combination as a dead-end.
 							$this->findDeadEnds[]=$serializedRuleStatement;
@@ -227,54 +217,41 @@ class InfModelB extends InfModel
 	* @return	boolean
 	* @access	public
 	*/
-	function contains(&$statement) 
+	public function contains(Statement $statement) 
 	{
-	//throws an error, if $statement is not of class Statement
-	if(!is_a($statement,'Statement'))
-		trigger_error(RDFAPI_ERROR . '(class: InfModelB; method: contains): 
-			$statement has to be object of class Statement', E_USER_ERROR);	
-	
-	//Call the _infFind method, but let it stop, if it finds the first match.	
-	if (count( $this->_infFind($statement->getSubject(),
+		//Call the _infFind method, but let it stop, if it finds the first match.	
+		return (count( $this->_infFind($statement->getSubject(),
 								$statement->getPredicate(),
 								$statement->getObject(),
-								array(),true) ) >0)
-		{
-			return true;
-		} else 
-		{
-			return false;
-		};
+								array(),true) ) >0);
 	}
     
-  /**
-   * Searches for triples and returns the first matching statement.
-   * NULL input for any parameter will match anything.
-   * Example:  $result = $m->findFirstMatchingStatement( NULL, NULL, $node );
-   * Returns the first statement of the MemModel where the object equals $node.
-   * Returns an NULL if nothing is found.
-   * You can define an offset to search for. Default = 0
-   *
-   * @param	object Node	$subject
-   * @param	object Node	$predicate
-   * @param	object Node	$object
-   * @param	integer	$offset
-   * @return	object Statement      
-   * @access	public
-   */
-   function findFirstMatchingStatement($subject, $predicate, $object, $offset = 0) 
+   /**
+    * Searches for triples and returns the first matching statement.
+    * NULL input for any parameter will match anything.
+    * Example:  $result = $m->findFirstMatchingStatement( NULL, NULL, $node );
+    * Returns the first statement of the MemModel where the object equals $node.
+    * Returns an NULL if nothing is found.
+    * You can define an offset to search for. Default = 0
+    *
+    * @param	object Node	$subject
+    * @param	object Node	$predicate
+    * @param	object Node	$object
+    * @param	integer	$offset
+    * @return	object Statement      
+    * @access	public
+    */
+    public function findFirstMatchingStatement($subject, $predicate, $object, $offset = 0) 
 	{
 		//Call the _infFind method, but let it stop, if it finds the 
 		//first match.	
 	   	$res= $this->_infFind($subject,$predicate,$object,array(),true,$offset);
 	   		
-		if (isset($res[$offset]))
-		{
+		if (isset($res[$offset])) {
 			return $res[$offset];
-		} else 
-		{
+		} else {
 			return NULL;
-		};
+		}
 	}  
 
 	/**
@@ -283,10 +260,10 @@ class InfModelB extends InfModel
 	* @access	public 
 	* @return	object	StatementIterator
 	*/  
-	function & getStatementIterator() 
+	public static function getStatementIterator() 
 	{
 		// Import Package Utility
-			include_once(RDFAPI_INCLUDE_DIR.PACKAGE_UTILITY);
+		include_once RDFAPI_INCLUDE_DIR.PACKAGE_UTILITY ;
 		// Gets a MemModel by executing a find(null,null,null) to get a 
 		//inferable statements.	
 		// WARNING: might be slow
@@ -399,7 +376,7 @@ class InfModelB extends InfModel
 	* triples as HTML.
 	*
 	* @access	public 
-	*/  
+	*/
 	function writeAsHtml() 
 	{
 			require_once(RDFAPI_INCLUDE_DIR.PACKAGE_SYNTAX_RDF);
@@ -454,7 +431,7 @@ class InfModelB extends InfModel
 	* @access	public
 	* @throws	PhpError
 	*/
-	function remove($statement)
+	function remove(Statement $statement)
 	{
 		if (parent::contains($statement))
 		{
@@ -505,7 +482,7 @@ class InfModelB extends InfModel
 	* @access	public 
 	* @return	object	FindIterator
 	*/  
-	function & findAsIterator($sub=null,$pred=null,$obj=null) {
+	public static function findAsIterator(Node $sub = NULL, Node $pred = NULL, Node $obj = NULL) {
 		$errmsg = RDFAPI_ERROR . '(class: InfModelB; method: findAsIterator): 
 									This function is disabled in the
 									Inference Model';

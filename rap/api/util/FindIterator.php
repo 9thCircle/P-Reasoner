@@ -18,17 +18,16 @@
  * @access	public
  *
  */ 
- class FindIterator extends Object {
+ class FindIterator extends Object
+ {
 
  	/**
 	* Reference to the MemModel
 	* @var		object MemModel
 	* @access	private
 	*/	
-    var $model;
+    protected $model;
     
-
-
  	/**
 	* Current position
 	* FindIterator does not use the build in PHP array iterator,
@@ -36,8 +35,7 @@
 	* @var		integer
 	* @access	private
 	*/	
-    var $position;
-    
+    protected $position;
     
     /**
 	* Searchpattern
@@ -46,9 +44,9 @@
 	* @access	private
 	*/	
 
-    var $subject;
-    var $predicate;
-    var $object;
+    protected $nSubject;
+    protected $nPredicate;
+    protected $nObject;
    
     
    /**
@@ -60,22 +58,23 @@
     * @param    object  Object
 	* @access	public
     */
-    function FindIterator(&$model,$sub,$pred,$obj) {
-		$this->model = &$model;
-		$this->subject=$sub;
-		$this->predicate=$pred;
-		$this->object=$obj;
-		$this->position=-1;
+    public function __construct(Model $model, Node $sub = NULL, Node $pred = NULL, Node $obj = NULL)
+	{
+		$this->model       = $model;
+		$this->nSubject    = $sub;
+		$this->nPredicate  = $pred;
+		$this->nObject     = $obj;
+		$this->position    = -1;
 	}
-	
 	
  	/**
     * Returns TRUE if there are more matching statements.
     * @return	boolean
     * @access	public  
     */
-    function hasNext() {
-  		if($this->model->findFirstMatchOff($this->subject,$this->predicate,$this->object,$this->position+1)>-1){
+    public function hasNext()
+	{
+  		if($this->model->findFirstMatchOff($this->nSubject,$this->nPredicate,$this->nObject,$this->position+1)>-1){
   			return TRUE;
   		}else{
   			return FALSE;
@@ -88,32 +87,30 @@
     * @return	statement or NULL if there is no next matching statement.
     * @access	public  
     */
-    function next() {
-  			$res=$this->model->findFirstMatchOff($this->subject,$this->predicate,$this->object,$this->position+1);	
-  			if($res>-1){
+    public function next()
+	{
+  			$res = $this->model->findFirstMatchOff($this->nSubject,$this->nPredicate, $this->nObject, $this->position + 1);
+  			if($res>-1) {
   				$this->position=$res;
   				return $this->model->triples[$res];
-  			}else{
-  				return Null;
+  			} else {
+  				return NULL;
   			}		
     }
-   
-   
- 
-
-    /**
-    * Returns the current matching statement.
-    * @return	statement or NULL if there is no current matching statement.
-    * @access	public  
-    */
-    function current() {
-  		if (($this->position >= -1)&&(isset($this->model->triples[$this->position]))) {
+	
+	/**
+	 * Returns the current matching statement.
+	 * @return	statement or NULL if there is no current matching statement.
+	 * @access	public  
+	 */
+	function current()
+	{
+		if (($this->position >= -1) && (isset($this->model->triples[$this->position]))) {
 			return $this->model->triples[$this->position];
 		} else {
 			return NULL;
 		} 
-    }  
-  
- } 
+	}
+}
 
 ?>

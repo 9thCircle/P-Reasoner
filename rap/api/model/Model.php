@@ -28,7 +28,7 @@ class Model extends Object
     * @var     string
     * @access	private
     */
-    protected $baseURI = '';
+    protected $baseURI = NULL;
 	
     /**
     * Number of the last assigned bNode.
@@ -108,7 +108,7 @@ class Model extends Object
             // create a parser according to the suffix of the filename
             // if there is no suffix assume the file to be XML/RDF
             preg_match("/\.([a-zA-Z0-9_]+)$/", $filename, $suffix);
-			$ext = strtolower($suffix[1]);
+			$ext = strtolower(array_key_exists(1, $suffix) ? $suffix[1] : NULL);
             if (isset($suffix[1]) && ($ext === 'n3' OR $ext === 'nt')){
                 // Import Package Syntax
                 include_once RDFAPI_INCLUDE_DIR.PACKAGE_SYNTAX_N3;
@@ -123,7 +123,7 @@ class Model extends Object
             }
         };
 
-        if (($stream && $type === 'rdf')||($stream && $type === 'n3')) {
+        if ($stream !== FALSE && ($type === 'rdf' || $type === 'n3')) {
                 $temp=&$parser->generateModel($filename, FALSE, $this);
         } else{
                 $temp=&$parser->generateModel($filename);
@@ -139,8 +139,8 @@ class Model extends Object
 	 * @param string $str The string containing the data to be parsed and loaded.
 	 * @param type $type The type of the string, currently only 'json' is supported.
 	 */
-	function loadFromString($str, $type) {
-		
+	public function loadFromString($str, $type)
+	{
 		switch ($type) {
 			case 'json':
 				include_once RDFAPI_INCLUDE_DIR.PACKAGE_SYNTAX_JSON;
@@ -185,7 +185,7 @@ class Model extends Object
     * @param 	Object Statement   $statement
     * @access	private
     */
-    protected function _addStatementFromAnotherModel($statement, &$blankNodes_tmp)
+    protected function addStatementFromAnotherModel(Statement $statement, &$blankNodes_tmp)
     {
         $subject  = $statement->getSubject();
         $object   = $statement->getObject();
@@ -195,7 +195,7 @@ class Model extends Object
             if (!array_key_exists($label, $blankNodes_tmp))
             {
                 if ($this->findFirstMatchingStatement($subject, NULL, NULL)
-                || $this->findFirstMatchingStatement(NULL, NULL, $subject))
+					|| $this->findFirstMatchingStatement(NULL, NULL, $subject))
                 {
                 $blankNodes_tmp[$label] = new BlankNode($this);
                 $statement->subj = $blankNodes_tmp[$label];

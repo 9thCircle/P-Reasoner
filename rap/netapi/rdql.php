@@ -94,8 +94,8 @@ function generateResultStatementsFromVarResult(&$result,$parsedq, &$outm,$closur
 	  $stmt = new Statement($subj,$pred,$obj);
 	  
 	  // bNode closure
-	  if (is_a($stmt->object(),'BlankNode') && $closure == True) {
-	     getBNodeClosure($stmt->object(),$model,$outm);
+	  if (is_a($stmt->getObject(),'BlankNode') && $closure == True) {
+	     getBNodeClosure($stmt->getObject(),$model,$outm);
 	  }
 	  if (is_a($stmt->getSubject(),'BlankNode') && $closure == True) {
 	     getBNodeClosure($stmt->getSubject(),$model,$outm);

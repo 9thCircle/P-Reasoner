@@ -25,7 +25,7 @@ class InfModel extends MemModel
 	* @var		array
 	* @access	private
 	*/
-	var $infRules;
+	protected $infRules;
 
 	/**
 	* Array of URI-Strings that produces Infrules.
@@ -33,7 +33,7 @@ class InfModel extends MemModel
 	* @var		array
 	* @access	private
 	*/
-	var $supportedInference;
+	protected $supportedInference;
 	
 	/**
 	* Array of the connection between the infrules and the statement 
@@ -44,7 +44,7 @@ class InfModel extends MemModel
 	* @var		array
 	* @access	private
 	*/	
-	var $statementRuleIndex;
+	protected $statementRuleIndex;
 	
 	/**
 	* Array of the infRule triggers and the matching infrules.
@@ -54,7 +54,7 @@ class InfModel extends MemModel
 	* @var		array
 	* @access	private
 	*/	
-	var $infRulesTriggerIndex;
+	protected $infRulesTriggerIndex;
 	
 	/**
 	* Array of the infRule entailments and the matching infrules.
@@ -64,10 +64,9 @@ class InfModel extends MemModel
 	* @var		array
 	* @access	private
 	*/	
-	var $infRulesEntailIndex;
-
-
-
+	protected $infRulesEntailIndex;
+	
+	
    /**
     * Constructor
 	* You can supply a base_uri
@@ -75,109 +74,102 @@ class InfModel extends MemModel
     * @param string $baseURI 
 	* @access	public
     */	
-	function InfModel ($baseURI = NULL) 
+	public function __construct($baseURI = NULL) 
 	{
 		//call the memmodel constructor method
 		parent::MemModel($baseURI);
 		//initialise vars
-		$this->infRulesTriggerIndex['s']=array();
-		$this->infRulesTriggerIndex['p']=array();
-		$this->infRulesTriggerIndex['o']=array();
-		$this->infRulesEntailIndex['s']=array();
-		$this->infRulesEntailIndex['p']=array();
-		$this->infRulesEntailIndex['o']=array();
-		$this->infRules=array();
-		$this->statementRuleIndex = array();
+		$this->infRulesTriggerIndex['s']  = array();
+		$this->infRulesTriggerIndex['p']  = array();
+		$this->infRulesTriggerIndex['o']  = array();
+		$this->infRulesEntailIndex['s']   = array();
+		$this->infRulesEntailIndex['p']   = array();
+		$this->infRulesEntailIndex['o']   = array();
+		$this->infRules                   = array();
+		$this->statementRuleIndex         = array();
 		//arraylist of predicate labels that shall add inference rules 
 		//to the model
 		//The constants, wich statements will create rules can be configured in constants.php
-		if (INF_RES_SUBCLASSOF)
+		if (INF_RES_SUBCLASSOF) {
 			$this->supportedInference[] = RDF_SCHEMA_URI.RDFS_SUBCLASSOF;
-			
-		if (INF_RES_SUBPROPERTYOF)
+		}
+		if (INF_RES_SUBPROPERTYOF) {
 			$this->supportedInference[] = RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF;
-
-		if (INF_RES_RANGE)
+		}
+		if (INF_RES_RANGE) {
 			$this->supportedInference[] = RDF_SCHEMA_URI.RDFS_RANGE;
-
-		if (INF_RES_DOMAIN)
+		}
+		if (INF_RES_DOMAIN) {
 			$this->supportedInference[] = RDF_SCHEMA_URI.RDFS_DOMAIN;
-
-		if (INF_RES_OWL_SAMEAS)
+		}
+		if (INF_RES_OWL_SAMEAS) {
 			$this->supportedInference[] = OWL_URI.OWL_SAME_AS;
-
-		if (INF_RES_OWL_INVERSEOF)
+		}
+		if (INF_RES_OWL_INVERSEOF) {
 			$this->supportedInference[] = OWL_URI.OWL_INVERSE_OF;
-		
-		if (INF_RES_OWL_SYMMETRIC)
+		}
+		if (INF_RES_OWL_SYMMETRIC) {
 			$this->supportedInference[] = OWL_URI.OWL_SYMMETRIC;
+		}
 		
 		#@ added by santec
 		//Rule: rdf1
-		if (INF_RES_RULE_RDF1)
-		{
+		if (INF_RES_RULE_RDF1) {
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, NULL, NULL);
 			$infRule->setEntailment('<p>', new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_NAMESPACE_URI.RDF_PROPERTY));
-			$this->_addInfRule($infRule,'base');
+			$this->_addInfRule($infRule, 'base');
 		}
 		
 		//Rule: rdfs12
-		if (INF_RES_RULE_RDFS12)
-		{
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,new Resource(RDF_NAMESPACE_URI.RDF_TYPE),new Resource(RDF_SCHEMA_URI.'ContainerMembershipProperty'));
-			$infRule->setEntailment('<s>',new Resource(RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF),new Resource(RDF_SCHEMA_URI.'member'));
-			$this->_addInfRule($infRule,'base');
+		if (INF_RES_RULE_RDFS12) {
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.'ContainerMembershipProperty'));
+			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF), new Resource(RDF_SCHEMA_URI.'member'));
+			$this->_addInfRule($infRule, 'base');
 		}
 		
 		#@ added by santec
 		//Rule: rdfs4a
-		if (INF_RES_RULE_RDFS4A)
-		{
-			$infRule=new InfRule();
+		if (INF_RES_RULE_RDFS4A) {
+			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, NULL, NULL);
 			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.'Resource'));
-			$this->_addInfRule($infRule,'base');
+			$this->_addInfRule($infRule, 'base');
 		}
 		
 		//Rule: rdfs6
-		if (INF_RES_RULE_RDFS6)
-		{
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,new Resource(RDF_NAMESPACE_URI.RDF_TYPE),new Resource(RDF_NAMESPACE_URI.RDF_PROPERTY));
-			$infRule->setEntailment('<s>',new Resource(RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF),'<s>');
-			$this->_addInfRule($infRule,'base');
+		if (INF_RES_RULE_RDFS6) {
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_NAMESPACE_URI.RDF_PROPERTY));
+			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF), '<s>');
+			$this->_addInfRule($infRule, 'base');
 		}
 			
 		//Rule: rdfs8
-		if (INF_RES_RULE_RDFS8)
-		{
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,new Resource(RDF_NAMESPACE_URI.RDF_TYPE),new Resource(RDF_SCHEMA_URI.RDFS_CLASS));
-			$infRule->setEntailment('<s>',new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF),new Resource(RDF_SCHEMA_URI.RDFS_RESOURCE));
-			$this->_addInfRule($infRule,'base');
+		if (INF_RES_RULE_RDFS8) {
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.RDFS_CLASS));
+			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF), new Resource(RDF_SCHEMA_URI.RDFS_RESOURCE));
+			$this->_addInfRule($infRule, 'base');
 			
 		}
 		
 		//Rule: rdfs10
-		if (INF_RES_RULE_RDFS10)
-		{
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,new Resource(RDF_NAMESPACE_URI.RDF_TYPE),new Resource(RDF_SCHEMA_URI.RDFS_CLASS));
-			$infRule->setEntailment('<s>',new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF),'<s>');
-			$this->_addInfRule($infRule,'base');
+		if (INF_RES_RULE_RDFS10) {
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.RDFS_CLASS));
+			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF), '<s>');
+			$this->_addInfRule($infRule, 'base');
 		}
 				
 		//Rule: rdfs13
-		if (INF_RES_RULE_RDFS13)
-		{
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,new Resource(RDF_NAMESPACE_URI.RDF_TYPE),new Resource(RDF_SCHEMA_URI.RDFS_DATATYPE));
-			$infRule->setEntailment('<s>',new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF),new Resource(RDF_SCHEMA_URI.RDFS_LITERAL));
-			$this->_addInfRule($infRule,'base');
+		if (INF_RES_RULE_RDFS13) {
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.RDFS_DATATYPE));
+			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF), new Resource(RDF_SCHEMA_URI.RDFS_LITERAL));
+			$this->_addInfRule($infRule, 'base');
 		}
-				
 	}
 	
  	/**
@@ -192,16 +184,15 @@ class InfModel extends MemModel
    	* @access	public
    	* @throws	PhpError 
    	*/	
-	function add($statement)
+	public function add(Statement $statement)
 	{
 		parent::add($statement);
 		//if the predicate is supported by the inference
-		if (in_array($statement->getLabelPredicate(),$this->supportedInference))
-		{
-				$this->_addToInference($statement);
-		};
+		if (in_array($statement->getLabelPredicate(), $this->supportedInference)) {
+			$this->_addToInference($statement);
+		}
 	}
-
+	
 	/**
 	* This function analyses the statement's predicate and adds the 
 	* matching infrule to the model.
@@ -209,12 +200,12 @@ class InfModel extends MemModel
    	* @param	object Statement	$statement
    	* @access	private
    	*/
-	function _addToInference($statement)
+	protected final function _addToInference(Statement $statement)
 	{
-		$predicateLabel=$statement->getLabelPredicate();
+		$predicateLabel = $statement->getLabelPredicate();
 		//get the position of the the statement in the model
 		end($this->triples);
-		$statementPosition=key($this->triples);
+		$statementPosition = key($this->triples);
 		
 		switch ($predicateLabel)
 		{
@@ -323,10 +314,10 @@ class InfModel extends MemModel
    	* @return	integer 
    	* @access	private
    	*/
-	function _removeFromInference($statement)
+	protected final function _removeFromInference($statement)
 	{
-		$return= array();
-		$statementPosition=-1;
+		$return = array();
+		$statementPosition = -1;
 		do
 		{
 			//get the position of the statement that should be removed
@@ -334,74 +325,56 @@ class InfModel extends MemModel
 													$statement->getPredicate(),
 													$statement->getObject(),
 													$statementPosition+1);						
-			if ($statementPosition!=-1)
-			{
+			if ($statementPosition != -1) {
 				//if it added any rules
-				if (isset ($this->statementRuleIndex[$statementPosition]))
-				{
+				if (isset ($this->statementRuleIndex[$statementPosition])) {
 					//remove all rules 
-					foreach ($this->statementRuleIndex[$statementPosition] as $key => $value)
-					{
+					foreach ($this->statementRuleIndex[$statementPosition] as $key => $value) {
 						//remove from Rule-Trigger Index
-						if (is_a($this,'InfModelF'))
-						{
+						if (is_a($this,'InfModelF')) {
 							$trigger=$this->infRules[$key]->getTrigger();
 							
-							if(is_a($trigger['s'],'Node'))
-							{
+							if(is_a($trigger['s'],'Node')) {
 								$subjectLabel=$trigger['s']->getLabel();
-							} else 
-							{
+							} else {
 								$subjectLabel='null';
 							}
 							unset ($this->infRulesTriggerIndex['s'][$subjectLabel][array_search($key,$this->infRulesTriggerIndex['s'][$subjectLabel])]);
 							
-							if(is_a($trigger['p'],'Node'))
-							{
+							if(is_a($trigger['p'],'Node')) {
 								$predicateLabel=$trigger['p']->getLabel();
-							} else 
-							{
+							} else {
 								$predicateLabel='null';
 							}
 							unset ($this->infRulesTriggerIndex['p'][$predicateLabel][array_search($key,$this->infRulesTriggerIndex['p'][$predicateLabel])]);
 							
-							if(is_a($trigger['o'],'Node'))
-							{
+							if(is_a($trigger['o'],'Node')) {
 								$objectLabel=$trigger['o']->getLabel();
-							} else 
-							{
+							} else {
 								$objectLabel='null';
 							}
 							unset ($this->infRulesTriggerIndex['o'][$objectLabel][array_search($key,$this->infRulesTriggerIndex['o'][$objectLabel])]);
-						} else
-						//remove from Rule-Entailment Index
-						{	
+						} else {
+							//remove from Rule-Entailment Index
 							$entailment=$this->infRules[$key]->getEntailment();
 							
-							if(is_a($entailment['s'],'Node'))
-							{
+							if(is_a($entailment['s'],'Node')) {
 								$subjectLabel=$entailment['s']->getLabel();
-							} else 
-							{
+							} else {
 								$subjectLabel='null';
 							}
 							unset ($this->infRulesEntailIndex['s'][$subjectLabel][array_search($key,$this->infRulesEntailIndex['s'][$subjectLabel])]);
 							
-							
-							if(is_a($entailment['p'],'Node'))
-							{
+							if(is_a($entailment['p'],'Node')) {
 								$predicateLabel=$entailment['p']->getLabel();
-							} else 
-							{
+							} else {
 								$predicateLabel='null';
 							}
 							unset ($this->infRulesEntailIndex['p'][$predicateLabel][array_search($key,$this->infRulesEntailIndex['p'][$predicateLabel])]);
 							
-							if(is_a($entailment['o'],'Node'))
-							{
+							if(is_a($entailment['o'],'Node')) {
 								$objectLabel=$entailment['o']->getLabel();
-							} else 
-							{
+							} else {
 								$objectLabel='null';
 							}
 							unset ($this->infRulesEntailIndex['o'][$objectLabel][array_search($key,$this->infRulesEntailIndex['o'][$objectLabel])]);
@@ -411,16 +384,15 @@ class InfModel extends MemModel
 					}
 					unset($this->statementRuleIndex[$statementPosition]);
 					$return[]=$statementPosition;
-				};
+				}
 			}
-			
 		} while($statementPosition!=-1);
 		
 		//return the positions of the statements to be removed OR emty array 
 		//if nothing was found.
 		return $return;
 	}
-
+	
 	/**
 	* Returns a model, containing all Statements, having a Predicate, that 
 	* is supported by the inference. 
@@ -428,14 +400,14 @@ class InfModel extends MemModel
 	* @return	object Model
 	* @access	public
 	*/
-	function getSchema() 
+	public final function getSchema() 
 	{
-		$res=new MemModel();
+		$res = new MemModel();
 		//Search the base-model for all statements, having a Predicate, that 
 		//is supported by the inference.
 		foreach ($this->supportedInference as $inferencePredicateLabel)
 		{
-			$res->addModel($this->find(null, new Resource($inferencePredicateLabel), null));		
+			$res->addModel($this->find(NULL, new Resource($inferencePredicateLabel), NULL));		
 		}
 		return $res;
 	}
@@ -451,9 +423,8 @@ class InfModel extends MemModel
 	* @access	public
 	* @throws	PhpError
 	*/
-	function replace($subject, $predicate, $object, $replacement) 
+	public final function replace($subject, $predicate, $object, $replacement) 
 	{
-	
 	   $errmsg = RDFAPI_ERROR . '(class: InfModel; method: replace): This function is disabled in the Inference Model';
 	   trigger_error($errmsg, E_USER_ERROR); 
 	}
@@ -474,9 +445,8 @@ class InfModel extends MemModel
 	* @return	object MemModel
 	* @access	public
 	*/
-	function findRegex($subject_regex, $predicate_regex, $object_regex) 
+	public final function findRegex($subject_regex, $predicate_regex, $object_regex) 
 	{
-
 		$errmsg = RDFAPI_ERROR . '(class: InfModel; method: findRegex): 
 									This function is disabled in the  
 									Inference Model';
@@ -496,7 +466,7 @@ class InfModel extends MemModel
 	* @return	object MemModel
 	* @access	public
 	*/
-	function findVocabulary($vocabulary) 
+	public final function findVocabulary($vocabulary) 
 	{
 		
 		$errmsg = RDFAPI_ERROR . '(class: InfModel; method: findVocabulary): 
@@ -514,67 +484,55 @@ class InfModel extends MemModel
 	* @param	integer	$infRulePosition
 	* @access	private
 	*/
-	function _addInfruleToIndex(& $infRule,& $infRulePosition)
+	protected final function _addInfruleToIndex(infRule &$infRule, &$infRulePosition)
 	{
 		//Add the rule only to the trigger index, if it is a InfFModel
-		if (is_a($this,'InfModelF'))
-		{
+		if (is_a($this,'InfModelF')) {
 			//get the trigger
 			$trigger = $infRule->getTrigger();
 			//evaluate and set the index
-			if ($trigger['s'] == null)
-			{
+			if ($trigger['s'] === NULL) {
 				$this->infRulesTriggerIndex['s']['null'][]=$infRulePosition;
-			} else 
-			{
+			} else {
 				$this->infRulesTriggerIndex['s'][$trigger['s']->getLabel()][]=$infRulePosition;
-			};
+			}
 			
-			if ($trigger['p'] == null)
-			{
+			if ($trigger['p'] === NULL) {
 				$this->infRulesTriggerIndex['p']['null'][]=$infRulePosition;
-			} else 
-			{
+			} else {
 				$this->infRulesTriggerIndex['p'][$trigger['p']->getLabel()][]=$infRulePosition;
-			};
+			}
 			
-			if ($trigger['o'] == null)
+			if ($trigger['o'] === NULL)
 			{
 				$this->infRulesTriggerIndex['o']['null'][]=$infRulePosition;
-			} else 
-			{
+			} else {
 				$this->infRulesTriggerIndex['o'][$trigger['o']->getLabel()][]=$infRulePosition;
-			};
-		} else 
-		//add to entailment Index if it is a BModel
-		{		
+			}
+		} else {
+			//add to entailment Index if it is a BModel
+			
 			//get the entailment
 			$entailment = $infRule->getEntailment();
 			//evaluate the entailment and add to index
-			if (!is_a($entailment['s'],'Node'))
-			{
+			if (!is_a($entailment['s'],'Node')) {
 				$this->infRulesEntailIndex['s']['null'][]=$infRulePosition;
-			} else 
-			{
+			} else {
 				$this->infRulesEntailIndex['s'][$entailment['s']->getLabel()][]=$infRulePosition;
-			};
+			}
 			
-			if (!is_a($entailment['p'],'Node'))
-			{
+			if (!is_a($entailment['p'],'Node')) {
 				$this->infRulesEntailIndex['p']['null'][]=$infRulePosition;
-			} else 
-			{
+			} else {
 				$this->infRulesEntailIndex['p'][$entailment['p']->getLabel()][]=$infRulePosition;
-			};
+			}
 			
-			if (!is_a($entailment['o'],'Node'))
-			{
+			if (!is_a($entailment['o'],'Node')) {
 				$this->infRulesEntailIndex['o']['null'][]=$infRulePosition;
-			} else 
-			{
+			} else {
 				$this->infRulesEntailIndex['o'][$entailment['o']->getLabel()][]=$infRulePosition;
-			};
-		};	
+			}
+		}
 	}
 	
 	/**
@@ -586,40 +544,49 @@ class InfModel extends MemModel
 	* @return	array	integer
 	* @access	private
 	*/
-	function _findRuleTriggerInIndex($statement)
+	protected final function _findRuleTriggerInIndex(Statement $statement)
 	{
-		$return=array();
+		$return = array();
 		//a statement's subject matches all triggers with null and the same URI
-		$subjectLabel=$statement->getLabelSubject();
-		$inIndexS=array();
-		if (isset($this->infRulesTriggerIndex['s']['null'])) 
-			$inIndexS=array_values($this->infRulesTriggerIndex['s']['null']);
-		if (isset($this->infRulesTriggerIndex['s'][$subjectLabel])) 
-			$inIndexS= array_merge($inIndexS,array_values($this->infRulesTriggerIndex['s'][$subjectLabel]));
+		$subjectLabel = $statement->getLabelSubject();
+		$inIndexS = array();
+		if (isset($this->infRulesTriggerIndex['s']['null'])) {
+			$inIndexS = array_values($this->infRulesTriggerIndex['s']['null']);
+		}
+		if (isset($this->infRulesTriggerIndex['s'][$subjectLabel])) {
+			$inIndexS = array_merge($inIndexS,array_values($this->infRulesTriggerIndex['s'][$subjectLabel]));
+		}
 		
-			//a statement's predicate matches all triggers with null and the same URI
-		$predicateLabel=$statement->getLabelPredicate();
-		$inIndexP=array();
-		if (isset($this->infRulesTriggerIndex['p']['null'])) 
-			$inIndexP=array_values($this->infRulesTriggerIndex['p']['null']);
-		if (isset($this->infRulesTriggerIndex['p'][$predicateLabel])) 
-			$inIndexP= array_merge($inIndexP,array_values($this->infRulesTriggerIndex['p'][$predicateLabel]));
+		//a statement's predicate matches all triggers with null and the same URI
+		$predicateLabel = $statement->getLabelPredicate();
+		$inIndexP = array();
+		if (isset($this->infRulesTriggerIndex['p']['null'])) {
+			$inIndexP = array_values($this->infRulesTriggerIndex['p']['null']);
+		}
+		if (isset($this->infRulesTriggerIndex['p'][$predicateLabel])) {
+			$inIndexP = array_merge($inIndexP,array_values($this->infRulesTriggerIndex['p'][$predicateLabel]));
+		}
 		
 		//a statement's object matches all triggers with null and the same URI	
-		$objectLabel=$statement->getLabelObject();
-		$inIndexO=array();
-		if (isset($this->infRulesTriggerIndex['o']['null'])) 
-			$inIndexO=array_values($this->infRulesTriggerIndex['o']['null']);
-		if (isset($this->infRulesTriggerIndex['o'][$objectLabel])) 
-			$inIndexO= array_merge($inIndexO,array_values($this->infRulesTriggerIndex['o'][$objectLabel]));
-
+		$objectLabel= $statement->getLabelObject();
+		$inIndexO = array();
+		if (isset($this->infRulesTriggerIndex['o']['null'])) {
+			$inIndexO =array_values($this->infRulesTriggerIndex['o']['null']);
+		}
+		if (isset($this->infRulesTriggerIndex['o'][$objectLabel])) {
+			$inIndexO = array_merge($inIndexO,array_values($this->infRulesTriggerIndex['o'][$objectLabel]));
+		}
+		
 		//if an infrule position occurs in subject, predicate, and object index, add to result array.		
 		foreach ($inIndexP as $positionP)
 		{
-			if (in_array($positionP,$inIndexO))
-				if (in_array($positionP,$inIndexS))
-					$return[]=$positionP;
+			if (in_array($positionP,$inIndexO)) {
+				if (in_array($positionP,$inIndexS)) {
+					$return[] = $positionP;
+				}
+			}
 		}
+		
 		return $return;
 	}
 	
@@ -634,50 +601,45 @@ class InfModel extends MemModel
 	* @return	array	integer
 	* @access	private
 	*/
-	function _findRuleEntailmentInIndex($subject,$predicate,$object)
+	protected final function _findRuleEntailmentInIndex($subject, $predicate, $object)
 	{
-		$return=array();
+		$return = array();
 		//a node matches all entailments with NULL or a matching URI
-		if(is_a($subject,'Node'))
-		{
-			$subjectLabel=$subject->getLabel();
-			$inIndexS=array();
+		if(is_a($subject,'Node')) {
+			$subjectLabel = $subject->getLabel();
+			$inIndexS = array();
 			if (isset($this->infRulesEntailIndex['s']['null'])) $inIndexS=array_values($this->infRulesEntailIndex['s']['null']);
 			if (isset($this->infRulesEntailIndex['s'][$subjectLabel])) $inIndexS= array_merge($inIndexS,array_values($this->infRulesEntailIndex['s'][$subjectLabel]));
-		} else 
-		//if the subject search pattern is NULL, every rule will match the subject search patter
-		{
-			$inIndexS=array_keys($this->infRules);
+		} else {
+			//if the subject search pattern is NULL, every rule will match the subject search patter
+			$inIndexS = array_keys($this->infRules);
 		}
 		
-		if(is_a($predicate,'Node'))
-		{
-			$predicateLabel=$predicate->getLabel();
-			$inIndexP=array();
+		if(is_a($predicate,'Node')) {
+			$predicateLabel = $predicate->getLabel();
+			$inIndexP = array();
 			if (isset($this->infRulesEntailIndex['p']['null'])) $inIndexP=array_values($this->infRulesEntailIndex['p']['null']);
 			if (isset($this->infRulesEntailIndex['p'][$predicateLabel])) $inIndexP= array_merge($inIndexP,array_values($this->infRulesEntailIndex['p'][$predicateLabel]));
-		}  else 
-		{
-			$inIndexP=array_keys($this->infRules);
+		}  else {
+			$inIndexP = array_keys($this->infRules);
 		}
 		
-		if(is_a($object,'Node'))
-		{
-			$objectLabel=$object->getLabel();
-			$inIndexO=array();
+		if(is_a($object,'Node')) {
+			$objectLabel = $object->getLabel();
+			$inIndexO = array();
 			if (isset($this->infRulesEntailIndex['o']['null'])) $inIndexO=array_values($this->infRulesEntailIndex['o']['null']);
 			if (isset($this->infRulesEntailIndex['o'][$objectLabel])) $inIndexO= array_merge($inIndexO,array_values($this->infRulesEntailIndex['o'][$objectLabel]));
-		} else 
-		{
-			$inIndexO=array_keys($this->infRules);
+		} else {
+			$inIndexO = array_keys($this->infRules);
 		}	
 		
 		//if an infrule position occurs in subject, predicate, and object index, add to result array.	
-		foreach ($inIndexP as $positionP)
-		{
-			if (in_array($positionP,$inIndexO))
-				if (in_array($positionP,$inIndexS))
-					$return[]=$positionP;
+		foreach ($inIndexP as $positionP) {
+			if (in_array($positionP,$inIndexO)) {
+				if (in_array($positionP,$inIndexS)) {
+					$return[] = $positionP;
+				}
+			}
 		}
 		return $return;
 	}
@@ -692,18 +654,19 @@ class InfModel extends MemModel
 	* @param	integer	$statementPosition
 	* @access	private
 	*/
-	function _addInfRule($infRule, $statementPosition)
+	protected final function _addInfRule(InfRule $infRule, $statementPosition)
 	{
 		//add the rule
-		$this->infRules[]=$infRule;			
+		$this->infRules[] = $infRule;			
 		//get the position of the added rule in the model
 		end($this->infRules);
-		$rulePosition=key($this->infRules);
+		$rulePosition = key($this->infRules);
 		//add the information to the index, that this statement 
 		//added this rule.
-		$this->statementRuleIndex[$statementPosition][$rulePosition]=true;
+		$this->statementRuleIndex[$statementPosition][$rulePosition] = TRUE;
 		//add informations to index over trigger & entailment
-		$this->_addInfruleToIndex($infRule,$rulePosition);
+		$this->_addInfruleToIndex($infRule, $rulePosition);
 	}
- }
+}
+
 ?>

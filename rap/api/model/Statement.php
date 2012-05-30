@@ -22,7 +22,7 @@ class Statement extends Object
 	* @var		object resource	
 	* @access	private
 	*/	
-	 public $subj = NULL;
+	public $subj = NULL;
 
 	/**
 	* Predicate of the statement
@@ -48,19 +48,19 @@ class Statement extends Object
    * @param	object	node $obj
 	* @throws	PhpError
    */
-   public function __construct($subj, $pred, $obj)
+   public function __construct(Node $subj, Node $pred, Node $obj)
    {
-		if (!is_a($subj, 'Resource')) {
+		if (is_a($subj, 'Resource') !== TRUE) {
 			$errmsg = RDFAPI_ERROR . 
 					  '(class: Statement; method: new): Resource expected as subject. Found: ' . get_class($subj);
 			trigger_error($errmsg, E_USER_ERROR); 
 		}
-		if (!is_a($pred, 'Resource') || is_a($pred, 'BlankNode')) {
+		if ((is_a($pred, 'Resource') && !is_a($pred, 'BlankNode')) !== TRUE) {
 			$errmsg = RDFAPI_ERROR . 
 					  '(class: Statement; method: new): Resource expected as predicate, no blank node allowed.';
 			trigger_error($errmsg, E_USER_ERROR); 
 		}
-		if (!(is_a($obj, 'Resource') or is_a($obj, 'Literal'))) {
+		if ((is_a($obj, 'Resource') || is_a($obj, 'Literal')) !== TRUE) {
 			$errmsg = RDFAPI_ERROR . 
 					  '(class: Statement; method: new): Resource or Literal expected as object.';
 			trigger_error($errmsg, E_USER_ERROR); 
@@ -97,26 +97,6 @@ class Statement extends Object
    * @return	object node
    */
 	public function getObject()
-	{
-		return $this->obj;
-	}
-	
-  /**
-   * Alias for getPredicate()
-   * @access	public 
-   * @return	object node
-   */
-	public function predicate()
-	{
-		return $this->pred;
-	}
-
-  /**
-   * Alias for getObject()
-   * @access	public 
-   * @return object node
-   */
-	public function object()
 	{
 		return $this->obj;
 	}
@@ -229,8 +209,8 @@ class Statement extends Object
 		## is this really needed?
 		return
 			$this->subj->equals($that->getSubject()) &&
-			$this->pred->equals($that->predicate()) &&
-			$this->obj->equals($that->object());
+			$this->pred->equals($that->getPredicate()) &&
+			$this->obj->equals($that->getObject());
 	}
 
   /**

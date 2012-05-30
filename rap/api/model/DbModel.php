@@ -147,7 +147,7 @@ class DbModel extends Model{
 			. $this->dbConn->qstr($statement->getLabelSubject()) .","
 			. $this->dbConn->qstr($statement->getLabelPredicate()) .",";
 
-			if (is_a($statement->object(), 'Literal')) {
+			if (is_a($statement->getObject(), 'Literal')) {
 				$quotedLiteral = $this->dbConn->qstr($statement->obj->getLabel());
 				$sql .=        $quotedLiteral .","
 				."'" .$statement->obj->getLanguage() ."',"
@@ -155,7 +155,7 @@ class DbModel extends Model{
 				."'" .$subject_is ."',"
 				."'l')";
 			}else{
-				$object_is = $this->_getNodeFlag($statement->object());
+				$object_is = $this->_getNodeFlag($statement->getObject());
 				$sql .=   $this->dbConn->qstr($statement->obj->getLabel()) .","
 				."'',"
 				."'',"
@@ -894,7 +894,7 @@ class DbModel extends Model{
 
 			$this->dbConn->startTrans();
 			foreach ($model->triples as $statement)
-			$this->_addStatementFromAnotherModel($statement, $blankNodes_tmp);
+			$this->addStatementFromAnotherModel($statement, $blankNodes_tmp);
 			$this->addParsedNamespaces($model->getParsedNamespaces());
 
 			$this->dbConn->completeTrans();
@@ -905,7 +905,7 @@ class DbModel extends Model{
 			$this->dbConn->startTrans();
 			$memModel =& $model->getMemModel();
 			foreach($memModel->triples as $statement)
-			$this->_addStatementFromAnotherModel($statement, $blankNodes_tmp);
+			$this->addStatementFromAnotherModel($statement, $blankNodes_tmp);
 			$this->addParsedNamespaces($model->getParsedNamespaces());
 			$this->dbConn->completeTrans();
 		}

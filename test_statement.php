@@ -58,7 +58,6 @@ $infModel->add(new Statement($master,  $pDirects,  $game));
 $infModel->add(new Statement($player,  $pPlays,    $game));
 $infModel->add(new Statement($master,  $pKnows,    $player));
 
-
 require_once 'end.php';
 
 ?>

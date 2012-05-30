@@ -34,9 +34,9 @@ function getBNodeClosure($res,$sourcem, &$outm) {
   $it = $resourcem->getStatementIterator();
   while ($it->hasNext()){
 	$stmt = $it->next();
-	$outm->add(new Statement($res,$stmt->predicate(), $stmt->object()));
-	if (is_a($stmt->object(),'BlankNode')){
-	  getBNodeClosure($stmt->object(),$sourcem,$outm);
+	$outm->add(new Statement($res,$stmt->getPredicate(), $stmt->getObject()));
+	if (is_a($stmt->getObject(),'BlankNode')){
+	  getBNodeClosure($stmt->getObject(),$sourcem,$outm);
 	}
   }  
 }

@@ -11,8 +11,6 @@
  * @version  $Id: InfStatement.php 268 2006-05-15 05:28:09Z tgauss $
  * @package infModel
  */
-class InfStatement extends Statement  {
-	
-}
-	
+class InfStatement extends Statement  { }
+
 ?>
