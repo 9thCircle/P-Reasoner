@@ -32,12 +32,12 @@ class InfModelF extends InfModel
 	
 	/**
 	* Variable that influences the habbit when adding statements. 
-	* Used by the loadModel method to increase performance.
+	* Used by the load method to increase performance.
 	*
 	* @var		boolean
 	* @access	private
 	*/
-	private $inferenceEnabled;
+	private $inferenceEnabled = TRUE;
 	
 		
    	/**
@@ -54,7 +54,6 @@ class InfModelF extends InfModel
 		
 		parent::__construct($baseURI);
 		$this->infPos = array();
-		$this->inferenceEnabled = TRUE;
 		
 		// profile
 		if ($profile === TRUE) {
@@ -80,7 +79,7 @@ class InfModelF extends InfModel
 		/*. float .*/  $start = (float)microtime(TRUE);
 		
 		parent::add($statement);
-		if ($this->inferenceEnabled) {
+		if ($this->inferenceEnabled === TRUE) {
 			foreach ($this->entailStatement($statement) as $state) {
 				//a addWithoutDublicates construct
 				if(!$this->contains($state)) {
@@ -122,7 +121,7 @@ class InfModelF extends InfModel
 		
 		if(!$this->contains($statement)) {
 		 	parent::add($statement);
-		 	if ($this->inferenceEnabled) {
+		 	if ($this->inferenceEnabled === TRUE) {
 				foreach ($this->entailStatement($statement) as $statement) {
 					if(!$this->contains($statement)) {
 						parent::add($statement);
@@ -412,23 +411,27 @@ class InfModelF extends InfModel
 	* If any statement of the model to be added to this model contains a blankNode 
 	* with an identifier already existing in this model, a new blankNode is generated.
 	*
-	* @param	object Model	$model 
-	* @param    bool $applyInference
+	* @param	object Model	$model
 	* @access	public
 	* @throws phpErrpr
 	*
 	*/
-	public function addModel(Model $model, $applyInference = TRUE)  
+	public function addModel(Model $model)  
 	{
 		/*. float .*/  $start = (float)microtime(TRUE);
 		
 		// Inferences are processed after the whole model is added
 		// (this increases performance).
 		
-	 	$this->inferenceEnabled = FALSE;
-	 	parent::addModel($model);
-	 	$this->inferenceEnabled = TRUE;
-#		$this->applyInference();
+		if ($this->inferenceEnabled === TRUE) {
+			$this->inferenceEnabled = FALSE;
+			parent::addModel($model);
+			$this->inferenceEnabled = TRUE;
+			$this->applyInference();
+		} else {
+			parent::addModel($model);
+			$this->inferenceEnabled = TRUE;
+		}
 		
 		// profile
 		if ($this->isProfiling() === TRUE) {
