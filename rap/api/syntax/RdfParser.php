@@ -2069,33 +2069,29 @@ function _end_element_handler( $parser, $name )
 */
 function _character_data_handler( $parser,$s)
 {
-    $len=strlen($s);
-    switch( $this->rdf_parser['top']['state'] )
-    {
+    $len = strlen($s);
+    switch( $this->rdf_parser['top']['state'] ) {
     case IN_PROPERTY_LITERAL:
     case IN_PROPERTY_UNKNOWN_OBJECT:
-        if( isset($this->rdf_parser['top']['data']) )
-        {
+        if( isset($this->rdf_parser['top']['data']) ) {
             $n = strlen( $this->rdf_parser['top']['data'] );
             $this->rdf_parser['top']['data'].= $s;
 
-        }
-        else
-        {
+        } else {
             $this->rdf_parser['top']['data']=$s;
         }
 
-        if( $this->rdf_parser['top']['state'] == IN_PROPERTY_UNKNOWN_OBJECT )
-        {
+        if($this->rdf_parser['top']['state'] == IN_PROPERTY_UNKNOWN_OBJECT) {
             /* look for non-whitespace */
-            for( $i = 0; (( $i < $len ) && (  ereg(" |\n|\t",$s{ $i }) )); $i++ );
-            /* if we found non-whitespace, this is a literal */
-            if( $i < $len )
-            {
+            # for( $i = 0; (( $i < $len ) && (  ereg(" |\n|\t",$s{ $i }) )); $i++ );
+			$chr = $s{$i};
+            for( $i = 0; (( $i < $len ) && ($chr === ' ' || $chr === "\n" || $chr === "\t") ); $i++ );
+			/* if we found non-whitespace, this is a literal */
+            if ($i < $len) {
                 $this->rdf_parser['top']['state'] = IN_PROPERTY_LITERAL;
             }
         }
-
+		
         break;
     case IN_TOP_LEVEL:
     	break;
@@ -2103,12 +2099,13 @@ function _character_data_handler( $parser,$s)
     case IN_XML:
         $this->rdf_parser['xml_literal']['buffer'] .= $s;
         break;
-    case IN_RDF:
-    case IN_DESCRIPTION:
-    case IN_PROPERTY_RESOURCE:
-    case IN_PROPERTY_EMPTY_RESOURCE:
-    case IN_PROPERTY_PARSE_TYPE_RESOURCE:
-    case IN_UNKNOWN:
+#    case IN_RDF:
+#    case IN_DESCRIPTION:
+#    case IN_PROPERTY_RESOURCE:
+#    case IN_PROPERTY_EMPTY_RESOURCE:
+#    case IN_PROPERTY_PARSE_TYPE_RESOURCE:
+#    case IN_UNKNOWN:
+	default:
         break;
     }
 }

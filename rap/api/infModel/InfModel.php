@@ -118,7 +118,7 @@ class InfModel extends MemModel
 		if (INF_RES_RULE_RDF1) {
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, NULL, NULL);
-			$infRule->setEntailment('<p>', new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_NAMESPACE_URI.RDF_PROPERTY));
+			$infRule->setEntailment(INF_TOK_PREDICATE, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_NAMESPACE_URI.RDF_PROPERTY));
 			$this->_addInfRule($infRule, 'base');
 		}
 		
@@ -126,7 +126,7 @@ class InfModel extends MemModel
 		if (INF_RES_RULE_RDFS12) {
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.'ContainerMembershipProperty'));
-			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF), new Resource(RDF_SCHEMA_URI.'member'));
+			$infRule->setEntailment(INF_TOK_SUBJECT, new Resource(RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF), new Resource(RDF_SCHEMA_URI.'member'));
 			$this->_addInfRule($infRule, 'base');
 		}
 		
@@ -135,7 +135,7 @@ class InfModel extends MemModel
 		if (INF_RES_RULE_RDFS4A) {
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, NULL, NULL);
-			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.'Resource'));
+			$infRule->setEntailment(INF_TOK_SUBJECT, new Resource(RDF_SCHEMA_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.'Resource'));
 			$this->_addInfRule($infRule, 'base');
 		}
 		
@@ -143,7 +143,7 @@ class InfModel extends MemModel
 		if (INF_RES_RULE_RDFS6) {
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_NAMESPACE_URI.RDF_PROPERTY));
-			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF), '<s>');
+			$infRule->setEntailment(INF_TOK_SUBJECT, new Resource(RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF), INF_TOK_SUBJECT);
 			$this->_addInfRule($infRule, 'base');
 		}
 			
@@ -151,7 +151,7 @@ class InfModel extends MemModel
 		if (INF_RES_RULE_RDFS8) {
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.RDFS_CLASS));
-			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF), new Resource(RDF_SCHEMA_URI.RDFS_RESOURCE));
+			$infRule->setEntailment(INF_TOK_SUBJECT, new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF), new Resource(RDF_SCHEMA_URI.RDFS_RESOURCE));
 			$this->_addInfRule($infRule, 'base');
 			
 		}
@@ -160,15 +160,15 @@ class InfModel extends MemModel
 		if (INF_RES_RULE_RDFS10) {
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.RDFS_CLASS));
-			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF), '<s>');
+			$infRule->setEntailment(INF_TOK_SUBJECT, new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF), INF_TOK_SUBJECT);
 			$this->_addInfRule($infRule, 'base');
 		}
-				
+		
 		//Rule: rdfs13
 		if (INF_RES_RULE_RDFS13) {
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), new Resource(RDF_SCHEMA_URI.RDFS_DATATYPE));
-			$infRule->setEntailment('<s>', new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF), new Resource(RDF_SCHEMA_URI.RDFS_LITERAL));
+			$infRule->setEntailment(INF_TOK_SUBJECT, new Resource(RDF_SCHEMA_URI.RDFS_SUBCLASSOF), new Resource(RDF_SCHEMA_URI.RDFS_LITERAL));
 			$this->_addInfRule($infRule, 'base');
 		}
 	}
@@ -221,7 +221,7 @@ class InfModel extends MemModel
 				//subject and object as the statement, that asked for an 
 				//entailment, and having the object of the statement, 
 				//that created this rule as predicate.
-				$infRule->setEntailment('<s>',$statement->getObject(),'<o>');
+				$infRule->setEntailment(INF_TOK_SUBJECT, $statement->getObject(), INF_TOK_OBJECT);
 				//add the infule to Model, Statement/Rule-Index, 
 				//and Rule/Trigger (or Rule/Entailment) index
 				$this->_addInfRule($infRule,$statementPosition);
@@ -230,7 +230,7 @@ class InfModel extends MemModel
 			case RDF_SCHEMA_URI.RDFS_SUBCLASSOF :
 				$infRule=new InfRule();
 				$infRule->setTrigger(null,new Resource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getSubject());
-				$infRule->setEntailment('<s>',new Resource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getObject());
+				$infRule->setEntailment(INF_TOK_SUBJECT,new Resource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getObject());
 				$this->infRules[]=$infRule;
 				$this->_addInfRule($infRule,$statementPosition);
 			break;
@@ -238,7 +238,7 @@ class InfModel extends MemModel
 			case RDF_SCHEMA_URI.RDFS_DOMAIN :
 				$infRule=new InfRule();
 				$infRule->setTrigger(null,$statement->getSubject(),null);
-				$infRule->setEntailment('<s>',new Resource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getObject());
+				$infRule->setEntailment(INF_TOK_SUBJECT, new Resource(RDF_NAMESPACE_URI.RDF_TYPE), $statement->getObject());
 				$this->infRules[]=$infRule;
 				$this->_addInfRule($infRule,$statementPosition);
 			break;
@@ -246,7 +246,7 @@ class InfModel extends MemModel
 			case RDF_SCHEMA_URI.RDFS_RANGE :
 				$infRule=new InfRule();
 				$infRule->setTrigger(null,$statement->getSubject(),null);
-				$infRule->setEntailment('<o>',new Resource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getObject());
+				$infRule->setEntailment(INF_TOK_OBJECT, new Resource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getObject());
 				$this->infRules[]=$infRule;
 				$this->_addInfRule($infRule,$statementPosition);
 			break;
@@ -254,13 +254,13 @@ class InfModel extends MemModel
 			case OWL_URI.OWL_INVERSE_OF :
 				$infRule=new InfRule();
 				$infRule->setTrigger(null,$statement->getSubject(),null);
-				$infRule->setEntailment('<o>',$statement->getObject(),'<s>');
+				$infRule->setEntailment(INF_TOK_OBJECT, $statement->getObject(), INF_TOK_SUBJECT);
 				$this->infRules[]=$infRule;
 				$this->_addInfRule($infRule,$statementPosition);
 			
 				$infRule=new InfRule();
 				$infRule->setTrigger(null,$statement->getObject(),null);
-				$infRule->setEntailment('<o>',$statement->getSubject(),'<s>');
+				$infRule->setEntailment(INF_TOK_OBJECT, $statement->getSubject(), INF_TOK_SUBJECT);
 				$this->infRules[]=$infRule;			
 				$this->_addInfRule($infRule,$statementPosition);				
 			break;
@@ -268,7 +268,7 @@ class InfModel extends MemModel
 			case OWL_URI.OWL_SYMMETRIC :
 				$infRule = new InfRule();
 				$infRule->setTrigger(NULL, $statement->getSubject(), NULL);
-				$infRule->setEntailment('<o>',$statement->getSubject(),'<s>');
+				$infRule->setEntailment(INF_TOK_OBJECT, $statement->getSubject(), INF_TOK_SUBJECT);
 				$this->infRules[] = $infRule;
 				$this->_addInfRule($infRule,$statementPosition);			
 			break;
@@ -276,32 +276,32 @@ class InfModel extends MemModel
 			case OWL_URI.OWL_SAME_AS :
 				$infRule=new InfRule();
 				$infRule->setTrigger($statement->getSubject(),null,null);
-				$infRule->setEntailment($statement->getObject(),'<p>','<o>');
+				$infRule->setEntailment($statement->getObject(), INF_TOK_PREDICATE, INF_TOK_OBJECT);
 				$this->_addInfRule($infRule,$statementPosition);
 			
 				$infRule=new InfRule();
 				$infRule->setTrigger($statement->getObject(),null,null);
-				$infRule->setEntailment($statement->getSubject(),'<p>','<o>');
+				$infRule->setEntailment($statement->getSubject(), INF_TOK_PREDICATE, INF_TOK_OBJECT);
 				$this->_addInfRule($infRule,$statementPosition);
 			
 				$infRule=new InfRule();
 				$infRule->setTrigger(null,$statement->getSubject(),null);
-				$infRule->setEntailment('<s>',$statement->getObject(),'<o>');
+				$infRule->setEntailment(INF_TOK_SUBJECT, $statement->getObject(), INF_TOK_OBJECT);
 				$this->_addInfRule($infRule,$statementPosition);
 			
 				$infRule=new InfRule();
 				$infRule->setTrigger(null,$statement->getObject(),null);
-				$infRule->setEntailment('<s>',$statement->getSubject(),'<o>');
+				$infRule->setEntailment(INF_TOK_SUBJECT, $statement->getSubject(), INF_TOK_OBJECT);
 				$this->_addInfRule($infRule,$statementPosition);
 			
 				$infRule=new InfRule();
 				$infRule->setTrigger(null,null,$statement->getSubject());
-				$infRule->setEntailment('<s>','<p>',$statement->getObject());
+				$infRule->setEntailment(INF_TOK_SUBJECT, INF_TOK_PREDICATE, $statement->getObject());
 				$this->_addInfRule($infRule,$statementPosition);
 			
 				$infRule=new InfRule();
 				$infRule->setTrigger(null,null,$statement->getObject());
-				$infRule->setEntailment('<s>','<p>',$statement->getSubject());
+				$infRule->setEntailment(INF_TOK_SUBJECT, INF_TOK_PREDICATE, $statement->getSubject());
 				$this->_addInfRule($infRule,$statementPosition);		
 			break;
 		};	
@@ -406,8 +406,7 @@ class InfModel extends MemModel
 		$res = new MemModel();
 		//Search the base-model for all statements, having a Predicate, that 
 		//is supported by the inference.
-		foreach ($this->supportedInference as $inferencePredicateLabel)
-		{
+		foreach ($this->supportedInference as $inferencePredicateLabel) {
 			$res->addModel($this->find(NULL, new Resource($inferencePredicateLabel), NULL));		
 		}
 		return $res;
@@ -485,7 +484,7 @@ class InfModel extends MemModel
 	* @param	integer	$infRulePosition
 	* @access	private
 	*/
-	protected final function _addInfruleToIndex(infRule &$infRule, &$infRulePosition)
+	protected final function _addInfruleToIndex(infRule $infRule, &$infRulePosition)
 	{
 		//Add the rule only to the trigger index, if it is a InfFModel
 		if (is_a($this,'InfModelF')) {
@@ -493,20 +492,19 @@ class InfModel extends MemModel
 			$trigger = $infRule->getTrigger();
 			//evaluate and set the index
 			if ($trigger['s'] === NULL) {
-				$this->infRulesTriggerIndex['s']['null'][]=$infRulePosition;
+				$this->infRulesTriggerIndex['s']['null'][] = $infRulePosition;
 			} else {
 				$this->infRulesTriggerIndex['s'][$trigger['s']->getLabel()][]=$infRulePosition;
 			}
 			
 			if ($trigger['p'] === NULL) {
-				$this->infRulesTriggerIndex['p']['null'][]=$infRulePosition;
+				$this->infRulesTriggerIndex['p']['null'][] = $infRulePosition;
 			} else {
 				$this->infRulesTriggerIndex['p'][$trigger['p']->getLabel()][]=$infRulePosition;
 			}
 			
-			if ($trigger['o'] === NULL)
-			{
-				$this->infRulesTriggerIndex['o']['null'][]=$infRulePosition;
+			if ($trigger['o'] === NULL) {
+				$this->infRulesTriggerIndex['o']['null'][] = $infRulePosition;
 			} else {
 				$this->infRulesTriggerIndex['o'][$trigger['o']->getLabel()][]=$infRulePosition;
 			}
@@ -516,7 +514,7 @@ class InfModel extends MemModel
 			//get the entailment
 			$entailment = $infRule->getEntailment();
 			//evaluate the entailment and add to index
-			if (!is_a($entailment['s'],'Node')) {
+			if (!is_a($entailment['s'], 'Node')) {
 				$this->infRulesEntailIndex['s']['null'][]=$infRulePosition;
 			} else {
 				$this->infRulesEntailIndex['s'][$entailment['s']->getLabel()][]=$infRulePosition;

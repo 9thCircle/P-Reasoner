@@ -17,31 +17,31 @@
 // General
 // ----------------------------------------------------------------------------------
 
-define('RDFAPI_ERROR', 'RDFAPI error ');
-define('DEFAULT_ALGORITHM', 'MD5');
-define('DEFAULT_ENCODING', 'UTF-8');
-define('INDENTATION', '   ');
-define('LINEFEED', chr(10));
+define('RDFAPI_ERROR',       'RDFAPI error ');
+define('DEFAULT_ALGORITHM',  'MD5');
+define('DEFAULT_ENCODING',   'UTF-8');
+define('INDENTATION',        "\t");
+define('LINEFEED',           "\n");
 
 // ----------------------------------------------------------------------------------
 // RAP Packages
 // ----------------------------------------------------------------------------------
-define('PACKAGE_MODEL','model/ModelP.php');
-define('PACKAGE_UTILITY','util/Utility.php');
-define('PACKAGE_DBASE','model/DBase.php');
-define('PACKAGE_SYNTAX_RDF','syntax/SyntaxRDF.php');
-define('PACKAGE_SYNTAX_N3','syntax/SyntaxN3.php');
-define('PACKAGE_SYNTAX_JSON','syntax/SyntaxJSON.php');
-define('PACKAGE_SYNTAX_GRDDL','syntax/SyntaxGRDDL.php');
-define('PACKAGE_VOCABULARY','vocabulary/Vocabulary.php');
-define('PACKAGE_RDQL','rdql/RDQL.php');
-define('PACKAGE_INFMODEL','infModel/InfModelP.php');
-define('PACKAGE_RESMODEL','resModel/ResModelP.php');
-define('PACKAGE_ONTMODEL','ontModel/OntModelP.php');
-define('PACKAGE_DATASET','dataset/DatasetP.php');
-define('PACKAGE_SPARQL','sparql/SPARQL.php');
-define('PACKAGE_SYNTAX_RSS','syntax/SyntaxRSS.php');
-define('PACKAGE_SYNTAX_SPARQLRES','syntax/SyntaxSparqlRes.php');
+define('PACKAGE_MODEL',             'model/ModelP.php');
+define('PACKAGE_UTILITY',           'util/Utility.php');
+define('PACKAGE_DBASE',             'model/DBase.php');
+define('PACKAGE_SYNTAX_RDF',        'syntax/SyntaxRDF.php');
+define('PACKAGE_SYNTAX_N3',         'syntax/SyntaxN3.php');
+define('PACKAGE_SYNTAX_JSON',       'syntax/SyntaxJSON.php');
+define('PACKAGE_SYNTAX_GRDDL',      'syntax/SyntaxGRDDL.php');
+define('PACKAGE_VOCABULARY',        'vocabulary/Vocabulary.php');
+define('PACKAGE_RDQL',              'rdql/RDQL.php');
+define('PACKAGE_INFMODEL',          'infModel/InfModelP.php');
+define('PACKAGE_RESMODEL',          'resModel/ResModelP.php');
+define('PACKAGE_ONTMODEL',          'ontModel/OntModelP.php');
+define('PACKAGE_DATASET',           'dataset/DatasetP.php');
+define('PACKAGE_SPARQL',            'sparql/SPARQL.php');
+define('PACKAGE_SYNTAX_RSS',        'syntax/SyntaxRSS.php');
+define('PACKAGE_SYNTAX_SPARQLRES',  'syntax/SyntaxSparqlRes.php');
 
 // ----------------------------------------------------------------------------------
 // Model
@@ -66,13 +66,13 @@ define('INDEX_TYPE',IND_DEF);
 // ModelFactory
 // ----------------------------------------------------------------------------------
 
-define ('MEMMODEL','MemModel');
-define ('DBMODEL','DbModel');
-define ('INFMODELF','InfModelF');
-define ('INFMODELB','InfModelB');
-define ('ONTMODEL','OntModel');
-define ('RESMODEL','ResModel');
-define ('RDFS_VOCABULARY','RdfsVocabulary.php');
+define ('MEMMODEL',         'MemModel');
+define ('DBMODEL',          'DbModel');
+define ('INFMODELF',        'InfModelF');
+define ('INFMODELB',        'InfModelB');
+define ('ONTMODEL',         'OntModel');
+define ('RESMODEL',         'ResModel');
+define ('RDFS_VOCABULARY',  'RdfsVocabulary.php');
 
 // ----------------------------------------------------------------------------------
 // Parser
@@ -94,8 +94,8 @@ define('CREATE_MODEL_WITHOUT_DUPLICATES', FALSE);
 // labels and rename them to the defined BNODE_PREFIX
 define('FIX_BLANKNODES', TRUE);
 
-define('NAMESPACE_SEPARATOR_CHAR','^');
-define('NAMESPACE_SEPARATOR_STRING','^');
+define('NAMESPACE_SEPARATOR_CHAR',    '^');
+define('NAMESPACE_SEPARATOR_STRING',  '^');
 define('IN_TOP_LEVEL',0);
 define('IN_RDF',1);
 define('IN_DESCRIPTION',2);
@@ -168,13 +168,13 @@ define('MAX_ALLOWED_ABBREVIATED_LENGTH',60);
 // ----------------------------------------------------------------------------------
 
 // Definition of the colors used by the method RDFUtil:writeHTMLTable
-define('HTML_TABLE_HEADER_COLOR', '#FFFFFF');
-define('HTML_TABLE_RESOURCE_COLOR', '#FFFFCC');
-define('HTML_TABLE_LITERAL_COLOR', '#E7E7EF');
-define('HTML_TABLE_BNODE_COLOR', '#FFCCFF');
-define('HTML_TABLE_RDF_NS_COLOR', '#CCFFCC');
-define('HTML_TABLE_NS_ROW_COLOR1', '#FFFFFF');
-define('HTML_TABLE_NS_ROW_COLOR0', '#E7E7EF');
+define('HTML_TABLE_HEADER_COLOR',    '#FFFFFF');
+define('HTML_TABLE_RESOURCE_COLOR',  '#FFFFCC');
+define('HTML_TABLE_LITERAL_COLOR',   '#E7E7EF');
+define('HTML_TABLE_BNODE_COLOR',     '#FFCCFF');
+define('HTML_TABLE_RDF_NS_COLOR',    '#CCFFCC');
+define('HTML_TABLE_NS_ROW_COLOR1',   '#FFFFFF');
+define('HTML_TABLE_NS_ROW_COLOR0',   '#E7E7EF');
 
 // ----------------------------------------------------------------------------------
 // RDF
@@ -345,6 +345,11 @@ $default_prefixes = array(
 // ----------------------------------------------------------------------------------
 // InfModel
 // ----------------------------------------------------------------------------------
+
+// Tokens for entailments; mean: "here put subj/pred/obj" 
+define('INF_TOK_SUBJECT',    'S');
+define('INF_TOK_PREDICATE',  'P');
+define('INF_TOK_OBJECT',     'O');
 
 //activate / deactivate reasoning for the following schema constructs
 //rdfs:subclass

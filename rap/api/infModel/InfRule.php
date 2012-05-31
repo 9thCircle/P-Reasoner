@@ -39,7 +39,7 @@ class InfRule
 	* Array, that hold the entailment subject in key ['s'], the 
 	* entailment predicate in ['p'], and the entailment object in ['o'].
 	* The array values can be a node that will be inserted in the 
-	* returning statement, or '<s>' to insert the subject,'<p>' to insert 
+	* returning statement, or INF_TOK_SUBJECT to insert the subject,INF_TOK_PREDICATE to insert 
 	* the predicate, or '<o>' to insert the object of the checked statement
 	* to this position in the new returned statement.
 	*
@@ -95,20 +95,14 @@ class InfRule
 	*/
 	public function setEntailment($subject, $predicate, $object)
 	{
-		//throw an error if subject, predicate, or object are neither node, 
-		//nor <s>,<p>,<o>.
-		if(!is_a($subject,'Node') && !ereg('<[spo]>', $subject)) 
-			trigger_error(RDFAPI_ERROR . '(class: Infrule; method:  
-				setEntailment): $subject has to be <s>,<p>,or <o> or of class Node'
-				, E_USER_ERROR);
-		if(!is_a($predicate,'Node') && !ereg('<[spo]>', $predicate)) 
-			trigger_error(RDFAPI_ERROR . '(class: Infrule; method: 
-				setEntailment): $predicate has to be <s>,<p>,or <o> or of class Node'
-				, E_USER_ERROR);
+		/* This check is not really needed.
+		
 		if(!is_a($object,'Node') && !ereg('<[spo]>', $object)) 
 			trigger_error(RDFAPI_ERROR . '(class: Infrule; method: 
-				setEntailment): $object has to be <s>,<p>,or <o> or of class Node'
+				setEntailment): $object has to be ' . INF_TOK_SUBJECT . ',' . INF_TOK_PREDICATE . ',or <o> or of class Node'
 				, E_USER_ERROR);
+		*/
+		
 		
 		$this->entailment['s']  = $subject;	
 		$this->entailment['p']  = $predicate;
@@ -177,64 +171,64 @@ class InfRule
 	}
 	
  	/**
-	* Returns a infered InfStatement by evaluating the statement with 
-	* the entailment rule.
-	*
-   	* @param	object Statement 
-	* @return 	object InfStatement
-	* @access	public
-	* @throws	PhpError
-	*/  	
+	 * Returns a infered InfStatement by evaluating the statement with 
+	 * the entailment rule.
+	 *
+   	 * @param	object Statement 
+	 * @return 	object InfStatement
+	 * @access	public
+	 * @throws	PhpError
+	 */
  	public function entail(Statement $statement)
  	{
- 		//if the entailment's subject is <s>,<p>,or <o>, put the statements 
+ 		//if the entailment's subject is INF_TOK_SUBJECT,INF_TOK_PREDICATE,or <o>, put the statements 
  		//subject,predicate,or object into the subject of the 
  		//entailed statement. If the entailment's subject is a node, 
  		//add that node to the statement.	
 	 	switch ($this->entailment['s']) {
-			case '<s>':
+			case INF_TOK_SUBJECT:
 				$entailedSubject=$statement->getSubject();
 			break;
-			case '<p>':
+			case INF_TOK_PREDICATE:
 				$entailedSubject=$statement->getPredicate();
 			break;	
-			case '<o>':
+			case INF_TOK_OBJECT:
 				$entailedSubject=$statement->getObject();
 			break;
 			default:
 				$entailedSubject=$this->entailment['s'];
 		}
 		
- 		//if the entailment's predicate is <s>,<p>,or <o>, put the 
+ 		//if the entailment's predicate is INF_TOK_SUBJECT, INF_TOK_PREDICATE, or INF_TOK_OBJECT, put the 
  		//statements subject,predicate,or object into the predicate of 
  		//the entailed statement. If the entailment's predicate is a node, 
  		//add that node to the statement.			
 		switch ($this->entailment['p']) {
-			case '<s>':
+			case INF_TOK_SUBJECT:
 				$entailedPredicate=$statement->getSubject();
 			break;
-			case '<p>':
+			case INF_TOK_PREDICATE:
 				$entailedPredicate=$statement->getPredicate();
 			break;	
-			case '<o>':
+			case INF_TOK_OBJECT:
 				$entailedPredicate=$statement->getObject();
 			break;
 			default:
 				$entailedPredicate=$this->entailment['p'];
 		}
 		
- 		//if the entailment's object is <s>,<p>,or <o>, put the 
+ 		//if the entailment's object is INF_TOK_SUBJECT, INF_TOK_PREDICATE, or INF_TOK_OBJECT, put the 
  		//statements subject,predicate,or object into the object of 
  		//the entailed statement. If the entailment's object is a node,
  		//add that node to the statement.			
 		switch ($this->entailment['o']) {
-			case '<s>':
+			case INF_TOK_SUBJECT:
 				$entailedObject=$statement->getSubject();
 			break;
-			case '<p>':
+			case INF_TOK_PREDICATE:
 				$entailedObject=$statement->getPredicate();
 			break;	
-			case '<o>':
+			case INF_TOK_OBJECT:
 				$entailedObject=$statement->getObject();
 			break;
 			default:
@@ -263,37 +257,37 @@ class InfRule
  		$findObject     = $this->trigger['o'];
  		
  		switch ($this->entailment['s']) {
- 			case '<s>':
+ 			case INF_TOK_SUBJECT:
  			 	$findSubject    = $subject;
 		 	break;
- 			case '<p>':
+ 			case INF_TOK_PREDICATE:
  			 	$findPredicate  = $subject;
 		 	break;	
-		 	case '<o>':
+		 	case INF_TOK_OBJECT:
 			 	$findObject     = $subject;
 		 	break;
  		}
  			
  		switch ($this->entailment['p']) {
- 			case '<s>':
+ 			case INF_TOK_SUBJECT:
  			 	$findSubject    = $predicate;
 		 	break;
- 			case '<p>':
+ 			case INF_TOK_PREDICATE:
  			 	$findPredicate  = $predicate;
 		 	break;	
-		 	case '<o>':
+		 	case INF_TOK_OBJECT:
 			 	$findObject     = $predicate;
 	 		break;
  		}
  		
  		switch ($this->entailment['o']) {
- 			case '<s>':
+ 			case INF_TOK_SUBJECT:
  			 	$findSubject    = $object;
 		 	break;
- 			case '<p>':
+ 			case INF_TOK_PREDICATE:
  			 	$findPredicate  = $object;
 		 	break;	
-		 	case '<o>':
+		 	case INF_TOK_OBJECT:
 			 	$findObject     = $object;
 		 	break;
  		}
