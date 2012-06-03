@@ -74,9 +74,9 @@ class InfModelB extends InfModel
 	* It recursively searches in the statements and rules to find 
 	* matching statements.
 	*
-	* @param	object Node	$subject
-	* @param	object Node	$predicate
-	* @param	object Node	$object
+	* @param	object RDFNode	$subject
+	* @param	object RDFNode	$predicate
+	* @param	object RDFNode	$object
 	* @return	object MemModel
 	* @access	public
 	* @throws	PhpError
@@ -121,9 +121,9 @@ class InfModelB extends InfModel
 	* It recursively searches in the statements and rules to find matching
 	* statements
 	*
-	* @param	object Node	$subject
-	* @param	object Node	$predicate
-	* @param	object Node	$object
+	* @param	object RDFNode	$subject
+	* @param	object RDFNode	$predicate
+	* @param	object RDFNode	$object
 	* @param	array		$searchStringIndex
 	* @param	boolean 	$findOnlyFirstMatching
 	* @param	integer 	$offset
@@ -150,7 +150,7 @@ class InfModelB extends InfModel
 		//Don't infer statements about the schema (rdfs:subClass, etc..)
 		//is false
     	if ($predicate === NULL || 
-    		(is_a($predicate,'Node') && !in_array($predicate->getLabel(), $this->supportedInference)))
+    		(is_a($predicate, 'RDFNode') && !in_array($predicate->getLabel(), $this->supportedInference)))
     		//Check only Rules, that the EntailmentIndex returned
        		foreach ($this->_findRuleEntailmentInIndex($subject,$predicate,$object) as $ruleKey) {
 	    		$infRule = $this->infRules[$ruleKey];
@@ -182,7 +182,7 @@ class InfModelB extends InfModel
 			    				//Entail the statements and check, if they are not about the 
 			    				//ontology
 			    				$newStatement=$infRule->entail($statement);
-			    				if (!in_array($newStatement->getLabelPredicate(),$this->supportedInference))
+			    				if (!in_array($newStatement->getPredicate()->getLabel(), $this->supportedInference))
 		    						//Check if, the entailed statements are, what we are looking for
 				    				if($this->_nodeEqualsFind($subject,$newStatement->getSubject()) && 
 				    					$this->_nodeEqualsFind($predicate,$newStatement->getPredicate()) && 
@@ -234,9 +234,9 @@ class InfModelB extends InfModel
     * Returns an NULL if nothing is found.
     * You can define an offset to search for. Default = 0
     *
-    * @param	object Node	$subject
-    * @param	object Node	$predicate
-    * @param	object Node	$object
+    * @param	object RDFNode	$subject
+    * @param	object RDFNode	$predicate
+    * @param	object RDFNode	$object
     * @param	integer	$offset
     * @return	object Statement      
     * @access	public
@@ -262,8 +262,6 @@ class InfModelB extends InfModel
 	*/  
 	public static function getStatementIterator() 
 	{
-		// Import Package Utility
-		include_once RDFAPI_INCLUDE_DIR.PACKAGE_UTILITY ;
 		// Gets a MemModel by executing a find(null,null,null) to get a 
 		//inferable statements.	
 		// WARNING: might be slow
@@ -395,9 +393,7 @@ class InfModelB extends InfModel
 	* @access	public 
 	*/  
 	function writeAsHtmlTable() 
-	{
-			// Import Package Utility
-			include_once(RDFAPI_INCLUDE_DIR.PACKAGE_UTILITY);   			
+	{		
 		RDFUtil::writeHTMLTable($this->getMemModel());
 	}  
 	
@@ -435,7 +431,7 @@ class InfModelB extends InfModel
 	{
 		if (parent::contains($statement))
 		{
-			if (in_array($statement->getLabelPredicate(),$this->supportedInference));
+			if (in_array($statement->getPredicate()->getLabel(),$this->supportedInference));
 				while (count($this->_removeFromInference($statement))>0);
 				
 			$this->findDeadEnds=array();
@@ -462,7 +458,7 @@ class InfModelB extends InfModel
 	{
 		//If the find pattern is a node, use the nodes equal-method and 
 		//return the result.
-		if (is_a($find,'Node'))
+		if (is_a($find, 'RDFNode'))
 			return $node->equals($find);
 		
 		//Null-pattern matches anything.
@@ -482,7 +478,7 @@ class InfModelB extends InfModel
 	* @access	public 
 	* @return	object	FindIterator
 	*/  
-	public static function findAsIterator(Node $sub = NULL, Node $pred = NULL, Node $obj = NULL) {
+	public static function findAsIterator(RDFNode $sub = NULL, RDFNode $pred = NULL, RDFNode $obj = NULL) {
 		$errmsg = RDFAPI_ERROR . '(class: InfModelB; method: findAsIterator): 
 									This function is disabled in the
 									Inference Model';

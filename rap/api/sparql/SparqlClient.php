@@ -14,7 +14,7 @@
 * @package sparql
 */
 
-class SparqlClient extends Object {
+class SparqlClient extends RDFObject {
 
 	var $server;
 	var $output;	

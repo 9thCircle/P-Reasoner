@@ -68,7 +68,7 @@ class ResContainer extends ResResource
 		foreach ($this->listProperties() as $statement)
 		{
 			//if the property matches a container membership property
-			if ($this->_predicateLabelMatchesMembershipProperty($statement->getLabelPredicate()))
+			if ($this->_predicateLabelMatchesMembershipProperty($statement->getPredicate()->getLabel()))
 			{
 				//check, if it's the value, we're looking for. 
 				if ($resResource->equals($statement->getObject()))
@@ -86,7 +86,7 @@ class ResContainer extends ResResource
    	*/	
 	function isAlt()
 	{
-		return ($this->containerType->getURI()==RDF_NAMESPACE_URI.RDF_ALT);
+		return ($this->containerType->getURI() === RDF_NAMESPACE_URI.RDF_ALT);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ class ResContainer extends ResResource
    	*/	
 	function isBag()
 	{
-		return ($this->containerType->getURI()==RDF_NAMESPACE_URI.RDF_BAG);
+		return ($this->containerType->getURI() === RDF_NAMESPACE_URI.RDF_BAG);
 	}
 
 	/**
@@ -108,7 +108,7 @@ class ResContainer extends ResResource
    	*/	
 	function isSeq()
 	{
-		return ($this->containerType->getURI()==RDF_NAMESPACE_URI.RDF_SEQ);
+		return ($this->containerType->getURI() === RDF_NAMESPACE_URI.RDF_SEQ);
 	}
 	
 	/**
@@ -122,9 +122,8 @@ class ResContainer extends ResResource
 		$return=array();
 		foreach ($this->listProperties() as $statement)
 		{
-			$predicateLabel=$statement->getLabelPredicate();
-			if ($this->_predicateLabelMatchesMembershipProperty($predicateLabel))
-			{
+			$predicateLabel=$statement->getPredicate()->getLabel();
+			if ($this->_predicateLabelMatchesMembershipProperty($predicateLabel)) {
 				$return[$this->_getMemberIndexNrFromMembershipPropertyLabel($predicateLabel)] = $statement->getObject();
 			}	
 		}
@@ -142,31 +141,28 @@ class ResContainer extends ResResource
    	*/
 	function remove($object)
 	{
-		$deleteFromIndex=array();
+		$deleteFromIndex = array();
 		//get all container members
 		$memberIndex=$this->getMembers();
 		
 		//check each container member if it equals the resoure to be removed
-		foreach ($memberIndex as $key => $value)
-		{
+		foreach ($memberIndex as $key => $value) {
 			//save the statements positio in the container
-			if($object->equals($value))
-					$deleteFromIndex[]=$key;	
+			if ($object->equals($value)) {
+				$deleteFromIndex[] = $key;
+			}
 		}
-
+		
 		//delete all found container members
-		foreach ($deleteFromIndex as $index)
-		{
+		foreach ($deleteFromIndex as $index) {
 			$this->removeAll($this->_getMembershipPropertyWithIndex($index));
 
 			//renumber all members with higher ordinal numbers than the deleted one
-			for ($i = $index;$i < count($memberIndex); $i++)
-			{
+			for ($i = $index;$i < count($memberIndex); $i++) {
 				$this->removeAll($this->_getMembershipPropertyWithIndex($i+1));
 				$this->addProperty($this->_getMembershipPropertyWithIndex($i),$memberIndex[$i+1]);
 			}		
 		}
-		
 	}
 	
 	/**
@@ -189,7 +185,7 @@ class ResContainer extends ResResource
    	*/
 	function _predicateLabelMatchesMembershipProperty($predicateLabel)
 	{
-		return substr($predicateLabel,0,strlen(RDF_NAMESPACE_URI.'_')) == RDF_NAMESPACE_URI.'_';
+		return substr($predicateLabel,0,strlen(RDF_NAMESPACE_URI.'_')) === RDF_NAMESPACE_URI.'_';
 	}
 	
 	/**

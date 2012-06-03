@@ -13,8 +13,8 @@
 *   the vocabulary in one spot, simplifing implementation and
 *   maintainence.
 */
-class RDF_RES{
-
+class RDF_RES
+{
 	// RDF concepts (constants are defined in constants.php)
 	function ALT()
 	{
@@ -177,6 +177,5 @@ class RDF_RES{
 		return  new ResResource(RDF_NAMESPACE_URI . RDF_SEEALSO);
 	}
 }
-
 
 ?>

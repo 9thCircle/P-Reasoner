@@ -65,7 +65,7 @@ class IteratorFindQuadsMem
 	var $current;
 
 	/**
-	* The graphName Resource to search for.
+	* The graphName RDFResource to search for.
 	*
 	* @var string
 	* @access	private
@@ -73,7 +73,7 @@ class IteratorFindQuadsMem
 	var $findGraphName;
 
 	/**
-	* The subject Resource to search for.
+	* The subject RDFResource to search for.
 	*
 	* @var string
 	* @access	private
@@ -81,7 +81,7 @@ class IteratorFindQuadsMem
 	var $findSubject;
 
 	/**
-	* The predicate Resource to search for.
+	* The predicate RDFResource to search for.
 	*
 	* @var string
 	* @access	private
@@ -89,7 +89,7 @@ class IteratorFindQuadsMem
 	var $findPredicate;
 
 	/**
-	* The object Resource to search for.
+	* The object RDFResource to search for.
 	*
 	* @var string
 	* @access	private
@@ -113,9 +113,9 @@ class IteratorFindQuadsMem
 	* either the subject, predicate, or object of the result statements.
 	*
     *
-    * @param Resource
-    * @param Resource
-    * @param Resource
+    * @param RDFResource
+    * @param RDFResource
+    * @param RDFResource
     * @param dataset
     * @param Boolean
 	* @access	public
@@ -200,7 +200,7 @@ class IteratorFindQuadsMem
 		if($this->returnAsTriples) return $this->current;
 
 		$currentGraph=&$this->graphIterator->current();
-		return new Quad(new Resource($currentGraph->getGraphName()),$this->current->getSubject(),$this->current->getPredicate(),$this->current->getObject());
+		return new Quad(new RDFResource($currentGraph->getGraphName()),$this->current->getSubject(),$this->current->getPredicate(),$this->current->getObject());
 	}
 
 	/**

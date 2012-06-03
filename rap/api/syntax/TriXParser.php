@@ -110,21 +110,21 @@ class TriXParser
 		switch ($tag) 
 		{
 				case 'uri':
-					return new Resource((string)$value);
+					return new RDFResource((string)$value);
 				break;
 		
 				case 'id':
-					return new BlankNode((string)$value);
+					return new RDFBlankNode((string)$value);
 				break;
 				
 				case 'typedLiteral':
-					$literal=new Literal((string)$value);
+					$literal=new RDFLiteral((string)$value);
 					$literal->setDatatype((string)$value['datatype']);
 					return $literal;
 				break;
 					
 				case 'plainLiteral':
-					$literal=new Literal((string)$value);
+					$literal=new RDFLiteral((string)$value);
 					if(isset($value['xml:lang']))
 						$literal->setLanguage((string)$value['xml:lang']);
 					return $literal;

@@ -11,17 +11,17 @@
 // ----------------------------------------------------------------------------------
 
 // Include Model classes
-require_once( RDFAPI_INCLUDE_DIR . 'model/Node.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'model/Literal.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'model/Resource.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'model/Blanknode.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'model/Statement.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'model/Model.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'model/MemModel.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'model/DbStore.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'util/StatementIterator.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'model/ModelFactory.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'sparql/SparqlClient.php' );
-require_once( RDFAPI_INCLUDE_DIR . 'sparql/ClientQuery.php' );
+require_once( __DIR__ . '/Node.php' );
+require_once( __DIR__ . '/Literal.php' );
+require_once( __DIR__ . '/Resource.php' );
+require_once( __DIR__ . '/Blanknode.php' );
+require_once( __DIR__ . '/Statement.php' );
+require_once( __DIR__ . '/Model.php' );
+require_once( __DIR__ . '/MemModel.php' );
+require_once( __DIR__ . '/DbStore.php' );
+require_once( __DIR__ . '/../util/StatementIterator.php' );
+require_once( __DIR__ . '/ModelFactory.php' );
+require_once( __DIR__ . '/../sparql/SparqlClient.php' );
+require_once( __DIR__ . '/../sparql/ClientQuery.php' );
 
 ?>

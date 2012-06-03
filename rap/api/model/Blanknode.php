@@ -1,8 +1,7 @@
 <?php
-require_once RDFAPI_INCLUDE_DIR . 'model/Resource.php';
 
 // ----------------------------------------------------------------------------------
-// Class: BlankNode
+// Class: RDFBlankNode
 // ----------------------------------------------------------------------------------
 
 
@@ -20,8 +19,8 @@ require_once RDFAPI_INCLUDE_DIR . 'model/Resource.php';
  * @package model
  * @access	public
  *
- */ 
-class BlankNode extends Resource
+ */
+class RDFBlankNode extends RDFResource
 {
    /**
     * Constructor
@@ -37,15 +36,13 @@ class BlankNode extends Resource
         if (is_a($namespace_or_uri_or_model, 'Model')) {
 			// generate identifier
 			$id = $namespace_or_uri_or_model->getUniqueResourceURI(BNODE_PREFIX);
-			
 			$this->uri = $id;
-
 		} else {
 			// set identifier
 			$this->uri = $namespace_or_uri_or_model . $localName;
 		}
     }
-
+	
   /**
    * Returns the ID of the blank node.
    *
@@ -63,7 +60,8 @@ class BlankNode extends Resource
    * @return 	string
    * @access	public  
    */	
-	public function getLabel() {
+	public function getLabel()
+	{
 		return $this->uri;
 	}
 
@@ -88,28 +86,24 @@ class BlankNode extends Resource
    */  
    public function equals ($that)
    {
-	
 	    if ($this === $that) {
 	      return TRUE;
 	    }
-        if ($that === NULL || is_a($that, 'BlankNode') !== TRUE) {
+        if ($that === NULL || is_a($that, 'RDFBlankNode') !== TRUE) {
 	      return FALSE;
 	    }
-	    	
+	    
 		return $this->getURI() === $that->getURI();
 	}
-
-
+	
     /**
     *   Doing string magic in PHP5
-    *   @return string String representation of this Blank Node
+    *   @return string String representation of this RDFBlankNode
     */
     public function __toString()
     {
         return $this->toString();
     }
-
-} // end: BlankNode 
-
+} // end: RDFBlankNode 
 
 ?>

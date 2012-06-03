@@ -14,287 +14,286 @@
 *   maintainence.
 */
 class OWL{
-
 	// OWL concepts
 	function ANNOTATION_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'AnnotationProperty');
+		return  new RDFResource(OWL_NS . 'AnnotationProperty');
 
 	}
 
 	function ALL_DIFFERENT()
 	{
-		return  new Resource(OWL_NS . 'AllDifferent');
+		return  new RDFResource(OWL_NS . 'AllDifferent');
 
 	}
 
 	function ALL_VALUES_FROM()
 	{
-		return  new Resource(OWL_NS . 'allValuesFrom');
+		return  new RDFResource(OWL_NS . 'allValuesFrom');
 
 	}
 
 	function BACKWARD_COMPATIBLE_WITH()
 	{
-		return  new Resource(OWL_NS . 'backwardCompatibleWith');
+		return  new RDFResource(OWL_NS . 'backwardCompatibleWith');
 
 	}
 
 	function CARDINALITY()
 	{
-		return  new Resource(OWL_NS . 'cardinality');
+		return  new RDFResource(OWL_NS . 'cardinality');
 
 	}
 
 	function OWL_CLASS()
 	{
-		return  new Resource(OWL_NS . 'Class');
+		return  new RDFResource(OWL_NS . 'Class');
 
 	}
 
 	function COMPLEMENT_OF()
 	{
-		return  new Resource(OWL_NS . 'complementOf');
+		return  new RDFResource(OWL_NS . 'complementOf');
 
 	}
 
 	function DATATYPE()
 	{
-		return  new Resource(OWL_NS . 'Datatype');
+		return  new RDFResource(OWL_NS . 'Datatype');
 
 	}
 
 	function DATATYPE_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'DatatypeProperty');
+		return  new RDFResource(OWL_NS . 'DatatypeProperty');
 
 	}
 
 	function DATA_RANGE()
 	{
-		return  new Resource(OWL_NS . 'DataRange');
+		return  new RDFResource(OWL_NS . 'DataRange');
 
 	}
 
 	function DATATYPE_RESTRICTION()
 	{
-		return  new Resource(OWL_NS . 'DatatypeRestriction');
+		return  new RDFResource(OWL_NS . 'DatatypeRestriction');
 
 	}
 
 	function DEPRECATED_CLASS()
 	{
-		return  new Resource(OWL_NS . 'DeprecatedClass');
+		return  new RDFResource(OWL_NS . 'DeprecatedClass');
 
 	}
 
 	function DEPRECATED_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'DeprecatedProperty');
+		return  new RDFResource(OWL_NS . 'DeprecatedProperty');
 
 	}
 
 	function DISTINCT_MEMBERS()
 	{
-		return  new Resource(OWL_NS . 'distinctMembers');
+		return  new RDFResource(OWL_NS . 'distinctMembers');
 
 	}
 
 	function DIFFERENT_FROM()
 	{
-		return  new Resource(OWL_NS . 'differentFrom');
+		return  new RDFResource(OWL_NS . 'differentFrom');
 
 	}
 
 	function DISJOINT_WITH()
 	{
-		return  new Resource(OWL_NS . 'disjointWith');
+		return  new RDFResource(OWL_NS . 'disjointWith');
 
 	}
 
 	function EQUIVALENT_CLASS()
 	{
-		return  new Resource(OWL_NS . 'equivalentClass');
+		return  new RDFResource(OWL_NS . 'equivalentClass');
 
 	}
 
 	function EQUIVALENT_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'equivalentProperty');
+		return  new RDFResource(OWL_NS . 'equivalentProperty');
 
 	}
 
 	function FUNCTIONAL_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'FunctionalProperty');
+		return  new RDFResource(OWL_NS . 'FunctionalProperty');
 
 	}
 
 	function HAS_VALUE()
 	{
-		return  new Resource(OWL_NS . 'hasValue');
+		return  new RDFResource(OWL_NS . 'hasValue');
 
 	}
 
 	function INCOMPATIBLE_WITH()
 	{
-		return  new Resource(OWL_NS . 'incompatibleWith');
+		return  new RDFResource(OWL_NS . 'incompatibleWith');
 
 	}
 
 	function IMPORTS()
 	{
-		return  new Resource(OWL_NS . 'imports');
+		return  new RDFResource(OWL_NS . 'imports');
 
 	}
 
 	function INTERSECTION_OF()
 	{
-		return  new Resource(OWL_NS . 'intersectionOf');
+		return  new RDFResource(OWL_NS . 'intersectionOf');
 
 	}
 
 	function INVERSE_FUNCTIONAL_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'InverseFunctionalProperty');
+		return  new RDFResource(OWL_NS . 'InverseFunctionalProperty');
 
 	}
 
 	function INVERSE_OF()
 	{
-		return  new Resource(OWL_NS . 'inverseOf');
+		return  new RDFResource(OWL_NS . 'inverseOf');
 
 	}
 
 	function MAX_CARDINALITY()
 	{
-		return  new Resource(OWL_NS . 'maxCardinality');
+		return  new RDFResource(OWL_NS . 'maxCardinality');
 
 	}
 
 	function MIN_CARDINALITY()
 	{
-		return  new Resource(OWL_NS . 'minCardinality');
+		return  new RDFResource(OWL_NS . 'minCardinality');
 
 	}
 
 	function NOTHING()
 	{
-		return  new Resource(OWL_NS . 'Nothing');
+		return  new RDFResource(OWL_NS . 'Nothing');
 
 	}
 
 	function OBJECT_CLASS()
 	{
-		return  new Resource(OWL_NS . 'ObjectClass');
+		return  new RDFResource(OWL_NS . 'ObjectClass');
 
 	}
 
 	function OBJECT_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'ObjectProperty');
+		return  new RDFResource(OWL_NS . 'ObjectProperty');
 
 	}
 
 	function OBJECT_RESTRICTION()
 	{
-		return  new Resource(OWL_NS . 'ObjectRestriction');
+		return  new RDFResource(OWL_NS . 'ObjectRestriction');
 
 	}
 
 	function ONE_OF()
 	{
-		return  new Resource(OWL_NS . 'oneOf');
+		return  new RDFResource(OWL_NS . 'oneOf');
 
 	}
 
 	function ON_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'onProperty');
+		return  new RDFResource(OWL_NS . 'onProperty');
 
 	}
 
 	function ONTOLOGY()
 	{
-		return  new Resource(OWL_NS . 'Ontology');
+		return  new RDFResource(OWL_NS . 'Ontology');
 
 	}
 
 	function PRIOR_VERSION()
 	{
-		return  new Resource(OWL_NS . 'priorVersion');
+		return  new RDFResource(OWL_NS . 'priorVersion');
 
 	}
 
 	function PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'Property');
+		return  new RDFResource(OWL_NS . 'Property');
 
 	}
 
 	function RESTRICTION()
 	{
-		return  new Resource(OWL_NS . 'Restriction');
+		return  new RDFResource(OWL_NS . 'Restriction');
 
 	}
 
 	function SAME_AS()
 	{
-		return  new Resource(OWL_NS . 'sameAs');
+		return  new RDFResource(OWL_NS . 'sameAs');
 
 	}
 
 	function SAME_CLASS_AS()
 	{
-		return  new Resource(OWL_NS . 'sameClassAs');
+		return  new RDFResource(OWL_NS . 'sameClassAs');
 
 	}
 
 	function SAME_INDIVIDUAL_AS()
 	{
-		return  new Resource(OWL_NS . 'sameIndividualAs');
+		return  new RDFResource(OWL_NS . 'sameIndividualAs');
 
 	}
 
 	function SAME_PROPERTY_AS()
 	{
-		return  new Resource(OWL_NS . 'samePropertyAs');
+		return  new RDFResource(OWL_NS . 'samePropertyAs');
 
 	}
 
 	function SOME_VALUES_FROM()
 	{
-		return  new Resource(OWL_NS . 'someValuesFrom');
+		return  new RDFResource(OWL_NS . 'someValuesFrom');
 
 	}
 
 	function SYMMETRIC_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'SymmetricProperty');
+		return  new RDFResource(OWL_NS . 'SymmetricProperty');
 
 	}
 
 	function THING()
 	{
-		return  new Resource(OWL_NS . 'Thing');
+		return  new RDFResource(OWL_NS . 'Thing');
 
 	}
 
 	function TRANSITIVE_PROPERTY()
 	{
-		return  new Resource(OWL_NS . 'TransitiveProperty');
+		return  new RDFResource(OWL_NS . 'TransitiveProperty');
 
 	}
 
 	function UNION_OF()
 	{
-		return  new Resource(OWL_NS . 'unionOf');
+		return  new RDFResource(OWL_NS . 'unionOf');
 
 	}
 
 	function VERSION_INFO()
 	{
-		return  new Resource(OWL_NS . 'versionInfo');
+		return  new RDFResource(OWL_NS . 'versionInfo');
 	}
 
 }

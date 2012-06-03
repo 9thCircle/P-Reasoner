@@ -13,65 +13,65 @@
 *   the vocabulary in one spot, simplifing implementation and
 *   maintainence.
 */
-class RSS{
-
+class RSS
+{
 	function CHANNEL()
 	{
-		return  new Resource(RSS_NS . 'channel');
+		return  new RDFResource(RSS_NS . 'channel');
 
 	}
 
 	function IMAGE()
 	{
-		return  new Resource(RSS_NS . 'image');
+		return  new RDFResource(RSS_NS . 'image');
 
 	}
 
 	function ITEM()
 	{
-		return  new Resource(RSS_NS . 'item');
+		return  new RDFResource(RSS_NS . 'item');
 
 	}
 
 	function TEXTINPUT()
 	{
-		return  new Resource(RSS_NS . 'textinput');
+		return  new RDFResource(RSS_NS . 'textinput');
 
 	}
 
 	function ITEMS()
 	{
-		return  new Resource(RSS_NS . 'items');
+		return  new RDFResource(RSS_NS . 'items');
 
 	}
 
 	function TITLE()
 	{
-		return  new Resource(RSS_NS . 'title');
+		return  new RDFResource(RSS_NS . 'title');
 
 	}
 
 	function LINK()
 	{
-		return  new Resource(RSS_NS . 'link');
+		return  new RDFResource(RSS_NS . 'link');
 
 	}
 
 	function URL()
 	{
-		return  new Resource(RSS_NS . 'url');
+		return  new RDFResource(RSS_NS . 'url');
 
 	}
 
 	function DESCRIPTION()
 	{
-		return  new Resource(RSS_NS . 'description');
+		return  new RDFResource(RSS_NS . 'description');
 
 	}
 
 	function NAME()
 	{
-		return  new Resource(RSS_NS . 'name');
+		return  new RDFResource(RSS_NS . 'name');
 	}
 }
 

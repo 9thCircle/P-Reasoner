@@ -16,7 +16,7 @@
 * @access	public
 **/
 
-class ResLiteral extends Literal 
+class ResLiteral extends RDFLiteral 
 {
 	/**
 	* Holds a reference to the associated model
@@ -33,9 +33,9 @@ class ResLiteral extends Literal
 	* @param	string	$str		label of the literal
 	* @param 	string $language	optional language identifier
     */	
-	function ResLiteral($str,$language = null)
+	function ResLiteral($str,$language = NULL)
 	{
-		parent::Literal($str,$language);
+		parent::__parent($str,$language);
 
 	}
 	

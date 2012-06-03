@@ -11,10 +11,17 @@
 // ----------------------------------------------------------------------------------
 
 // Include InfModel classes
-require_once RDFAPI_INCLUDE_DIR . 'infModel/InfRule.php';
-require_once RDFAPI_INCLUDE_DIR . 'infModel/InfStatement.php';
-require_once RDFAPI_INCLUDE_DIR . 'infModel/InfModel.php';
-require_once RDFAPI_INCLUDE_DIR . 'infModel/InfModelB.php';
-require_once RDFAPI_INCLUDE_DIR . 'infModel/InfModelF.php';
+
+require_once __DIR__ . '/InfRule.php';
+require_once __DIR__ . '/InfStatement.php';
+require_once __DIR__ . '/InfModel.php';
+
+// if there is not such value, load both; else load the specified InfModel
+if (@$includeOptione['InfModel']['InfModel'] !== 'InfModelF') { 
+	require_once __DIR__ . '/InfModelB.php';
+}
+if (@$includeOptione['InfModel']['InfModel'] !== 'InfModelB') { 
+	require_once __DIR__ . '/InfModelF.php';
+}
 
 ?>

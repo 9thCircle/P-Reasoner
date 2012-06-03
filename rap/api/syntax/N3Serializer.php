@@ -12,7 +12,7 @@
  * Supported N3 features:
  * <ul>
  *   <li>Using [ ] for blank nodes, or _: if necessary</li>
- *   <li>Literal datatype- and xmlLanguageTag support</li>
+ *   <li>RDFLiteral datatype- and xmlLanguageTag support</li>
  * </ul>
  *
  * Un-supported N3 Features include:
@@ -31,7 +31,7 @@
 
 define('MAGIC_STRING', '~~~');
 
-class N3Serializer extends Object
+class N3Serializer extends RDFObject
 {
 
     var $debug = false;
@@ -142,15 +142,15 @@ class N3Serializer extends Object
         $resources  = array();
         foreach ($this->model->triples as $t) {
             $s = $t->getSubject();
-            if (is_a($s, 'Resource')) {
+            if (is_a($s, 'RDFResource')) {
                 $namespaces[$s->getNamespace()] = 1;
             }
             $p = $t->getPredicate();
-            if (is_a($p, 'Resource')) {
+            if (is_a($p, 'RDFResource')) {
                 $namespaces[$p->getNamespace()] = 1;
             }
             $o = $t->getObject();
-            if (is_a($o, 'Resource')) {
+            if (is_a($o, 'RDFResource')) {
                 $namespaces[$o->getNamespace()] = 1;
             }
             $uri = $s->getURI();
@@ -162,7 +162,7 @@ class N3Serializer extends Object
                 $resources[$uri] = $s;
             }
 
-            if ($this->styleNest && is_a($s, 'BlankNode')) {
+            if ($this->styleNest && is_a($s, 'RDFBlankNode')) {
                 //make sure blank nodes are sorted *after* normal nodes
                 //so that they can be included
                 $count[$uri] -= 0.00001;
@@ -341,7 +341,7 @@ class N3Serializer extends Object
     /**
     * Fill in $resourcetext for a single resource.
     * Will recurse into Objects of triples, but should never look ? (really?)
-    * @param object Resource $r
+    * @param object RDFResource $r
     * @returns boolean
     * @access private
     **/
@@ -360,7 +360,7 @@ class N3Serializer extends Object
         $out = '';
 
         if (isset($this->done[$r->getURI()]) && $this->done[$r->getURI()]) {
-            if (!$this->styleNest && is_a($r, 'BlankNode')) {
+            if (!$this->styleNest && is_a($r, 'RDFBlankNode')) {
                 if ($this->resourcetext_taken[$r->getURI()] == 1) {
                     //Oh bother, we must use the _:blah construct.
                     $a = $this->resourcetext[$r->getURI()];
@@ -376,8 +376,8 @@ class N3Serializer extends Object
         $this->done[$r->getURI()] = true;
         $compress = false;
 
-        if (is_a($r, 'Resource')) {
-            if (is_a($r, 'BlankNode')) {
+        if (is_a($r, 'RDFResource')) {
+            if (is_a($r, 'RDFBlankNode')) {
                 //test if this blanknode is referenced somewhere
                 $rbn      = $this->model->find(null, null, $r);
                 $compress = (N3SER_BNODE_SHORT || $this->styleCompress)
@@ -420,7 +420,7 @@ class N3Serializer extends Object
 
             $o = $t->getObject();
 
-            if (is_a($o, 'Literal')) {
+            if (is_a($o, 'RDFLiteral')) {
                 $l = $o->getLabel();
                 if (strpos($l, LINEFEED) === false) {
                     $long = false;
@@ -453,11 +453,11 @@ class N3Serializer extends Object
                 }
             }
 
-            if (is_a($o, 'Resource')) {
+            if (is_a($o, 'RDFResource')) {
                 if ($this->debug) {
                     print 'Doing object: '.$o->getURI().LINEFEED;
                 }
-                if (is_a($o, 'BlankNode')) {
+                if (is_a($o, 'RDFBlankNode')) {
                     if ($this->styleNest && $this->styleCompress
                      && !isset($this->done[$o->getURI()])
                     ) {

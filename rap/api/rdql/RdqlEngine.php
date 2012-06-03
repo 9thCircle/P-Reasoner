@@ -14,15 +14,13 @@
  * @access public
  */
 
-Class RdqlEngine extends Object{
-
-	
-
+Class RdqlEngine extends RDFObject
+{
 /**
  * Prints a query result as HTML table.
  * You can change the colors in the configuration file.
  *
- * @param array $queryResult [][?VARNAME] = object Node
+ * @param array $queryResult [][?VARNAME] = object RDFNode
  * @access private
  */
  function writeQueryResultAsHtmlTable($queryResult) {
@@ -51,7 +49,7 @@ Class RdqlEngine extends Object{
 
        $lang  = NULL;
        $dtype = NULL;
-       if (is_a($value, 'Literal')) {
+       if (is_a($value, 'RDFLiteral')) {
     	   if ($value->getLanguage() != NULL)
                $lang = ' <b>(xml:lang="' . $value->getLanguage() . '") </b> ';
 		   if ($value->getDatatype() != NULL)

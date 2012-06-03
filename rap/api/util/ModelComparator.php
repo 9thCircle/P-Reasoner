@@ -18,8 +18,8 @@
  * @access	public
  *
  **/ 
- class ModelComparator extends Object {
- 	
+class ModelComparator extends RDFObject
+{
  	/**
  	* Compares two models.
  	*
@@ -106,11 +106,11 @@
  				$label = null;
  				if(isset($labelmap[$value['sub']])){
  					$label = $labelmap[$value['sub']];
- 					$value['triple']->subj = new BlankNode($labelmap[$value['sub']]);
+ 					$value['triple']->subj = new RDFBlankNode($labelmap[$value['sub']]);
  				}else{
  					$label = $i."Bnode";
  					$labelmap[$value['sub']]=$label;
- 					$value['triple']->subj = new BlankNode($labelmap[$value['sub']]);
+ 					$value['triple']->subj = new RDFBlankNode($labelmap[$value['sub']]);
  					$i++;
  				}
  			}
@@ -119,11 +119,11 @@
  				$label = null;
  				if(isset($labelmap[$value['obj']])){
  					$label = $labelmap[$value['obj']];
- 					$value['triple']->obj = new BlankNode($labelmap[$value['obj']]);
+ 					$value['triple']->obj = new RDFBlankNode($labelmap[$value['obj']]);
  				}else{
  					$label = $i."Bnode";
  					$labelmap[$value['obj']]=$label;
- 					$value['triple']->obj = new BlankNode($labelmap[$value['obj']]);
+ 					$value['triple']->obj = new RDFBlankNode($labelmap[$value['obj']]);
  					$i++;
  				}
  			}

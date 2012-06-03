@@ -64,7 +64,7 @@ class OntClass extends OntResource
 	{
 		$statement = $this->model->findFirstMatchingStatement(null,$this->vocabulary->SUB_CLASS_OF(),$this);
 		if ($statement !== null)
-			return $this->model->createOntClass($statement->getLabelSubject());
+			return $this->model->createOntClass($statement->getSubject()->getLabel());
 		
 		return null;
 	}
@@ -134,7 +134,7 @@ class OntClass extends OntResource
 		$returnIndex=array();
 		foreach ($statements as $statement) 
 		{
-			$subjectLabel=$statement->getLabelSubject();
+			$subjectLabel=$statement->getSubject()->getLabel();
 			if (!in_array($subjectLabel,$returnIndex))
 			{
 				$returnIndex[]=$subjectLabel;
@@ -172,7 +172,7 @@ class OntClass extends OntResource
 		$returnIndex=array();
 		foreach ($statements as $statement) 
 		{
-			$subjectLabel=$statement->getLabelSubject();
+			$subjectLabel=$statement->getSubject()->getLabel();
 			if (!in_array($subjectLabel,$returnIndex))
 			{
 				$returnIndex[]=$subjectLabel;
@@ -203,7 +203,7 @@ class OntClass extends OntResource
 		$returnIndex=array();
 		foreach ($statements as $statement) 
 		{
-			$objectLabel=$statement->getLabelObject();
+			$objectLabel=$statement->getObject()->getLabel();
 			if (!in_array($objectLabel,$returnIndex))
 			{
 				$returnIndex[]=$objectLabel;

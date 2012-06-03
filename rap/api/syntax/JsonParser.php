@@ -6,8 +6,8 @@
  * @author Philipp Frischmuth <philipp@frischmuth24.de>
  * @version $Id: JsonParser.php 555 2007-12-11 20:27:34Z p_frischmuth $
  */
-class JsonParser extends Object {
-	
+class JsonParser extends RDFObject
+{
 	/**
 	 * This method takes a json encoded rdf-model and a reference to aa (usually empty) MemModel, parses the json
 	 * string and adds the statements to the given MemModel.
@@ -27,21 +27,21 @@ class JsonParser extends Object {
 		
 		foreach ($jsonModel as $subject=>$remain) {
 			foreach ($remain as $predicate=>$object) {
-				$s = (strpos($subject, '_') === 0) ? new BlankNode(substr($subject, 2)) : new Resource($subject);
-				$p = new Resource($predicate);
+				$s = (strpos($subject, '_') === 0) ? new RDFBlankNode(substr($subject, 2)) : new RDFResource($subject);
+				$p = new RDFResource($predicate);
 				
 				foreach ($object as $obj) {
 					if ($obj['type'] === 'uri') {
-						$o = new Resource($obj['value']);
+						$o = new RDFResource($obj['value']);
 					} else if ($obj['type'] === 'bnode') {
-						$o = new BlankNode(substr($obj['value'], 2));
+						$o = new RDFBlankNode(substr($obj['value'], 2));
 					} else {
 						$dtype = (isset($obj['datatype'])) ? $obj['datatype'] : '';
 						$lang = (isset($obj['lang'])) ? $obj['lang'] : '';
 
 						$oVal = $obj['value'];
 
-						$o = new Literal($oVal, $lang);
+						$o = new RDFLiteral($oVal, $lang);
 						$o->setDatatype($dtype);
 					}
 					

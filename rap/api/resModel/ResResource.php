@@ -7,8 +7,8 @@
 **/
 
 /**
-* An RDF Resource.
-* Resource instances, when created, are associated with a specific model. They support a 
+* An RDF RDFResource.
+* RDFResource instances, when created, are associated with a specific model. They support a 
 * range of methods, such as getProperty() and addProperty() which will access or modify 
 * that model. This enables the programmer to write code in a compact and easy style.
 *
@@ -19,7 +19,7 @@
 * @package resModel
 * @access	public
 **/
-class ResResource extends Resource 
+class ResResource extends RDFResource 
 {
 	/**
 	* Holds a reference to the associated model
@@ -45,7 +45,7 @@ class ResResource extends Resource
     */		
 	function ResResource($uri)
 	{
-			parent::Resource($uri);
+			parent::RDFResource($uri);
 			$this->isAnon = ($uri === null);		
 	}
 	

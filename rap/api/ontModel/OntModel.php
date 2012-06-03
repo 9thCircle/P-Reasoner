@@ -121,9 +121,9 @@ class OntModel extends ResModel
 		$returnIndex=array();
 		foreach ($statements as $statement) 
 		{
-			$objectLabel=$statement->getLabelObject();
+			$objectLabel=$statement->getObject()->getLabel();
 			//if it's about a typed Individual	
-			if ($objectLabel!=RDF_SCHEMA_URI.RDFS_CLASS)
+			if ($objectLabel !== RDFS_CLASS)
 			{
 				if (!in_array($objectLabel,$returnIndex))
 				{
@@ -133,7 +133,7 @@ class OntModel extends ResModel
 			} else 
 			//if it's a "class1 rdf:type rdf:class" construct
 			{
-				$subjectLabel=$statement->getLabelSubject();
+				$subjectLabel=$statement->getSubject()->getLabel();
 				if (!in_array($subjectLabel,$returnIndex))
 				{
 					$returnIndex[]=$subjectLabel;
@@ -146,7 +146,7 @@ class OntModel extends ResModel
 		foreach ($statements as $statement) 
 		{
 			//add the statements object to the result
-			$objectLabel=$statement->getLabelObject();
+			$objectLabel=$statement->getObject()->getLabel();
 			if (!in_array($objectLabel,$returnIndex))
 			{
 				$returnIndex[]=$objectLabel;
@@ -156,7 +156,7 @@ class OntModel extends ResModel
 		foreach ($statements as $statement) 
 		{
 			//add the statements subject to the result
-			$objectLabel=$statement->getLabelSubject();
+			$objectLabel=$statement->getSubject()->getLabel();
 			if (!in_array($objectLabel,$returnIndex))
 			{
 				$returnIndex[]=$objectLabel;

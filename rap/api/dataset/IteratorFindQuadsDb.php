@@ -107,20 +107,20 @@ class IteratorFindQuadsDb
 			return null;
 		// subject
 		if ($this->dbResultSet->fields[5] == 'r')
-		$sub = new Resource($this->dbResultSet->fields[0]);
+		$sub = new RDFResource($this->dbResultSet->fields[0]);
 		else
-		$sub = new BlankNode($this->dbResultSet->fields[0]);
+		$sub = new RDFBlankNode($this->dbResultSet->fields[0]);
 
 		// predicate
-		$pred = new Resource($this->dbResultSet->fields[1]);
+		$pred = new RDFResource($this->dbResultSet->fields[1]);
 
 		// object
 		if ($this->dbResultSet->fields[6] == 'r')
-		$obj = new Resource($this->dbResultSet->fields[2]);
+		$obj = new RDFResource($this->dbResultSet->fields[2]);
 		elseif ($this->dbResultSet->fields[6] == 'b')
-		$obj = new BlankNode($this->dbResultSet->fields[2]);
+		$obj = new RDFBlankNode($this->dbResultSet->fields[2]);
 		else {
-			$obj = new Literal($this->dbResultSet->fields[2], $this->dbResultSet->fields[3]);
+			$obj = new RDFLiteral($this->dbResultSet->fields[2], $this->dbResultSet->fields[3]);
 			if ($this->dbResultSet->fields[4])
 			$obj->setDatatype($this->dbResultSet->fields[4]);
 		}
@@ -128,7 +128,7 @@ class IteratorFindQuadsDb
 		if($this->returnAsTriples)
 			return (new Statement($sub, $pred, $obj));
 
-		return (new Quad(new Resource($this->dbResultSet->fields[7]),$sub,$pred,$obj));
+		return (new Quad(new RDFResource($this->dbResultSet->fields[7]),$sub,$pred,$obj));
 	}
 	
 	/**

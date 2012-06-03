@@ -1,8 +1,7 @@
 <?php
-require_once RDFAPI_INCLUDE_DIR . 'model/Node.php';
 
 // ----------------------------------------------------------------------------------
-// Class: Resource
+// Class: RDFResource
 // ----------------------------------------------------------------------------------
 
 /**
@@ -15,14 +14,14 @@ require_once RDFAPI_INCLUDE_DIR . 'model/Node.php';
  * concatenation of the namespace and the local name.
  *
  *
- * @version  $Id: Resource.php 453 2007-06-20 21:19:09Z cweiske $
+ * @version  $Id: RDFResource.php 453 2007-06-20 21:19:09Z cweiske $
  * @author Chris Bizer <chris@bizer.de>
  *
  * @package model
  * @access	public
  *
  */
-class Resource extends Node
+class RDFResource extends RDFNode
 {
  	/**
 	* URIref to the resource
@@ -40,12 +39,11 @@ class Resource extends Node
  	* @param string $localName
 	* @access	public
     */
-    public function Resource($namespace_or_uri , $localName = '')
+    public function RDFResource($namespace_or_uri , $localName = '')
 	{
 		$this->uri = $namespace_or_uri . $localName;
 	}
-
-
+	
   /**
    * Returns the URI of the resource.
    * @return string
@@ -73,9 +71,6 @@ class Resource extends Node
    */
 	public function getNamespace()
 	{
-		// Import Package Utility
-		include_once RDFAPI_INCLUDE_DIR.PACKAGE_UTILITY;
-		
 		return RDFUtil::guessNamespace($this->uri);
 	}
 
@@ -86,10 +81,7 @@ class Resource extends Node
    */
     public function getLocalName()
 	{
-    	// Import Package Utility
-   		include_once(RDFAPI_INCLUDE_DIR.PACKAGE_UTILITY);
-
-	    return RDFUtil::guessName($this->uri);
+    	return RDFUtil::guessName($this->uri);
   	}
 
   /**
@@ -99,7 +91,7 @@ class Resource extends Node
    */
 	public function toString()
 	{
-		return 'Resource("' . $this->uri .'")';
+		return 'RDFResource("' . $this->uri .'")';
 	}
 
   /**
@@ -113,32 +105,24 @@ class Resource extends Node
 	public function equals($that)
 	{
 	    if ($this === $that) {
-	      return TRUE;
+			return TRUE;
 	    }
-
-	    if (($that === NULL) or !(is_a($that, 'Resource')) or (is_a($that, 'BlankNode'))) {
-	      return false;
+		
+	    if ($that === NULL || (is_a($that, 'RDFResource') === FALSE) || is_a($that, 'RDFBlankNode')) {
+			return FALSE;
 	    }
-
-		if ($this->getURI() == $that->getURI()) {
-	      return true;
-	    }
-
-	    return false;
+		
+		return $this->getURI() === $that->getURI();
 	}
-
-
-
-
+	
     /**
     *   Doing string magic in PHP5
-    *   @return string String representation of this Resource
+    *   @return string String representation of this RDFResource
     */
     public function __toString()
     {
         return $this->toString();
     }
-
 }
 
 ?>

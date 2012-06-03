@@ -11,7 +11,7 @@ require_once RDFAPI_INCLUDE_DIR . 'sparql/GraphPattern.php';
 *
 * @package sparql
 */
-class Query extends Object
+class Query extends RDFObject
 {
     /**
     * The BASE part of the SPARQL query.

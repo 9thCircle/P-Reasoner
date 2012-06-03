@@ -11,11 +11,12 @@
 // ----------------------------------------------------------------------------------
 
 // include utility classes
-require_once RDFAPI_INCLUDE_DIR . 'util/RdfUtil.php';
-require_once RDFAPI_INCLUDE_DIR . 'util/FindIterator.php';
-require_once RDFAPI_INCLUDE_DIR . 'util/IterFind.php';
+require_once __DIR__ . '/Object.php';
+require_once __DIR__ . '/RdfUtil.php';
+require_once __DIR__ . '/FindIterator.php';
+require_once __DIR__ . '/IterFind.php';
 
 // experimental
-require_once RDFAPI_INCLUDE_DIR . 'util/ModelComparator.php';
+require_once __DIR__ . '/ModelComparator.php';
 
 ?>

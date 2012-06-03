@@ -26,7 +26,7 @@ class RdfsVocabulary extends OntVocabulary
    	*/
 	function ONTCLASS()
 	{
-		return new ResResource(RDF_SCHEMA_URI.RDFS_CLASS);	
+		return new ResResource(RDFS_CLASS);	
 	}
 	
 	/**
@@ -37,7 +37,7 @@ class RdfsVocabulary extends OntVocabulary
    	*/
 	function DOMAIN()
 	{
-		return new ResProperty(RDF_SCHEMA_URI.RDFS_DOMAIN);	
+		return new ResProperty(RDFS_DOMAIN);	
 	}
 	
 	 
@@ -49,7 +49,7 @@ class RdfsVocabulary extends OntVocabulary
    	*/
 	function COMMENT()
 	{
-		return new ResProperty(RDF_SCHEMA_URI.RDFS_COMMENT);	
+		return new ResProperty(RDFS_COMMENT);	
 	}
 	
  	/**
@@ -60,7 +60,7 @@ class RdfsVocabulary extends OntVocabulary
    	*/
 	function IS_DEFINED_BY()
 	{
-		return new ResProperty(RDF_SCHEMA_URI.RDFS_IS_DEFINED_BY);
+		return new ResProperty(RDFS_IS_DEFINED_BY);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ class RdfsVocabulary extends OntVocabulary
    	*/
 	function LABEL()
 	{
-		return new ResProperty(RDF_SCHEMA_URI.RDFS_LABEL);
+		return new ResProperty(RDFS_LABEL);
 	}
 	
 	/**
@@ -82,7 +82,7 @@ class RdfsVocabulary extends OntVocabulary
    	*/
 	function RANGE()
 	{
-		return new ResProperty(RDF_SCHEMA_URI.RDFS_RANGE);
+		return new ResProperty(RDFS_RANGE);
 	}
 	
 	/**
@@ -93,7 +93,7 @@ class RdfsVocabulary extends OntVocabulary
    	*/
 	function SEE_ALSO()
 	{
-		return new ResProperty(RDF_SCHEMA_URI.RDFS_SEE_ALSO);
+		return new ResProperty(RDFS_SEE_ALSO);
 	}
 	
 	/**
@@ -104,7 +104,7 @@ class RdfsVocabulary extends OntVocabulary
    	*/
 	function SUB_CLASS_OF()
 	{
-		return new ResProperty(RDF_SCHEMA_URI.RDFS_SUBCLASSOF);
+		return new ResProperty(RDFS_SUBCLASSOF);
 	}
 	
 	/**
@@ -115,7 +115,7 @@ class RdfsVocabulary extends OntVocabulary
    	*/
 	function SUB_PROPERTY_OF()
 	{
-		return new ResProperty(RDF_SCHEMA_URI.RDFS_SUBPROPERTYOF);
+		return new ResProperty(RDFS_SUBPROPERTYOF);
 	}
 
 	/**

@@ -175,7 +175,7 @@ class ResList extends ResResource
 		//remove the first element
 		$this->removeAll($this->rdfFirstResource);
 		$this->removeAll($this->rdfRestResource);
-		//change this Resource URI to that of the second list element
+		//change this RDFResource URI to that of the second list element
 		//thus makin it the fist element
 		$this->uri=$rest->getURI();
 		
@@ -559,7 +559,7 @@ class ResList extends ResResource
 	}
 	
 	/**
-	* Get the associated rdf:rest Resource from the suplied ResList element
+	* Get the associated rdf:rest RDFResource from the suplied ResList element
 	*
    	* @param	object ResList	$listElement
    	* @return	object ResList 

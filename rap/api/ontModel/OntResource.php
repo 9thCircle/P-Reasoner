@@ -249,15 +249,15 @@ class OntResource extends ResResource
 			switch ($returnType) 
 			{
 				case 'OntClass':
-					return $this->model->createOntClass($statement->getLabelObject());		
+					return $this->model->createOntClass($statement->getObject()->getLabel());		
 					break;
 					
 				case 'OntProperty':
-					return $this->model->createOntProperty($statement->getLabelObject());		
+					return $this->model->createOntProperty($statement->getObject()->getLabel());		
 					break;
 				
 				case 'Individual':
-					return $this->model->createIndividual($statement->getLabelObject());		
+					return $this->model->createIndividual($statement->getObject()->getLabel());		
 					break;
 			
 				default:
@@ -427,15 +427,15 @@ class OntResource extends ResResource
 			switch ($returnType) 
 			{
 				case 'OntClass':
-					$return[]=$this->model->createOntClass($statement->getLabelObject());		
+					$return[]=$this->model->createOntClass($statement->getObject()->getLabel());		
 					break;
 					
 				case 'OntProperty':
-					$return[]=$this->model->createOntProperty($statement->getLabelObject());		
+					$return[]=$this->model->createOntProperty($statement->getObject()->getLabel());		
 					break;
 				
 				case 'Individual':
-					$return[]=$this->model->createIndividual($statement->getLabelObject());		
+					$return[]=$this->model->createIndividual($statement->getObject()->getLabel());		
 					break;
 			
 				default:
@@ -628,7 +628,7 @@ class OntResource extends ResResource
 		
 		foreach ($return as $statement)
 		{
-			$attributeLabel=$statement->getLabelObject();
+			$attributeLabel=$statement->getObject()->getLabel();
 			if (!in_array($attributeLabel,$attributeIndex))
 			{
 				$attributeIndex[]=$attributeLabel;
@@ -674,7 +674,7 @@ class OntResource extends ResResource
 		
 		foreach ($return as $statement)
 		{
-			$attributeLabel=$statement->getLabelSubject();
+			$attributeLabel=$statement->getSubject()->getLabel();
 			if (!in_array($attributeLabel,$attributeIndex))
 			{
 				$attributeIndex[]=$attributeLabel;

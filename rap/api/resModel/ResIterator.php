@@ -178,7 +178,7 @@ class ResIterator
 	}
 	
 	/**
-    * Returns the next Resource (subject, predicate, 
+    * Returns the next RDFResource (subject, predicate, 
     * or object of the next matching statement).
     *
     * @return	object resResource

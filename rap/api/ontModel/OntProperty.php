@@ -113,7 +113,7 @@ class OntProperty extends OntResource
 	{
 		$statement = $this->model->findFirstMatchingStatement(null,$this->vocabulary->SUB_PROPERTY_OF(),$this);
 		if ($statement !== null)
-			return new OntProperty($statement->getLabelSubject());
+			return new OntProperty($statement->getSubject()->getLabel());
 		
 		return null;
 	}
@@ -242,11 +242,11 @@ class OntProperty extends OntResource
 		$returnIndex=array();
 		foreach ($statements as $statement) 
 		{
-			$objectLabel=$statement->getLabelSubject();
+			$objectLabel=$statement->getSubject()->getLabel();
 			if (!in_array($objectLabel,$returnIndex))
 			{
 				$returnIndex[]=$objectLabel;
-				$return[]=new OntProperty($statement->getLabelSubject());
+				$return[]=new OntProperty($statement->getSubject()->getLabel());
 			}	
 		}	
 		return $return;	
@@ -274,11 +274,11 @@ class OntProperty extends OntResource
 		$returnIndex=array();
 		foreach ($statements as $statement) 
 		{
-			$objectLabel=$statement->getLabelObject();
+			$objectLabel=$statement->getObject()->getLabel();
 			if (!in_array($objectLabel,$returnIndex))
 			{
 				$returnIndex[]=$objectLabel;
-				$return[]=new OntProperty($statement->getLabelObject());
+				$return[]=new OntProperty($statement->getObject()->getLabel());
 			}	
 		}	
 		return $return;	

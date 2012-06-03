@@ -14,388 +14,382 @@
 *   maintainence.
 */
 class FOAF{
-
-
 	function AGENT()
 	{
-		return  new Resource(FOAF_NS . 'Agent');
+		return  new RDFResource(FOAF_NS . 'Agent');
 
 	}
 
 	function DOCUMENT()
 	{
-		return  new Resource(FOAF_NS . 'Document');
+		return  new RDFResource(FOAF_NS . 'Document');
 
 	}
 
 	function GROUP()
 	{
-		return  new Resource(FOAF_NS . 'Group');
+		return  new RDFResource(FOAF_NS . 'Group');
 
 	}
 
 	function IMAGE()
 	{
-		return  new Resource(FOAF_NS . 'Image');
+		return  new RDFResource(FOAF_NS . 'Image');
 
 	}
 
 	function ONLINE_ACCOUNT()
 	{
-		return  new Resource(FOAF_NS . 'OnlineAccount');
+		return  new RDFResource(FOAF_NS . 'OnlineAccount');
 
 	}
 
 	function ONLINE_CHAT_ACCOUNT()
 	{
-		return  new Resource(FOAF_NS . 'OnlineChatAccount');
+		return  new RDFResource(FOAF_NS . 'OnlineChatAccount');
 
 	}
 
 	function ONLINE_ECOMMERCE_ACCOUNT()
 	{
-		return  new Resource(FOAF_NS . 'OnlineEcommerceAccount');
+		return  new RDFResource(FOAF_NS . 'OnlineEcommerceAccount');
 
 	}
 
 	function ONLINE_GAMING_ACCOUNT()
 	{
-		return  new Resource(FOAF_NS . 'OnlineGamingAccount');
+		return  new RDFResource(FOAF_NS . 'OnlineGamingAccount');
 
 	}
 
 	function ORGANIZATION()
 	{
-		return  new Resource(FOAF_NS . 'Organization');
+		return  new RDFResource(FOAF_NS . 'Organization');
 
 	}
 
 	function PERSON()
 	{
-		return  new Resource(FOAF_NS . 'Person');
+		return  new RDFResource(FOAF_NS . 'Person');
 
 	}
 
 	function PERSONAL_PROFILE_DOCUMENT()
 	{
-		return  new Resource(FOAF_NS . 'PersonalProfileDocument');
+		return  new RDFResource(FOAF_NS . 'PersonalProfileDocument');
 
 	}
 
 	function PROJECT()
 	{
-		return  new Resource(FOAF_NS . 'Project');
+		return  new RDFResource(FOAF_NS . 'Project');
 
 	}
 
 	function ACCOUNT_NAME()
 	{
-		return  new Resource(FOAF_NS . 'accountName');
+		return  new RDFResource(FOAF_NS . 'accountName');
 
 	}
 
 	function ACCOUNT_SERVICE_HOMEPAGE()
 	{
-		return  new Resource(FOAF_NS . 'accountServiceHomepage');
+		return  new RDFResource(FOAF_NS . 'accountServiceHomepage');
 
 	}
 
 	function AIM_CHAT_ID()
 	{
-		return  new Resource(FOAF_NS . 'aimChatID');
+		return  new RDFResource(FOAF_NS . 'aimChatID');
 
 	}
 
 	function BASED_NEAR()
 	{
-		return  new Resource(FOAF_NS . 'based_near');
+		return  new RDFResource(FOAF_NS . 'based_near');
 
 	}
 
 	function CURRENT_PROJECT()
 	{
-		return  new Resource(FOAF_NS . 'currentProject');
+		return  new RDFResource(FOAF_NS . 'currentProject');
 
 	}
 
 	function DEPICTION()
 	{
-		return  new Resource(FOAF_NS . 'depiction');
+		return  new RDFResource(FOAF_NS . 'depiction');
 
 	}
 
 	function DEPICTS()
 	{
-		return  new Resource(FOAF_NS . 'depicts');
+		return  new RDFResource(FOAF_NS . 'depicts');
 
 	}
 
 	function DNA_CHECKSUM()
 	{
-		return  new Resource(FOAF_NS . 'dnaChecksum');
+		return  new RDFResource(FOAF_NS . 'dnaChecksum');
 
 	}
 
 	function FAMILY_NAME()
 	{
-		return  new Resource(FOAF_NS . 'family_name');
+		return  new RDFResource(FOAF_NS . 'family_name');
 
 	}
 
 	function FIRST_NAME()
 	{
-		return  new Resource(FOAF_NS . 'firstName');
+		return  new RDFResource(FOAF_NS . 'firstName');
 
 	}
 
 	function FUNDED_BY()
 	{
-		return  new Resource(FOAF_NS . 'fundedBy');
+		return  new RDFResource(FOAF_NS . 'fundedBy');
 
 	}
 
 	function GEEKCODE()
 	{
-		return  new Resource(FOAF_NS . 'geekcode');
+		return  new RDFResource(FOAF_NS . 'geekcode');
 
 	}
 
 	function GENDER()
 	{
-		return  new Resource(FOAF_NS . 'gender');
+		return  new RDFResource(FOAF_NS . 'gender');
 
 	}
 
 	function GIVENNAME()
 	{
-		return  new Resource(FOAF_NS . 'givenname');
+		return  new RDFResource(FOAF_NS . 'givenname');
 
 	}
 
 	function HOLDS_ACCOUNT()
 	{
-		return  new Resource(FOAF_NS . 'holdsAccount');
+		return  new RDFResource(FOAF_NS . 'holdsAccount');
 
 	}
 
 	function HOMEPAGE()
 	{
-		return  new Resource(FOAF_NS . 'homepage');
+		return  new RDFResource(FOAF_NS . 'homepage');
 
 	}
 
 	function ICQ_CHAT_ID()
 	{
-		return  new Resource(FOAF_NS . 'icqChatID');
+		return  new RDFResource(FOAF_NS . 'icqChatID');
 
 	}
 
 	function IMG()
 	{
-		return  new Resource(FOAF_NS . 'img');
+		return  new RDFResource(FOAF_NS . 'img');
 
 	}
 
 	function INTEREST()
 	{
-		return  new Resource(FOAF_NS . 'interest');
+		return  new RDFResource(FOAF_NS . 'interest');
 
 	}
 
 	function JABBER_ID()
 	{
-		return  new Resource(FOAF_NS . 'jabberID');
+		return  new RDFResource(FOAF_NS . 'jabberID');
 
 	}
 
 	function KNOWS()
 	{
-		return  new Resource(FOAF_NS . 'knows');
+		return  new RDFResource(FOAF_NS . 'knows');
 
 	}
 
 	function LOGO()
 	{
-		return  new Resource(FOAF_NS . 'logo');
+		return  new RDFResource(FOAF_NS . 'logo');
 
 	}
 
 	function MADE()
 	{
-		return  new Resource(FOAF_NS . 'made');
+		return  new RDFResource(FOAF_NS . 'made');
 
 	}
 
 	function MAKER()
 	{
-		return  new Resource(FOAF_NS . 'maker');
+		return  new RDFResource(FOAF_NS . 'maker');
 
 	}
 
 	function MBOX()
 	{
-		return  new Resource(FOAF_NS . 'mbox');
+		return  new RDFResource(FOAF_NS . 'mbox');
 
 	}
 
 	function MBOX_SHA1SUM()
 	{
-		return  new Resource(FOAF_NS . 'mbox_sha1sum');
+		return  new RDFResource(FOAF_NS . 'mbox_sha1sum');
 
 	}
 
 	function MEMBER()
 	{
-		return  new Resource(FOAF_NS . 'member');
+		return  new RDFResource(FOAF_NS . 'member');
 
 	}
 
 	function MEMBERSHIP_CLASS()
 	{
-		return new Resource(FOAF_NS . 'membershipClass');
+		return new RDFResource(FOAF_NS . 'membershipClass');
 
 	}
 
 	function MSN_CHAT_ID()
 	{
-		return  new Resource(FOAF_NS . 'msnChatID');
+		return  new RDFResource(FOAF_NS . 'msnChatID');
 
 	}
 
 	function MYERS_BRIGGS()
 	{
-		return  new Resource(FOAF_NS . 'myersBriggs');
+		return  new RDFResource(FOAF_NS . 'myersBriggs');
 
 	}
 
 	function NAME()
 	{
-		return  new Resource(FOAF_NS . 'name');
+		return  new RDFResource(FOAF_NS . 'name');
 
 	}
 
 	function NICK()
 	{
-		return  new Resource(FOAF_NS . 'nick');
+		return  new RDFResource(FOAF_NS . 'nick');
 
 	}
 
 	function PAGE()
 	{
-		return  new Resource(FOAF_NS . 'page');
+		return  new RDFResource(FOAF_NS . 'page');
 
 	}
 
 	function PAST_PROJECT()
 	{
-		return  new Resource(FOAF_NS . 'pastProject');
+		return  new RDFResource(FOAF_NS . 'pastProject');
 
 	}
 
 	function PHONE()
 	{
-		return  new Resource(FOAF_NS . 'phone');
+		return  new RDFResource(FOAF_NS . 'phone');
 
 	}
 
 	function PLAN()
 	{
-		return  new Resource(FOAF_NS . 'plan');
+		return  new RDFResource(FOAF_NS . 'plan');
 
 	}
 
 	function PRIMARY_TOPIC()
 	{
-		return  new Resource(FOAF_NS . 'primaryTopic');
+		return  new RDFResource(FOAF_NS . 'primaryTopic');
 
 	}
 
 	function PUBLICATIONS()
 	{
-		return  new Resource(FOAF_NS . 'publications');
+		return  new RDFResource(FOAF_NS . 'publications');
 
 	}
 
 	function SCHOOL_HOMEPAGE()
 	{
-		return  new Resource (FOAF_NS . 'schoolHomepage');
+		return  new RDFResource (FOAF_NS . 'schoolHomepage');
 
 	}
 
 	function SHA1()
 	{
-		return  new Resource (FOAF_NS . 'sha1');
+		return  new RDFResource (FOAF_NS . 'sha1');
 
 	}
 
 	function SURNAME()
 	{
-		return  new Resource (FOAF_NS . 'surname');
+		return  new RDFResource (FOAF_NS . 'surname');
 
 	}
 
 	function THEME()
 	{
-		return  new Resource(FOAF_NS . 'theme');
+		return  new RDFResource(FOAF_NS . 'theme');
 
 	}
 
 	function THUMBNAIL()
 	{
-		return  new Resource(FOAF_NS . 'thumbnail');
+		return  new RDFResource(FOAF_NS . 'thumbnail');
 
 	}
 
 	function TIPJAR()
 	{
-		return  new Resource(FOAF_NS . 'tipjar');
+		return  new RDFResource(FOAF_NS . 'tipjar');
 
 	}
 
 	function TITLE()
 	{
-		return  new Resource(FOAF_NS . 'title');
+		return  new RDFResource(FOAF_NS . 'title');
 
 	}
 
 	function TOPIC()
 	{
-		return  new Resource(FOAF_NS . 'topic');
+		return  new RDFResource(FOAF_NS . 'topic');
 
 	}
 
 	function TOPIC_INTEREST()
 	{
-		return  new Resource(FOAF_NS . 'topic_interest');
+		return  new RDFResource(FOAF_NS . 'topic_interest');
 
 	}
 
 	function WEBLOG()
 	{
-		return  new Resource(FOAF_NS . 'weblog');
+		return  new RDFResource(FOAF_NS . 'weblog');
 
 	}
 
 	function WORK_INFO_HOMEPAGE()
 	{
-		return  new Resource(FOAF_NS . 'workInfoHomepage');
+		return  new RDFResource(FOAF_NS . 'workInfoHomepage');
 
 	}
 
 	function WORKPLACE_HOMEPAGE()
 	{
-		return  new Resource(FOAF_NS . 'workplaceHomepage');
+		return  new RDFResource(FOAF_NS . 'workplaceHomepage');
 
 	}
 
 	function YAHOO_CHAT_ID()
 	{
-		return  new Resource(FOAF_NS . 'yahooChatID');
+		return  new RDFResource(FOAF_NS . 'yahooChatID');
 	}
 }
-
-
-
-
 
 ?>

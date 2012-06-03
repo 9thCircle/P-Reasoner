@@ -1,5 +1,5 @@
 <?php
-require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
+
 require_once RDFAPI_INCLUDE_DIR . 'sparql/FilterFunctions.php';
 require_once RDFAPI_INCLUDE_DIR . 'sparql/SparqlEngine/ResultConverter.php';
 
@@ -17,7 +17,7 @@ require_once RDFAPI_INCLUDE_DIR . 'sparql/SparqlEngine/ResultConverter.php';
 * @package sparql
 */
 
-Class SparqlEngine extends Object{
+Class SparqlEngine extends RDFObject{
 
 
     /**
@@ -220,17 +220,17 @@ Class SparqlEngine extends Object{
         $pred = $pattern->getPredicate();
         $obj  = $pattern->getObject();
 
-        if(is_string($sub)||$sub instanceof BlankNode){
+        if(is_string($sub)||$sub instanceof RDFBlankNode) {
             if(is_string($sub))
             $var['sub'] = $sub;
             $sub = null;
         }
-        if(is_string($pred)||$pred instanceof BlankNode ){
+        if(is_string($pred)||$pred instanceof RDFBlankNode) {
             if(is_string($pred))
             $var['pred'] = $pred;
             $pred = null;
         }
-        if(is_string($obj)||$obj instanceof BlankNode){
+        if(is_string($obj)||$obj instanceof RDFBlankNode) {
             if(is_string($obj))
             $var['obj'] = $obj;
             $obj = null;
@@ -312,19 +312,19 @@ Class SparqlEngine extends Object{
             return false;
             break;
             case 1:
-            if(is_a($trip->obj,'Literal'))
+            if(is_a($trip->obj,'RDFLiteral'))
             return false;
             if($trip->subj != $trip->obj)
             return false;
             break;
             case 2:
-            if(is_a($trip->obj,'Literal'))
+            if(is_a($trip->obj,'RDFLiteral'))
             return false;
             if($trip->pred != $trip->obj)
             return false;
             break;
             case 3:
-            if(is_a($trip->obj,'Literal'))
+            if(is_a($trip->obj,'RDFLiteral'))
             return false;
             if($trip->pred != $trip->obj || $trip->pred != $trip->subj )
             return false;
@@ -498,8 +498,8 @@ Class SparqlEngine extends Object{
     protected function _checkGraphs(&$pattern,$graphlist){
 
         $gr = $pattern->getGraphname();
-        if($gr instanceof Resource ){
-            if($graphlist[0]==null || in_array($gr,$graphlist)){
+        if($gr instanceof RDFResource ){
+            if($graphlist[0] === null || in_array($gr,$graphlist)){
                 $newGraphList['list'][] = $gr;
                 $newGraphList['var'][]  = null;
             }else{
@@ -704,7 +704,7 @@ Class SparqlEngine extends Object{
                         else
                         $function['isBlank'] = false;
 
-                        // is Literal
+                        // is RDFLiteral
                         if(count($isLiteralcalls[1])>0)
                         $function['isLiteral'] = $isLiteralcalls[1];
                         else
@@ -803,7 +803,7 @@ Class SparqlEngine extends Object{
         // evaluate isBlank calls
         if($function['isBlank']){
             foreach($function['isBlank'] as $var){
-                if(isset($res[$var]) && $res[$var]!=="" && $res[$var] instanceof BlankNode )
+                if(isset($res[$var]) && $res[$var]!=="" && $res[$var] instanceof RDFBlankNode )
                 $replacement = 'true';
                 else
                 $replacement = 'false';
@@ -814,7 +814,7 @@ Class SparqlEngine extends Object{
         // evaluate isLiteral calls
         if($function['isLiteral']){
             foreach($function['isLiteral'] as $var){
-                if(isset($res[$var]) && $res[$var]!=="" && $res[$var] instanceof Literal  )
+                if(isset($res[$var]) && $res[$var]!=="" && $res[$var] instanceof RDFLiteral  )
                 $replacement = 'true';
                 else
                 $replacement = 'false';
@@ -825,7 +825,7 @@ Class SparqlEngine extends Object{
         // evaluate isUri calls
         if($function['isUri']){
             foreach($function['isUri'] as $var){
-                if(isset($res[$var]) && $res[$var]!=="" && $res[$var] instanceof Resource && $res[$var]->getUri() && !$res[$var] instanceof BlankNode )
+                if(isset($res[$var]) && $res[$var]!=='' && $res[$var] instanceof RDFResource && $res[$var]->getUri() && !$res[$var] instanceof RDFBlankNode )
                 $replacement = 'true';
                 else
                 $replacement = 'false';
@@ -835,17 +835,17 @@ Class SparqlEngine extends Object{
         // evaluate lang calls
         if($function['lang']){
             foreach($function['lang'] as $var){
-                if(isset($res[$var]) && $res[$var]!=="" && $res[$var] instanceof Literal && $res[$var]->getLanguage() )
+                if(isset($res[$var]) && $res[$var]!=="" && $res[$var] instanceof RDFLiteral && $res[$var]->getLanguage() )
                 $replacement = '"'.$res[$var]->getLanguage().'"';
                 else
-                $replacement = 'null';
+                $replacement = INF_TOK_ANY;
                 $evalString = preg_replace("/lang\(\\".$var."\)/i",$replacement,$evalString);
             }
         }
         // evaluate datatype calls
         if($function['datatype']){
             foreach($function['datatype'] as $var){
-                if(isset($res[$var]) && $res[$var]!=="" && $res[$var] instanceof Literal && $res[$var]->getDatatype() )
+                if(isset($res[$var]) && $res[$var]!=="" && $res[$var] instanceof RDFLiteral && $res[$var]->getDatatype() )
                 $replacement = '\'<'.$res[$var]->getDatatype().'>\'';
                 else
                 $replacement = 'false';
@@ -858,7 +858,7 @@ Class SparqlEngine extends Object{
                 if($var{0}=='?' || $var{0}=='$'){
                     if(isset($res[$var]) && $res[$var]!==""){
                         $replacement = "'str_".$res[$var]->getLabel()."'";
-                        if($res[$var] instanceof BlankNode)
+                        if($res[$var] instanceof RDFBlankNode)
                         $replacement = "''";
                     }else{
                         $replacement = 'false';
@@ -880,7 +880,7 @@ Class SparqlEngine extends Object{
             if(isset($res[$var])&&$res[$var]!== ""){
                 //$replacement = "'".$res[$var]->getLabel()."'";
                 $replacement = '" "';
-                if($res[$var] instanceof Literal){
+                if($res[$var] instanceof RDFLiteral){
                     if($res[$var]->getDatatype()!= null){
                         if($res[$var]->getDatatype() == XML_SCHEMA.'boolean')
                         $replacement = $res[$var]->getLabel();
@@ -897,7 +897,7 @@ Class SparqlEngine extends Object{
                         $replacement = "'str_".$res[$var]->getLabel()."'";
                     }
                 }else{
-                    if($res[$var] instanceof Resource){
+                    if($res[$var] instanceof RDFResource){
                         $replacement = "'<".$res[$var]->getLabel().">'";
                     }
                 }
@@ -1006,9 +1006,9 @@ Class SparqlEngine extends Object{
 
         foreach($vartable as $k => $x){
             foreach($order as $value){
-                // if the value is a typed Literal try to determine if it
+                // if the value is a typed RDFLiteral try to determine if it
                 // a numeric datatype
-                if($x[$value['val']] instanceof Literal){
+                if($x[$value['val']] instanceof RDFLiteral){
                     $dtype = $x[$value['val']]->getDatatype();
                     if($dtype){
                         switch($dtype){
@@ -1023,13 +1023,13 @@ Class SparqlEngine extends Object{
                     }
                 }
                 if($x[$value['val']]){
-                    if($x[$value['val']]instanceof Literal){
+                    if($x[$value['val']]instanceof RDFLiteral){
                         $pref = "2";
                     }
-                    if($x[$value['val']]instanceof Resource){
+                    if($x[$value['val']]instanceof RDFResource){
                         $pref = "1";
                     }
-                    if($x[$value['val']]instanceof BlankNode){
+                    if($x[$value['val']]instanceof RDFBlankNode){
                         $pref = "0";
                     }
                     $result[$value['val']][$n] = $pref.$x[$value['val']]->getLabel();
@@ -1074,7 +1074,7 @@ Class SparqlEngine extends Object{
         foreach($vartable as $key => $value){
             $key_index="";
             foreach($value as $k => $v)
-            if($v instanceof Object)
+            if($v instanceof RDFObject)
                 $key_index = $key_index.$k.$v->toString();
             if(isset($index[$key_index]))
             unset($vartable[$key]);
@@ -1089,7 +1089,7 @@ Class SparqlEngine extends Object{
     * Prints a query result as HTML table.
     * You can change the colors in the configuration file.
     *
-    * @param array $queryResult [][?VARNAME] = object Node
+    * @param array $queryResult [][?VARNAME] = object RDFNode
     * @return void
     */
     public function writeQueryResultAsHtmlTable($queryResult) {
@@ -1128,7 +1128,7 @@ Class SparqlEngine extends Object{
 
                     $lang  = NULL;
                     $dtype = NULL;
-                    if (is_a($value, 'Literal')) {
+                    if (is_a($value, 'RDFLiteral')) {
                         if ($value->getLanguage() != NULL)
                         $lang = ' <b>(xml:lang="' . $value->getLanguage() . '") </b> ';
                         if ($value->getDatatype() != NULL)

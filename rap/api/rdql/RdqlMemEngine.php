@@ -41,7 +41,7 @@ Class RdqlMemEngine extends RdqlEngine {
  *                               ['strEqExprs'][]['var'] = ?VARNAME
  *                                               ['operator'] = (eq | ne)
  *                                               ['value'] = string
- *                                               ['value_type'] = ('variable' | 'URI' | 'Literal')
+ *                                               ['value_type'] = ('variable' | 'URI' | 'RDFLiteral')
  *                                               ['value_lang'] = string
  *                                               ['value_dtype'] = string
  *                               ['numExpr']['vars'][] = ?VARNAME
@@ -57,7 +57,7 @@ Class RdqlMemEngine extends RdqlEngine {
  * @param   object  MemModel &$memModel
  * @param   array   &$parsedQuery  (the same format as $this->parsedQuery)
  * @param   boolean $returnNodes
- * @return  array   [][?VARNAME] = object Node  (if $returnNodes = TRUE)
+ * @return  array   [][?VARNAME] = object RDFNode  (if $returnNodes = TRUE)
  *      OR  array   [][?VARNAME] = string
  *
  * @access  public
@@ -86,10 +86,10 @@ Class RdqlMemEngine extends RdqlEngine {
  /**
  * Find triples matching all patterns of an RDQL query and return an array
  * with variables from all patterns and their corresponding values.
- * The variable values returned are instances of object Node.
+ * The variable values returned are instances of object RDFNode.
  *
  * @param   object  MemModel  &$memModel
- * @return  array   [][?VARNAME] = object Node
+ * @return  array   [][?VARNAME] = object RDFNode
  *
  * @access  private
  */
@@ -106,7 +106,7 @@ Class RdqlMemEngine extends RdqlEngine {
 
 /**
  * Find tuples matching one pattern and return an array with pattern
- * variables and their corresponding values (instances of object Node).
+ * variables and their corresponding values (instances of object RDFNode).
  *
  * @param   object  MemModel &$memModel
  * @param   array  &$pattern ['subject']['value'] = VARorURI
@@ -115,7 +115,7 @@ Class RdqlMemEngine extends RdqlEngine {
  *                                     ['is_literal'] = boolean
  *                                     ['l_lang'] = string
  *                                     ['l_dtype'] = string
- * @return  array   [][?VARNAME] = object Node
+ * @return  array   [][?VARNAME] = object RDFNode
  *
  * @access  private
  */
@@ -137,13 +137,13 @@ Class RdqlMemEngine extends RdqlEngine {
         $var[$i++]['val'] = $v['value'];
      }else
         if (isset($v['is_literal'])) {
-          $param[$key]['is_a'] = 'Literal';
+          $param[$key]['is_a'] = 'RDFLiteral';
           $param[$key]['string'] = $v['value'];
           $param[$key]['lang'] = $v['l_lang'];
           $param[$key]['dtype'] = $v['l_dtype'];
         }else{
           if ($key == 'object') {
-             $param[$key]['is_a'] = 'Resource';
+             $param[$key]['is_a'] = 'RDFResource';
              $param[$key]['string'] = $v['value'];
              $param[$key]['lang'] = NULL;
              $param[$key]['dtype'] = NULL;
@@ -220,30 +220,30 @@ Class RdqlMemEngine extends RdqlEngine {
        $subj=NULL;
    } else
    {
-       $subj=new Resource($subjLabel);
-   };
+       $subj=new RDFResource($subjLabel);
+   }
    if ($predLabel=='ANY')
    {
        $pred=NULL;
    } else
    {
-       $pred=new Resource($predLabel);
-   }; 
+       $pred=new RDFResource($predLabel);
+   }
             
    if ($objLabel=='ANY')
    {
        $obj=NULL;
    } else
    {
-       if ($obj_is == 'Literal')
+       if ($obj_is == 'RDFLiteral')
        {
-           $obj=new Literal($objLabel);
+           $obj=new RDFLiteral($objLabel);
            $obj->setDatatype($objDtype);
            $obj->setLanguage($objLang);
        } else {
-           $obj=new Resource($objLabel);
+           $obj=new RDFResource($objLabel);
        }
-   };
+   }
    
    $res=$memModel->find($subj,$pred,$obj);
 
@@ -263,9 +263,9 @@ Class RdqlMemEngine extends RdqlEngine {
 /**
  * Perform an SQL-like inner join on two resultSets.
  *
- * @param   array   &$finalRes [][?VARNAME] = object Node
- * @param   array   &$res      [][?VARNAME] = object Node
- * @return  array              [][?VARNAME] = object Node
+ * @param   array   &$finalRes [][?VARNAME] = object RDFNode
+ * @param   array   &$res      [][?VARNAME] = object RDFNode
+ * @return  array              [][?VARNAME] = object RDFNode
  *
  * @access  private
  */
@@ -328,8 +328,8 @@ Class RdqlMemEngine extends RdqlEngine {
  * Filter the result-set of query variables by evaluating each filter from the
  * AND clause of the RDQL query.
  *
- * @param   array  &$finalRes  [][?VARNAME] = object Node
- * @return  array  [][?VARNAME] = object Node
+ * @param   array  &$finalRes  [][?VARNAME] = object RDFNode
+ * @return  array  [][?VARNAME] = object RDFNode
  * @access	private
  */
  function filterTuples(&$finalRes) {
@@ -366,7 +366,7 @@ Class RdqlMemEngine extends RdqlEngine {
                  
             case 'URI':
 
-                 if (is_a($fRes[$expr['var']], 'Literal')) {
+                 if (is_a($fRes[$expr['var']], 'RDFLiteral')) {
                     if ($expr['operator'] == 'ne')
                        $exprBoolVal = 'TRUE';
                     break;
@@ -377,15 +377,15 @@ Class RdqlMemEngine extends RdqlEngine {
                     $exprBoolVal = 'TRUE';
                  break;
                  
-            case 'Literal':
+            case 'RDFLiteral':
 
-                 if (!is_a($fRes[$expr['var']], 'Literal')) {
+                 if (!is_a($fRes[$expr['var']], 'RDFLiteral')) {
                     if ($expr['operator'] == 'ne')
                        $exprBoolVal = 'TRUE';
                     break;
                  }
 
-                 $filterLiteral= new Literal($expr['value'],$expr['value_lang']);
+                 $filterLiteral= new RDFLiteral($expr['value'],$expr['value_lang']);
                  $filterLiteral->setDatatype($expr['value_dtype']);
                  
                 $equal=$fRes[$expr['var']]->equals($filterLiteral);
@@ -438,8 +438,8 @@ Class RdqlMemEngine extends RdqlEngine {
  * Remove all conditional variables from the result-set and leave only variables
  * specified in the SELECT clause of the RDQL query.
  *
- * @param   array  &$finalRes  [][?VARNAME] = object Node
- * @return  array  [][?VARNAME] = object Node
+ * @param   array  &$finalRes  [][?VARNAME] = object RDFNode
+ * @return  array  [][?VARNAME] = object RDFNode
  * @access	private
  */
  function selectVariables(&$finalRes) {
@@ -469,7 +469,7 @@ Class RdqlMemEngine extends RdqlEngine {
 /**
  * Convert the variable values of $finalRes from objects to their string serialization.
  *
- * @param   array  &$finalRes  [][?VARNAME] = object Node
+ * @param   array  &$finalRes  [][?VARNAME] = object RDFNode
  * @return  array  [][?VARNAME] = string
  * @access	private
  */
@@ -477,9 +477,9 @@ Class RdqlMemEngine extends RdqlEngine {
 
    foreach ($finalRes as $n => $tuple)
      foreach ($tuple as $varname => $node) {
-       if (is_a($node, 'Resource'))
+       if (is_a($node, 'RDFResource'))
           $res[$n][$varname] = '<' .$node->getLabel() .'>';
-       elseif (is_a($node, 'Literal')) {
+       elseif (is_a($node, 'RDFLiteral')) {
           $res[$n][$varname] = '"' .$node->getLabel() .'"';
           if ($node->getLanguage())
              $res[$n][$varname] .= ' (xml:lang="' .$node->getLanguage() .'")';
@@ -508,7 +508,7 @@ Class RdqlMemEngine extends RdqlEngine {
          if ($triple->subj != $triple->pred)
             return FALSE;
       if (in_array('object', $intBindings)) {
-         if (is_a($triple->obj, 'Literal'))
+         if (is_a($triple->obj, 'RDFLiteral'))
             return FALSE;
          elseif ($triple->subj != $triple->obj)
             return FALSE;
@@ -516,7 +516,7 @@ Class RdqlMemEngine extends RdqlEngine {
       return TRUE;
    }
    if (in_array('predicate', $intBindings)) {
-      if (is_a($triple->obj, 'Literal'))
+      if (is_a($triple->obj, 'RDFLiteral'))
          return FALSE;
       elseif ($triple->pred != $triple->obj)
              return FALSE;
@@ -526,11 +526,11 @@ Class RdqlMemEngine extends RdqlEngine {
 
 
 /**
- * Check if the lang and dtype of the passed object Literal are equal $lang and $dtype
+ * Check if the lang and dtype of the passed object RDFLiteral are equal $lang and $dtype
  * !!! Language only differentiates literals in rdf:XMLLiterals and plain literals (xsd:string).
  * !!! Therefore if a literal is datatyped ignore the language.
  *
- * @param  object  Literal $literal
+ * @param  object  RDFLiteral $literal
  * @param  string  $dtype1
  * @param  string  $dtype2
  * @return boolean

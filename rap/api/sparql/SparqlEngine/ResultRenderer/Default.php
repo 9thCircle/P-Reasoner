@@ -94,13 +94,13 @@ class SparqlEngine_ResultRenderer_Default implements SparqlEngine_ResultRenderer
                 $obj  = $triple->getObject();
 
                 if (is_string($sub)  && $sub{1} == '_') {
-                    $sub  = new BlankNode("_bN".$bnode);
+                    $sub  = new RDFBlankNode("_bN".$bnode);
                 }
                 if (is_string($pred) && $pred{1} == '_') {
-                    $pred = new BlankNode("_bN".$bnode);
+                    $pred = new RDFBlankNode("_bN".$bnode);
                 }
                 if (is_string($obj)  && $obj{1} == '_') {
-                    $obj  = new BlankNode("_bN".$bnode);
+                    $obj  = new RDFBlankNode("_bN".$bnode);
                 }
 
 
@@ -140,7 +140,7 @@ class SparqlEngine_ResultRenderer_Default implements SparqlEngine_ResultRenderer
         $vars = $this->query->getResultVars();
         if ($arVartable == null) {
             if ($vars) {
-                $arVartable[0] = array('?x' => new Resource(substr($vars[0],1,-1)));
+                $arVartable[0] = array('?x' => new RDFResource(substr($vars[0],1,-1)));
                 $vars[0] = '?x';
             }
         }
@@ -173,19 +173,19 @@ class SparqlEngine_ResultRenderer_Default implements SparqlEngine_ResultRenderer
     /**
     * Tries to determine the rdf:type of the variable.
     *
-    * @param  Node       $var The variable
-    * @param  MemModel   $resultGraph The result graph which describes the Resource
+    * @param  RDFNode       $var The variable
+    * @param  MemModel   $resultGraph The result graph which describes the RDFResource
     * @return String     Uri of the rdf:type
     */
     protected function _determineType($var, $resultGraph)
     {
         $type = null;
         // find in namedGraphs
-        if (!$var instanceof Literal) {
+        if (!$var instanceof RDFLiteral) {
             $iter = $this->dataset->findInNamedGraphs(
                 null,
                 $var,
-                new Resource(RDF_NAMESPACE_URI.'type'),
+                new RDFResource(RDF_NAMESPACE_URI.'type'),
                 null,
                 true
             );
@@ -198,10 +198,10 @@ class SparqlEngine_ResultRenderer_Default implements SparqlEngine_ResultRenderer
         }
         // if no type information found find in default graph
         if (!$type) {
-            if (!$var instanceof Literal) {
+            if (!$var instanceof RDFLiteral) {
                 $iter1 = $this->dataset->findInDefaultGraph(
                     $var,
-                    new Resource(RDF_NAMESPACE_URI.'type'),
+                    new RDFResource(RDF_NAMESPACE_URI.'type'),
                     null
                 );
                 $type = null;
@@ -223,18 +223,18 @@ class SparqlEngine_ResultRenderer_Default implements SparqlEngine_ResultRenderer
     * Modifies $resultGraph
     *
     * @param Array      $list List containing the attributes
-    * @param MemModel   $resultGraph The result graph which describes the Resource
+    * @param MemModel   $resultGraph The result graph which describes the RDFResource
     * @return void
     */
     protected function _getAttributes($list, $resultGraph, $varvalue)
     {
         if ($list){
             foreach ($list as $attribute) {
-                if (!$varvalue instanceof Literal) {
+                if (!$varvalue instanceof RDFLiteral) {
                     $iter2 = $this->dataset->findInNamedGraphs(
                         null,
                         $varvalue,
-                        new Resource($attribute),
+                        new RDFResource($attribute),
                         null,
                         true
                     );
@@ -244,7 +244,7 @@ class SparqlEngine_ResultRenderer_Default implements SparqlEngine_ResultRenderer
                     }
                     $iter3 = $this->dataset->findInDefaultGraph(
                         $varvalue,
-                        new Resource($attribute),
+                        new RDFResource($attribute),
                         null
                     );
                     while ($iter3->valid()) {

@@ -13,168 +13,168 @@
 *   the vocabulary in one spot, simplifing implementation and
 *   maintainence.
 */
-class RDF{
-
+class RDF
+{
 	// RDF concepts (constants are defined in constants.php)
 	function ALT()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_ALT);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_ALT);
 
 	}
 
 	function BAG()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_BAG);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_BAG);
 
 	}
 
 	function PROPERTY()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_PROPERTY);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_PROPERTY);
 
 	}
 
 	function SEQ()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_SEQ);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_SEQ);
 
 	}
 
 	function STATEMENT()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_STATEMENT);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_STATEMENT);
 
 	}
 
 	function RDF_LIST()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_LIST);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_LIST);
 
 	}
 
 	function NIL()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_NIL);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_NIL);
 
 	}
 
 	function TYPE()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_TYPE);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_TYPE);
 
 	}
 
 	function REST()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_REST);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_REST);
 
 	}
 
 	function FIRST()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_FIRST);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_FIRST);
 
 	}
 
 	function SUBJECT()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_SUBJECT);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_SUBJECT);
 
 	}
 
 	function PREDICATE()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_PREDICATE);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_PREDICATE);
 
 	}
 
 	function OBJECT()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_OBJECT);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_OBJECT);
 
 	}
 
 	function DESCRIPTION()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_DESCRIPTION);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_DESCRIPTION);
 
 	}
 
 	function ID()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_ID);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_ID);
 
 	}
 
 	function ABOUT()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_ABOUT);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_ABOUT);
 
 	}
 
 	function ABOUT_EACH()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_ABOUT_EACH);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_ABOUT_EACH);
 
 	}
 
 	function ABOUT_EACH_PREFIX()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_ABOUT_EACH_PREFIX);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_ABOUT_EACH_PREFIX);
 
 	}
 
 	function BAG_ID()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_BAG_ID);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_BAG_ID);
 
 	}
 
 	function RESOURCE()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_RESOURCE);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_RESOURCE);
 
 	}
 
 	function PARSE_TYPE()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_PARSE_TYPE);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_PARSE_TYPE);
 
 	}
 
 	function LITERAL()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_PARSE_TYPE_LITERAL);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_PARSE_TYPE_LITERAL);
 
 	}
 
 	function PARSE_TYPE_RESOURCE()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_PARSE_TYPE_RESOURCE);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_PARSE_TYPE_RESOURCE);
 
 	}
 
 	function LI()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_LI);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_LI);
 
 	}
 
 	function NODE_ID()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_NODEID);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_NODEID);
 
 	}
 
 	function DATATYPE()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_DATATYPE);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_DATATYPE);
 
 	}
 
 	function SEE_ALSO()
 	{
-		return  new Resource(RDF_NAMESPACE_URI . RDF_SEEALSO);
+		return  new RDFResource(RDF_NAMESPACE_URI . RDF_SEEALSO);
 	}
 }
 

@@ -18,7 +18,8 @@
  */
 
 
-Class RdqlParser extends Object{
+Class RdqlParser extends RDFObject
+{
 
 /**
  * Parsed query variables and constraints.
@@ -46,7 +47,7 @@ Class RdqlParser extends Object{
  *                               ['strEqExprs'][]['var'] = ?VARNAME
  *                                               ['operator'] = (eq | ne)
  *                                               ['value'] = string
- *                                               ['value_type'] = ('variable' | 'URI' | 'QName' | 'Literal')
+ *                                               ['value_type'] = ('variable' | 'URI' | 'QName' | 'RDFLiteral')
  *                                               ['value_lang'] = string
  *                                               ['value_dtype'] = string
  *                                              {['value_dtype_is_qname'] = boolean}
@@ -492,7 +493,7 @@ Class RdqlParser extends Object{
  *                  ['strEqExprs'][]['var'] = ?VARNAME
  *                                 ['operator'] = (eq | ne)
  *                                 ['value'] = string
- *                                 ['value_type'] = ('variable' | 'URI' | 'QName'| 'Literal')
+ *                                 ['value_type'] = ('variable' | 'URI' | 'QName'| 'RDFLiteral')
  *                                 ['value_lang'] = string
  *                                 ['value_dtype'] = string
  *								   ['value_dtype_is_qname'] = boolean
@@ -526,7 +527,7 @@ Class RdqlParser extends Object{
      $parsedFilter['strEqExprs'][$i]['var'] = $this->_isDefined($eqExprs[1][$i]);#
      $parsedFilter['strEqExprs'][$i]['operator'] = strtolower($eqExprs[2][$i]);
      $parsedFilter['strEqExprs'][$i]['value'] = trim($eqExprs[3][$i],"'\"");
-     $parsedFilter['strEqExprs'][$i]['value_type'] = 'Literal';
+     $parsedFilter['strEqExprs'][$i]['value_type'] = 'RDFLiteral';
      $parsedFilter['strEqExprs'][$i]['value_lang'] = substr($eqExprs[4][$i], 1);     
      $dtype = substr($eqExprs[5][$i], 2);
      if ($dtype) {
@@ -649,7 +650,7 @@ Class RdqlParser extends Object{
           	 $this->parsedQuery['patterns'][$n][$key]['value']
           	 	= $this->_replaceNamespacePrefix($v['value'], RDQL_WHR_ERR);
           	 unset($this->parsedQuery['patterns'][$n][$key]['is_qname']);	 
-       	  } else { // is quoted URI (== <URI>) or Literal          	
+       	  } else { // is quoted URI (== <URI>) or RDFLiteral          	
               if (isset($this->parsedQuery['patterns'][$n][$key]['is_literal'])) {
               	 if (isset($this->parsedQuery['patterns'][$n][$key]['l_dtype_is_qname'])) {   
           	 		$this->parsedQuery['patterns'][$n][$key]['l_dtype']
@@ -683,7 +684,7 @@ Class RdqlParser extends Object{
                $this->parsedQuery['filters'][$n]['strEqExprs'][$i]['value']
                  = eregi_replace("$prefix:", $uri,
                     $this->parsedQuery['filters'][$n]['strEqExprs'][$i]['value']);
-          elseif ($expr['value_type'] == 'Literal') {
+          elseif ($expr['value_type'] === 'RDFLiteral') {
           	 if (isset($expr['value_dtype_is_qname'])) {
           	 	$this->parsedQuery['filters'][$n]['strEqExprs'][$i]['value_dtype']
           	 	   = $this->_replaceNamespacePrefix($expr['value_dtype'], RDQL_AND_ERR);          	 	   
@@ -769,7 +770,7 @@ Class RdqlParser extends Object{
 
 /**
  * Check if the given token is either a variable (?var) or the first token
- * of either an URI (<URI>) or a literal ("Literal").
+ * of either an URI (<URI>) or a literal ("RDFLiteral").
  * In case of a literal return an array with literal properties (value, language, datatype).
  * In case of a variable or an URI return only ['value'] = string.
  *

@@ -6,8 +6,8 @@
  * @author Philipp Frischmuth <philipp@frischmuth24.de>
  * @version $Id: JsonSerializer.php 555 2007-12-11 20:27:34Z p_frischmuth $
  */
-class JsonSerializer extends Object {
-	
+class JsonSerializer extends RDFObject
+{
 	/**
 	 * This method takes a MemModel object ad parameter and serializes all contained triples to rdf/json format.
 	 * 
@@ -42,7 +42,7 @@ class JsonSerializer extends Object {
 			$subj = $predicatesArray[0]->getSubject();
 			
 			// add special _: sequence for blank node only
-			if ($subj instanceof BlankNode) {
+			if ($subj instanceof RDFBlankNode) {
 				$jsonString .= '"_:' . $this->_escapeValue($subj->getLabel()) . '":';
 			} else {
 				$jsonString .= '"' . $this->_escapeValue($subj->getLabel()) . '":';
@@ -69,7 +69,7 @@ class JsonSerializer extends Object {
 				}
 				$j++;
 				
-				$jsonString .= '"' . $this->_escapeValue($valueArray[0]->getLabelPredicate()) . '":';
+				$jsonString .= '"' . $this->_escapeValue($valueArray[0]->getPredicate()->getLabel()) . '":';
 				
 				// create a json array (value array) 
 				$jsonString .= '[';
@@ -87,24 +87,24 @@ class JsonSerializer extends Object {
 					$obj = $triple->getObject();
 					
 					// add special _: sequence for blank nodes only
-					if ($obj instanceof BlankNode) {
+					if ($obj instanceof RDFBlankNode) {
 						$jsonString .= '"value":"_:' . $this->_escapeValue($obj->getLabel()) . '",';
-					} else if ($obj instanceof Literal) {
+					} else if ($obj instanceof RDFLiteral) {
 						$jsonString .= '"value":"' . $this->_escapeValue($obj->getLabel()) . '",';
 					} else {
 						$jsonString .= '"value":"' . $this->_escapeValue($obj->getLabel()) . '",';
 					}
 					
 					// add type of object
-					if ($obj instanceof Literal) {
+					if ($obj instanceof RDFLiteral) {
 						$jsonString .= '"type":"literal"';
-					} else if ($obj instanceof BlankNode) {
+					} else if ($obj instanceof RDFBlankNode) {
 						$jsonString .= '"type":"bnode"';
 					} else {
 						$jsonString .= '"type":"uri"';
 					}
 					
-					if ($obj instanceof Literal) {
+					if ($obj instanceof RDFLiteral) {
 						if ($obj->getLanguage() != '') {
 							$jsonString .= ',"lang":"' . $this->_escapeValue($obj->getLanguage()) . '"';
 						}

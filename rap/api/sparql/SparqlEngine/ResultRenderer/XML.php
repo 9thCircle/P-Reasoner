@@ -87,7 +87,7 @@ class SparqlEngine_ResultRenderer_XML implements SparqlEngine_ResultRenderer
     * an xml string for a single variable an their corresponding value.
     *
     * @param  String  $varname The variables name
-    * @param  Node    $varvalue The value of the variable
+    * @param  RDFNode    $varvalue The value of the variable
     * @return String  The xml string
     */
     protected function _getBindingString($varname, $varvalue)
@@ -95,11 +95,11 @@ class SparqlEngine_ResultRenderer_XML implements SparqlEngine_ResultRenderer
         $binding = '<binding name="'.$varname.'">';
         $value = '<unbound/>';
 
-        if ($varvalue instanceof BlankNode) {
+        if ($varvalue instanceof RDFBlankNode) {
             $value = '<bnode>' . $varvalue->getLabel() . '</bnode>';
-        } else if ($varvalue instanceof Resource) {
+        } else if ($varvalue instanceof RDFResource) {
             $value = '<uri>' . $varvalue->getUri() . '</uri>';
-        } else if ($varvalue instanceof Literal) {
+        } else if ($varvalue instanceof RDFLiteral) {
             $label = htmlspecialchars($varvalue->getLabel());
             $value = '<literal>'.$label.'</literal>';
             if ($varvalue->getDatatype() != null) {

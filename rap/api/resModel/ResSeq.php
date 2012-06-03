@@ -97,7 +97,7 @@ class ResSeq extends ResContainer
 		//check all members, until $object is found
 		foreach ($this->listProperties() as $statement)
 		{
-			$predicateLabel=$statement->getLabelPredicate();
+			$predicateLabel=$statement->getPredicate()->getLabel();
 			if ($this->_predicateLabelMatchesMembershipProperty($predicateLabel))
 			{
 				if($object->equals($statement->getObject()))

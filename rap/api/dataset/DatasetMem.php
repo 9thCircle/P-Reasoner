@@ -285,10 +285,10 @@ class DatasetMem extends Dataset
 	 * Tells wether the Dataset contains a quad or
 	 * quads matching a pattern.
 	 *
-	 * @param Resource $graphName
-	 * @param Resource $subject
-	 * @param Resource $predicate
-	 * @param Resource $object
+	 * @param RDFResource $graphName
+	 * @param RDFResource $subject
+	 * @param RDFResource $predicate
+	 * @param RDFResource $object
 	 * @return boolean
 	 */
 	function containsQuad($graphName,$subject,$predicate,$object)
@@ -353,13 +353,13 @@ class DatasetMem extends Dataset
 	 * Finds Statements that match a quad pattern. The argument may contain
 	 * wildcards.
 	 *
-	 * @param Resource or Null
-	 * @param Resourceor Null
-	 * @param Resource or Null
-	 * @param Resource or Null
+	 * @param RDFResource or Null
+	 * @param RDFResource or Null
+	 * @param RDFResource or Null
+	 * @param RDFResource or Null
 	 * @return Iterator
 	 */
-	function &findInNamedGraphs($graph,$subject,$predicate,$object,$returnAsTriples = false)
+	function &findInNamedGraphs($graph, RDFResource $subject = NULL, RDFResource $predicate = NULL, RDFResource $object = NULL, $returnAsTriples = false)
 	{
 
 		if ($graph!=null)
@@ -381,12 +381,12 @@ class DatasetMem extends Dataset
 	 * Finds Statements that match a pattern in the default Graph. The argument may contain
 	 * wildcards.
 	 *
-	 * @param Resource or Null
-	 * @param Resource or Null
-	 * @param Resource or Null
+	 * @param RDFResource or Null
+	 * @param RDFResource or Null
+	 * @param RDFResource or Null
 	 * @return Iterator
 	 */
-	function &findInDefaultGraph($subject,$predicate,$object)
+	function &findInDefaultGraph(RDFResource $subject = NULL, RDFResource $predicate = NULL, RDFResource $object = NULL)
 	{
 		return $this->defaultGraph->iterFind($subject,$predicate,$object);
 	}

@@ -17,21 +17,21 @@ $subClassOf      = OWL_RES::INVERSE_OF();
 
 // define classes
 
-$game       = new Resource(NS . 'Game');
-$person     = new Resource(NS . 'Person');
-$master     = new Resource(NS . 'Master');
-$player     = new Resource(NS . 'Player');
+$game       = new RDFResource(NS . 'Game');
+$person     = new RDFResource(NS . 'Person');
+$master     = new RDFResource(NS . 'Master');
+$player     = new RDFResource(NS . 'Player');
 
 
 // define properties
 
-$pPlays           = new Resource(NS . 'Plays');
-$pPlayedBy        = new Resource(NS . 'IsPlayedBy');
-$pDirects         = new Resource(NS . 'Directs');
-$pDirectedBy      = new Resource(NS . 'IsDirectedBy');
-$pPartecipates    = new Resource(NS . 'Parecipates');
-$pPartecipatedBy  = new Resource(NS . 'IsPartecipatedBy');
-$pKnows           = new Resource(NS . 'Knows');
+$pPlays           = new RDFResource(NS . 'Plays');
+$pPlayedBy        = new RDFResource(NS . 'IsPlayedBy');
+$pDirects         = new RDFResource(NS . 'Directs');
+$pDirectedBy      = new RDFResource(NS . 'IsDirectedBy');
+$pPartecipates    = new RDFResource(NS . 'Parecipates');
+$pPartecipatedBy  = new RDFResource(NS . 'IsPartecipatedBy');
+$pKnows           = new RDFResource(NS . 'Knows');
 
 
 // define taxonomies (RDF triples)

@@ -14,7 +14,7 @@
  * @version  $Id: Statement.php 268 2006-05-15 05:28:09Z tgauss $
  * @package model
  */
-class Statement extends Object
+class Statement extends RDFObject
 {
 	/**
 	* Subject of the statement
@@ -43,26 +43,26 @@ class Statement extends Object
   /**
    * The parameters to constructor are instances of classes and not just strings
    *
-   * @param	object	node $subj
-   * @param	object	node $pred
-   * @param	object	node $obj
+   * @param	object	RDFNode $subj
+   * @param	object	RDFNode $pred
+   * @param	object	RDFNode $obj
 	* @throws	PhpError
    */
-   public function __construct(Node $subj, Node $pred, Node $obj)
+   public function __construct(RDFNode $subj, RDFNode $pred, RDFNode $obj)
    {
-		if (is_a($subj, 'Resource') !== TRUE) {
+		if (is_a($subj, 'RDFResource') !== TRUE) {
 			$errmsg = RDFAPI_ERROR . 
-					  '(class: Statement; method: new): Resource expected as subject. Found: ' . get_class($subj);
+					  '(class: Statement; method: new): RDFResource expected as subject. Found: ' . get_class($subj);
 			trigger_error($errmsg, E_USER_ERROR); 
 		}
-		if ((is_a($pred, 'Resource') && !is_a($pred, 'BlankNode')) !== TRUE) {
+		if ((is_a($pred, 'RDFResource') && !is_a($pred, 'RDFBlankNode')) !== TRUE) {
 			$errmsg = RDFAPI_ERROR . 
-					  '(class: Statement; method: new): Resource expected as predicate, no blank node allowed.';
+					  '(class: Statement; method: new): RDFResource expected as predicate, no blank node allowed.';
 			trigger_error($errmsg, E_USER_ERROR); 
 		}
-		if ((is_a($obj, 'Resource') || is_a($obj, 'Literal')) !== TRUE) {
+		if ((is_a($obj, 'RDFResource') || is_a($obj, 'RDFLiteral')) !== TRUE) {
 			$errmsg = RDFAPI_ERROR . 
-					  '(class: Statement; method: new): Resource or Literal expected as object.';
+					  '(class: Statement; method: new): RDFResource or RDFLiteral expected as object.';
 			trigger_error($errmsg, E_USER_ERROR); 
 		}
 		
@@ -142,7 +142,7 @@ class Statement extends Object
 	{
 		return $this->pred->toString();
 	}
-
+	
   /**
    * Reurns a toString() serialization of the statements's object.
    *
@@ -153,40 +153,7 @@ class Statement extends Object
 	{
 		return $this->obj->toString();
 	}
-
-  /**
-   * Returns the URI or bNode identifier of the statements's subject.
-   *
-   * @access	public 
-   * @return	string 
-   */  
-	public function getLabelSubject()
-	{
-		return $this->subj->getLabel();
-	}
-
-  /**
-   * Returns the URI of the statements's predicate.
-   *
-   * @access	public 
-   * @return	string 
-   */  
-	public function getLabelPredicate()
-	{
-		return $this->pred->getLabel();
-	}
-
-  /**
-   * Reurns the URI, text or bNode identifier of the statements's object.
-   *
-   * @access	public 
-   * @return	string 
-   */  
-	public function getLabelObject()
-	{
-		return $this->obj->getLabel();
-	}
-  
+	
   /**
    * Checks if two statements are equal.
    * Two statements are considered to be equal if they have the
@@ -195,21 +162,12 @@ class Statement extends Object
    * @access	public 
    * @param		object	statement $that
    * @return	boolean 
-   */  
-
-	public function equals ($that)
+   */
+	public function equals($that)
 	{
-		if ($this === $that) {
-			return TRUE;
-		}
-		if ($that === NULL || is_a($that, 'Statement') !== TRUE) {
-			return FALSE;
-		}
-		
-		## is this really needed?
 		return
-			$this->subj->equals($that->getSubject()) &&
-			$this->pred->equals($that->getPredicate()) &&
+			$this->subj->equals($that->getSubject())    &&
+			$this->pred->equals($that->getPredicate())  &&
 			$this->obj->equals($that->getObject());
 	}
 
@@ -221,7 +179,7 @@ class Statement extends Object
    * @param		object	statement &$that
    * @return	boolean 
    */  
-	public function compare(&$that)
+	public function compare($that)
 	{
 		return statementsorter($this, $that);
 		// statementsorter function see below
@@ -241,28 +199,27 @@ class Statement extends Object
   {
 		if (is_a($model_or_bNodeID, 'MemModel')) {
 			// parameter is model
-			$statementModel = new MemModel($model_or_bNodeID->getBaseURI());
-			$thisStatement = new BlankNode($model_or_bNodeID);
+			$statementModel  = new MemModel($model_or_bNodeID->getBaseURI());
+			$thisStatement   = new RDFBlankNode($model_or_bNodeID);
 		} else {
 			// parameter is bNodeID
-			$statementModel = new MemModel();
-			$thisStatement = &$model_or_bNodeID;
-		} 
+			$statementModel  = new MemModel();
+			$thisStatement   = &$model_or_bNodeID;
+		}
 		
-		$RDFstatement = new Resource(RDF_NAMESPACE_URI . RDF_STATEMENT);
-		$RDFtype = new Resource(RDF_NAMESPACE_URI . RDF_TYPE);
-		$RDFsubject = new Resource(RDF_NAMESPACE_URI . RDF_SUBJECT);
-		$RDFpredicate = new Resource(RDF_NAMESPACE_URI . RDF_PREDICATE);
-		$RDFobject = new Resource(RDF_NAMESPACE_URI . RDF_OBJECT);
+		$RDFstatement  = new RDFResource(RDF_NAMESPACE_URI . RDF_STATEMENT);
+		$RDFtype       = new RDFResource(RDF_NAMESPACE_URI . RDF_TYPE);
+		$RDFsubject    = new RDFResource(RDF_NAMESPACE_URI . RDF_SUBJECT);
+		$RDFpredicate  = new RDFResource(RDF_NAMESPACE_URI . RDF_PREDICATE);
+		$RDFobject     = new RDFResource(RDF_NAMESPACE_URI . RDF_OBJECT);
 		
-		$statementModel->add(new Statement($thisStatement, $RDFtype, $RDFstatement));
-		$statementModel->add(new Statement($thisStatement, $RDFsubject, $this->getSubject()));
-		$statementModel->add(new Statement($thisStatement, $RDFpredicate, $this->getPredicate()));
-		$statementModel->add(new Statement($thisStatement, $RDFobject, $this->Object()));
+		$statementModel->add(new Statement($thisStatement,  $RDFtype,       $RDFstatement));
+		$statementModel->add(new Statement($thisStatement,  $RDFsubject,    $this->getSubject()));
+		$statementModel->add(new Statement($thisStatement,  $RDFpredicate,  $this->getPredicate()));
+		$statementModel->add(new Statement($thisStatement,  $RDFobject,     $this->getObject()));
 		
 		return $statementModel;
   }
-  
 } // end: Statement
 
 
@@ -278,20 +235,18 @@ class Statement extends Object
 */
 function statementsorter($a, $b)
 {
-	  //Compare subjects
-	  $x = $a->getSubject();
-	  $y = $b->getSubject();
-	  $r = strcmp($x->getLabel(),$y->getLabel());
-	  if ($r!=0) return $r;
-	  //Compare predicates
-	  $x=$a->getPredicate();
-	  $y=$b->getPredicate();
-	  $r=strcmp($x->getURI(),$y->getURI());
-	  if ($r!=0) return $r;
-	  //Final resort, compare objects
-	  $x = $a->getObject();
-	  $y = $b->getObject();
-	  return strcmp($x->toString(), $y->toString());
+	//Compare subjects
+	$r = strcmp($a->getSubject()->getLabel(), $b->getSubject()->getLabel());
+	if ($r !== 0) {
+		return $r;
+	}
+	//Compare predicates
+	$r = strcmp($a->getPredicate()->getURI(), $b->getPredicate()->getURI());
+	if ($r !== 0) {
+		return $r;
+	}
+	//Final resort, compare objects
+	return strcmp($a->getObject()->toString(), $b->getObject()->toString());
 }
-	
+
 ?>

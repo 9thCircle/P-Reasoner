@@ -13,30 +13,30 @@ require_once RDFAPI_INCLUDE_DIR . 'sparql/SparqlVariable.php';
 *
 * @package sparql
 */
-class QueryTriple extends Object
+class QueryTriple extends RDFObject
 {
 
     /**
     * The QueryTriples Subject.
-    * Can be a BlankNode or Resource, string in
+    * Can be a RDFBlankNode or RDFResource, string in
     * case of a variable
-    * @var Node/string
+    * @var RDFNode/string
     */
     protected $subject;
 
     /**
     * The QueryTriples Predicate.
-    * Normally only a Resource, string in
+    * Normally only a RDFResource, string in
     * case of a variable
-    * @var Node/string
+    * @var RDFNode/string
     */
     protected $predicate;
 
     /**
     * The QueryTriples Object.
-    * Can be BlankNode, Resource or Literal, string in
+    * Can be RDFBlankNode, RDFResource or RDFLiteral, string in
     * case of a variable
-    * @var Node/string
+    * @var RDFNode/string
     */
     protected $object;
 
@@ -45,9 +45,9 @@ class QueryTriple extends Object
     /**
     * Constructor
     *
-    * @param Node $sub  Subject
-    * @param Node $pred Predicate
-    * @param Node $ob   Object
+    * @param RDFNode $sub  Subject
+    * @param RDFNode $pred Predicate
+    * @param RDFNode $ob   Object
     */
     public function QueryTriple($sub,$pred,$ob)
     {
@@ -59,7 +59,7 @@ class QueryTriple extends Object
     /**
     * Returns the Triples Subject.
     *
-    * @return Node
+    * @return RDFNode
     */
     public function getSubject()
     {
@@ -69,7 +69,7 @@ class QueryTriple extends Object
     /**
     * Returns the Triples Predicate.
     *
-    * @return Node
+    * @return RDFNode
     */
     public function getPredicate()
     {
@@ -79,7 +79,7 @@ class QueryTriple extends Object
     /**
     * Returns the Triples Object.
     *
-    * @return Node
+    * @return RDFNode
     */
     public function getObject()
     {
@@ -117,7 +117,7 @@ class QueryTriple extends Object
         }
     }//public function __clone()
 
-}//class QueryTriple extends Object
+}//class QueryTriple extends RDFObject
 
 // end class: QueryTriple.php
 ?>

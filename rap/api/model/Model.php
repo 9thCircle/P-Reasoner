@@ -18,7 +18,7 @@
  * @package model
  * @access	public
  */
-class Model extends Object
+class Model extends RDFObject
 {
 	/**
     * Base URI of the Model.
@@ -91,19 +91,19 @@ class Model extends Object
             // Import Package Syntax
             include_once(RDFAPI_INCLUDE_DIR.PACKAGE_SYNTAX_N3);
             $parser = new N3Parser();
-        }elseif ((isset($type)) && ($type ==='rdf')) {
+        } elseif ((isset($type)) && ($type ==='rdf')) {
             // Import Package Syntax
             include_once(RDFAPI_INCLUDE_DIR.PACKAGE_SYNTAX_RDF);
             $parser = new RdfParser();
-        }elseif ((isset($type)) && ($type ==='grddl')) {
+        } elseif ((isset($type)) && ($type ==='grddl')) {
             // Import Package Syntax
             include_once(RDFAPI_INCLUDE_DIR.PACKAGE_SYNTAX_GRDDL);
             $parser = new GRDDLParser();
-        }elseif ((isset($type)) && ($type ==='rss')) {
+        } elseif ((isset($type)) && ($type ==='rss')) {
             // Import Package Syntax
             include_once(RDFAPI_INCLUDE_DIR.PACKAGE_SYNTAX_RSS);
             $parser = new RssParser();
-        }else {
+        } else {
             // create a parser according to the suffix of the filename
             // if there is no suffix assume the file to be XML/RDF
             preg_match("/\.([a-zA-Z0-9_]+)$/", $filename, $suffix);
@@ -120,7 +120,7 @@ class Model extends Object
                 include_once RDFAPI_INCLUDE_DIR.PACKAGE_SYNTAX_RDF;
                 $parser = new RdfParser();
             }
-        };
+        }
 
         if ($stream !== FALSE && ($type === 'rdf' || $type === 'n3')) {
                 $temp=&$parser->generateModel($filename, FALSE, $this);
@@ -189,14 +189,14 @@ class Model extends Object
         $subject  = $statement->getSubject();
         $object   = $statement->getObject();
 
-        if (is_a($subject, "BlankNode")) {
+        if (is_a($subject, 'RDFBlankNode')) {
             $label = $subject->getLabel();
             if (!array_key_exists($label, $blankNodes_tmp))
             {
                 if ($this->findFirstMatchingStatement($subject, NULL, NULL)
 					|| $this->findFirstMatchingStatement(NULL, NULL, $subject))
                 {
-                $blankNodes_tmp[$label] = new BlankNode($this);
+                $blankNodes_tmp[$label] = new RDFBlankNode($this);
                 $statement->subj = $blankNodes_tmp[$label];
                 } else {
                 $blankNodes_tmp[$label] = $subject;
@@ -205,14 +205,14 @@ class Model extends Object
                 $statement->subj = $blankNodes_tmp[$label];
         }
 		
-        if (is_a($object, "BlankNode")) {
+        if (is_a($object, 'RDFBlankNode')) {
             $label = $object->getLabel();
             if (!array_key_exists($label, $blankNodes_tmp))
             {
                 if ($this->findFirstMatchingStatement($object, NULL, NULL)
                 || $this->findFirstMatchingStatement(NULL, NULL, $object))
                 {
-                $blankNodes_tmp[$label] = new BlankNode($this);
+                $blankNodes_tmp[$label] = new RDFBlankNode($this);
                 $statement->obj = $blankNodes_tmp[$label];
                 } else {
                 $blankNodes_tmp[$label] = $object;
@@ -255,9 +255,7 @@ class Model extends Object
     {
         return ModelFactory::getResModelForBaseModel($this);
     }
-
-
-
+	
     /**
     * Returns an OntModel with this model as baseModel.
     * $vocabulary has to be one of the following constants (currently only one is supported):
@@ -273,9 +271,7 @@ class Model extends Object
     {
         return ModelFactory::getOntModelForBaseModel($this, $vocabulary);
     }
-
-
-
+	
     /**
     * Searches for triples using find() and tracks forward blank nodes
     * until the final objects in the retrieved subgraphs are all named resources.
@@ -292,50 +288,43 @@ class Model extends Object
     * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     *
     * @author   Anton Koestlbacher <anton1@koestlbacher.de>
-    * @param    object Node     $subject
-    * @param    object Node     $predicate
-    * @param    object Node     $object
+    * @param    object RDFNode     $subject
+    * @param    object RDFNode     $predicate
+    * @param    object RDFNode     $object
     * @param    object MemModel $object
     * @return   object MemModel
     * @access   public
     * @throws   PhpError
     */
-    public function findForward($subject, $predicate, $object, &$newModel = NULL)
+    public function findForward(RDFNode $subject = NULL, RDFNode $predicate = NULL, RDFNode $object = NULL, &$newModel = NULL)
     {
-        if (!is_a($newModel, "MemModel"))
-        {
+        if (!is_a($newModel, "MemModel")) {
             $newModel = New MemModel;
         }
-
-        if (is_a($this, "DbModel"))
-        {
+		
+        if (is_a($this, "DbModel")) {
             $model = $this;
             $res   = $model->find($subject, $predicate, $object);
             $it    = $res->getStatementIterator();
-        }
-        elseif (is_a($this, "MemModel")) {
+        } elseif (is_a($this, "MemModel")) {
             $model = $this;
             $it    = $model->findAsIterator($subject, $predicate, $object);
-        }
-        elseif (is_a($this, "ResModel")) {
+        } elseif (is_a($this, "ResModel")) {
             $model = $this->model;
             $it    = $model->findAsIterator($subject, $predicate, $object);
         }
-
-        while ($it->hasNext())
-        {
+		
+        while ($it->hasNext()) {
             $statement = $it->next();
             $newModel->add($statement);
-            if (is_a($statement->getObject(), 'BlankNode'))
+            if (is_a($statement->getObject(), 'RDFBlankNode'))
             {
                 $model->findForward($statement->getObject(), NULL, NULL, $newModel);
             }
         }
         return $newModel;
     }
-
-
-
+	
     /**
     * Perform an RDQL query on this Model. Should work with all types of models.
     * This method returns a MemModel containing the result statements.
@@ -394,23 +383,23 @@ class Model extends Object
                 if (substr($pattern['subject']['value'], 0, 1) == '?') {
                     $subj = $result[$pattern['subject']['value']];
                 } else {
-                    $subj = new Resource($pattern['subject']['value']);
+                    $subj = new RDFResource($pattern['subject']['value']);
                 }
                 if (substr($pattern['predicate']['value'], 0, 1) == '?') {
                     $pred = $result[$pattern['predicate']['value']];
                 } else {
-                    $pred = new Resource($pattern['predicate']['value']);
+                    $pred = new RDFResource($pattern['predicate']['value']);
                 }
 
                 if (substr($pattern['object']['value'], 0, 1) == '?') {
                     $obj = $result[$pattern['object']['value']];
                 } else {
                     if (isset($pattern['object']['is_literal'])) {
-                        $obj = new Literal($pattern['object']['value']);
+                        $obj = new RDFLiteral($pattern['object']['value']);
                         $obj->setDatatype($pattern['object']['l_dtype']);
                         $obj->setLanguage($pattern['object']['l_lang']);
                     } else {
-                        $obj = new Resource($pattern['object']['value']);
+                        $obj = new RDFResource($pattern['object']['value']);
                     }
                 }
 				
@@ -419,10 +408,10 @@ class Model extends Object
 				
                 // findForward() Statements containing an eventually given blank node
                 // and add them to the result, if closure = true
-                if (is_a($statement->getObject(),'BlankNode') && $closure == TRUE) {
+                if (is_a($statement->getObject(),'RDFBlankNode') && $closure == TRUE) {
                     $newModel = $model->findForward($statement->getObject(), NULL, NULL, $newModel);
                 }
-                if (is_a($statement->getSubject(),'BlankNode') && $closure == TRUE) {
+                if (is_a($statement->getSubject(),'RDFBlankNode') && $closure == TRUE) {
                     $newModel = $model->findForward($statement->getSubject(), NULL, NULL, $newModel);
                 }
             }

@@ -20,15 +20,11 @@
 
 
 
-class NTripleSerializer extends Object {
-
+class NTripleSerializer extends RDFObject
+{
   var $debug; 
   var $model;
   var $res; 
-
-  
-  
-  
 
    /**
     * Constructor

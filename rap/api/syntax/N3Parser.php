@@ -1,11 +1,4 @@
 <?php
-require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
-require_once RDFAPI_INCLUDE_DIR . 'model/Blanknode.php';
-require_once RDFAPI_INCLUDE_DIR . 'model/Resource.php';
-require_once RDFAPI_INCLUDE_DIR . 'model/Literal.php';
-require_once RDFAPI_INCLUDE_DIR . 'model/Statement.php';
-require_once RDFAPI_INCLUDE_DIR . 'model/MemModel.php';
-require_once RDFAPI_INCLUDE_DIR . 'constants.php';
 
 // ----------------------------------------------------------------------------------
 // Class: N3Parser
@@ -24,7 +17,7 @@ require_once RDFAPI_INCLUDE_DIR . 'constants.php';
  *   <li>@prefix mappings</li>
  *   <li>= maps to owl#sameAs</li>
  *   <li>a maps to rdf-syntax-ns#type</li>
- *   <li>Literal datytype- and xmlLanguageTag support
+ *   <li>RDFLiteral datytype- and xmlLanguageTag support
  * </ul>
  * Un-supported N3 Features include:
  * <ul>
@@ -51,7 +44,7 @@ require_once RDFAPI_INCLUDE_DIR . 'constants.php';
  * @access public
  **/
 
-class N3Parser extends Object {
+class N3Parser extends RDFObject {
 
 
   /* ==================== Variables ==================== */
@@ -123,7 +116,7 @@ class N3Parser extends Object {
 
 
   /**
-   * Sets, if BlankNode labels should be replaced by the generic label from the constants.php file
+   * Sets, if RDFBlankNode labels should be replaced by the generic label from the constants.php file
    * default is "false" -> the used label in n3 is parsed to the model
    * @param boolean
    * @access public
@@ -1059,7 +1052,7 @@ function str2unicode_nfc($str=""){
 
 
     /**
-     * Constructs a RAP RDFNode from URI/Literal/Bnode
+     * Constructs a RAP RDFNode from URI/RDFLiteral/Bnode
      * @access private
      * @param string $s
      * @returns object RDFNode
@@ -1088,34 +1081,34 @@ function str2unicode_nfc($str=""){
             if (UNIC_RDF) {
                 $ins = $this->str2unicode_nfc($ins);
             }
-            $new_Literal = new Literal($ins, $lang);
+            $new_Literal = new RDFLiteral($ins, $lang);
             if (isset($dtype)) {
                 $new_Literal->setDatatype($dtype);
             }
             return  $new_Literal;
         } else if (is_int($s)) {
-            $value = new Literal($s);
+            $value = new RDFLiteral($s);
             $value->setDatatype(XML_SCHEMA . 'integer');
             return $value;
         } else if (is_float($s)) {
-            $value = new Literal($s);
+            $value = new RDFLiteral($s);
             $value->setDatatype(XML_SCHEMA . 'double');
             return $value;
         } else if ($s == '@true') {
-            $value = new Literal(true);
+            $value = new RDFLiteral(true);
             $value->setDatatype(XML_SCHEMA . 'boolean');
             return $value;
         } else if ($s == '@false') {
-            $value = new Literal(false);
+            $value = new RDFLiteral(false);
             $value->setDatatype(XML_SCHEMA . 'boolean');
             return $value;
         }
 
         if (strstr($s, '_' . BNODE_PREFIX)) {
             if (($this->FixBnodes) || (!array_search($s,$this->bNodeMap))) {
-                return new BlankNode($ins);
+                return new RDFBlankNode($ins);
             } else {
-                return new BlankNode(
+                return new RDFBlankNode(
                     trim(
                         substr(
                             array_search($s, $this->bNodeMap),
@@ -1126,7 +1119,7 @@ function str2unicode_nfc($str=""){
             };
         }
 
-        return new Resource($ins);
+        return new RDFResource($ins);
     }//function toRDFNode($s, $state)
 
 

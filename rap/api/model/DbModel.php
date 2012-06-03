@@ -144,10 +144,10 @@ class DbModel extends Model{
 			        (modelID, subject, predicate, object, l_language, l_datatype, subject_is, object_is)
 			        VALUES
                     (" .$this->modelID .","
-			. $this->dbConn->qstr($statement->getLabelSubject()) .","
-			. $this->dbConn->qstr($statement->getLabelPredicate()) .",";
+			. $this->dbConn->qstr($statement->getSubject()->getLabel()) .","
+			. $this->dbConn->qstr($statement->getPredicate()->getLabel()) .",";
 
-			if (is_a($statement->getObject(), 'Literal')) {
+			if (is_a($statement->getObject(), 'RDFLiteral')) {
 				$quotedLiteral = $this->dbConn->qstr($statement->obj->getLabel());
 				$sql .=        $quotedLiteral .","
 				."'" .$statement->obj->getLanguage() ."',"
@@ -431,9 +431,9 @@ class DbModel extends Model{
 	* Example:  $result = $m->find( NULL, NULL, $node );
 	*           Finds all triples with $node as object.
 	*
-	* @param	object Resource	$subject
-	* @param	object Resource	$predicate
-	* @param	object Node	$object
+	* @param	object RDFResource	$subject
+	* @param	object RDFResource	$predicate
+	* @param	object RDFNode	$object
 	* @return	object MemModel
 	* @throws	PhpError
 	* @throws  SqlError
@@ -441,11 +441,11 @@ class DbModel extends Model{
 	*/
 	function find($subject, $predicate, $object) {
 
-		if ((!is_a($subject, 'Resource') && $subject != NULL) ||
-		(!is_a($predicate, 'Resource') && $predicate != NULL) ||
-		(!is_a($object, 'Node') && $object != NULL)) {
+		if ((!is_a($subject, 'RDFResource') && $subject !== NULL) ||
+		(!is_a($predicate, 'RDFResource') && $predicate !== NULL) ||
+		(!is_a($object, 'RDFNode') && $object != NULL)) {
 
-			$errmsg = RDFAPI_ERROR . '(class: DbModel; method: find): Parameters must be subclasses of Node or NULL';
+			$errmsg = RDFAPI_ERROR . '(class: DbModel; method: find): Parameters must be subclasses of RDFNode or NULL';
 			trigger_error($errmsg, E_USER_ERROR);
 		}
 
@@ -533,9 +533,9 @@ class DbModel extends Model{
 	* Return an NULL if nothing is found.
 	* You can set an search offset with $offset.
 	*
-	* @param	object Resource	$subject
-	* @param	object Resource	$predicate
-	* @param	object Node	$object
+	* @param	object RDFResource	$subject
+	* @param	object RDFResource	$predicate
+	* @param	object RDFNode	$object
 	* @param	integer	$offset
 	* @return	object Statement
 	* @throws  PhpError
@@ -544,11 +544,11 @@ class DbModel extends Model{
 	*/
 	function findFirstMatchingStatement($subject, $predicate, $object, $offset = -1) {
 
-		if ((!is_a($subject, 'Resource') && $subject != NULL) ||
-		(!is_a($predicate, 'Resource') && $predicate != NULL) ||
-		(!is_a($object, 'Node') && $object != NULL)) {
+		if ((!is_a($subject, 'RDFResource') && $subject !== NULL) ||
+		(!is_a($predicate, 'RDFResource') && $predicate !== NULL) ||
+		(!is_a($object, 'RDFNode') && $object !== NULL)) {
 
-			$errmsg = RDFAPI_ERROR . '(class: DbModel; method: find): Parameters must be subclasses of Node or NULL';
+			$errmsg = RDFAPI_ERROR . '(class: DbModel; method: find): Parameters must be subclasses of RDFNode or NULL';
 			trigger_error($errmsg, E_USER_ERROR);
 		}
 
@@ -580,9 +580,9 @@ class DbModel extends Model{
 	* Search for triples and return the number of matches.
 	* NULL input for any parameter will match anything.
 	*
-	* @param	object Resource	$subject
-	* @param	object Resource	$predicate
-	* @param	object Node  	$object
+	* @param	object RDFResource	$subject
+	* @param	object RDFResource	$predicate
+	* @param	object RDFNode  	$object
 	* @return	integer
 	* @throws	PhpError
 	* @throws  SqlError
@@ -590,11 +590,11 @@ class DbModel extends Model{
 	*/
 	function findCount($subject, $predicate, $object) {
 
-		if ((!is_a($subject, 'Resource') && $subject != NULL) ||
-		(!is_a($predicate, 'Resource') && $predicate != NULL) ||
-		(!is_a($object, 'Node') && $object != NULL)) {
+		if ((!is_a($subject, 'RDFResource') && $subject !== NULL) ||
+		(!is_a($predicate, 'RDFResource') && $predicate !== NULL) ||
+		(!is_a($object, 'RDFNode') && $object !== NULL)) {
 
-			$errmsg = RDFAPI_ERROR . '(class: DbModel; method: find): Parameters must be subclasses of Node or NULL';
+			$errmsg = RDFAPI_ERROR . '(class: DbModel; method: find): Parameters must be subclasses of RDFNode or NULL';
 			trigger_error($errmsg, E_USER_ERROR);
 		}
 
@@ -619,13 +619,13 @@ class DbModel extends Model{
 	/**
 	* Perform an RDQL query on this DbModel.
 	* This method returns an associative array of variable bindings.
-	* The values of the query variables can either be RAP's objects (instances of Node)
+	* The values of the query variables can either be RAP's objects (instances of RDFNode)
 	* if $returnNodes set to TRUE, or their string serialization.
 	*
 	* @access	public
 	* @param string $queryString
 	* @param boolean $returnNodes
-	* @return  array   [][?VARNAME] = object Node  (if $returnNodes = TRUE)
+	* @return  array   [][?VARNAME] = object RDFNode  (if $returnNodes = TRUE)
 	*      OR  array   [][?VARNAME] = string
 	*
 	*/
@@ -653,13 +653,13 @@ class DbModel extends Model{
 	/**
 	* Perform an RDQL query on this DBModel.
 	* This method returns an RdqlResultIterator of variable bindings.
-	* The values of the query variables can either be RAP's objects (instances of Node)
+	* The values of the query variables can either be RAP's objects (instances of RDFNode)
 	* if $returnNodes set to TRUE, or their string serialization.
 	*
 	* @access	public
 	* @param string $queryString
 	* @param boolean $returnNodes
-	* @return  object RdqlResultIterator = with values as object Node  (if $returnNodes = TRUE)
+	* @return  object RdqlResultIterator = with values as object RDFNode  (if $returnNodes = TRUE)
 	*      OR  object RdqlResultIterator = with values as strings if (if $returnNodes = FALSE)
 	*
 	*/
@@ -676,10 +676,10 @@ class DbModel extends Model{
 	*           any triple of the model with the $replacement node.
 	* Throw an error in case of a paramter mismatch.
 	*
-	* @param	object Resource	$subject
-	* @param	object Resource	$predicate
-	* @param	object Node	$object
-	* @param	object Node	$replacement
+	* @param	object RDFResource	$subject
+	* @param	object RDFResource	$predicate
+	* @param	object RDFNode	$object
+	* @param	object RDFNode	$replacement
 	* @throws	PhpError
 	* @throws  SqlError
 	* @access	public
@@ -687,12 +687,12 @@ class DbModel extends Model{
 	function replace($subject, $predicate, $object, $replacement) {
 
 		// check the correctness of the passed parameters
-		if ( ((!is_a($subject, 'Resource') && $subject != NULL) ||
-		(!is_a($predicate, 'Resource') && $predicate != NULL) ||
-		(!is_a($object, 'Node') && $object != NULL)) ||
-		(($subject != NULL && is_a($replacement, 'Literal')) ||
-		($predicate != NULL && (is_a($replacement, 'Literal') ||
-		is_a($replacement, 'BlankNode')))) )
+		if ( ((!is_a($subject, 'RDFResource') && $subject != NULL) ||
+		(!is_a($predicate, 'RDFResource') && $predicate != NULL) ||
+		(!is_a($object, 'RDFNode') && $object != NULL)) ||
+		(($subject != NULL && is_a($replacement, 'RDFLiteral')) ||
+		($predicate != NULL && (is_a($replacement, 'RDFLiteral') ||
+		is_a($replacement, 'RDFBlankNode')))) )
 		{
 			$errmsg = RDFAPI_ERROR . '(class: DbModel; method: find): Parameter mismatch';
 			trigger_error($errmsg, E_USER_ERROR);
@@ -717,7 +717,7 @@ class DbModel extends Model{
 				$quotedObject = $this->dbConn->qstr($replacement->getLabel());
 				$sql .= $comma .' object=' .$quotedObject
 				.", object_is='" .$this->_getNodeFlag($replacement) ."' ";
-				if (is_a($replacement, 'Literal')) {
+				if (is_a($replacement, 'RDFLiteral')) {
 					$sql .= ", l_language='" .$replacement->getLanguage() ."' "
 					.", l_datatype='" .$replacement->getDataType() ."' ";
 				}
@@ -989,16 +989,16 @@ class DbModel extends Model{
 
 
 	/**'
-	* Return the flag of the Node object.
-	* r - Resource, b - BlankNode, l - Literal
+	* Return the flag of the RDFNode object.
+	* r - RDFResource, b - RDFBlankNode, l - RDFLiteral
 	*
-	* @param   object Node $object
+	* @param   object RDFNode $object
 	* @return  string
 	* @access	private
 	*/
 	function _getNodeFlag($object)  {
 
-		return is_a($object,'BlankNode')?'b':(is_a($object,'Resource')?'r':'l');
+		return is_a($object,'RDFBlankNode')?'b':(is_a($object,'RDFResource')?'r':'l');
 	}
 
 
@@ -1026,20 +1026,20 @@ class DbModel extends Model{
 
 			// subject
 			if ($recordSet->fields[5] == 'r')
-			$sub = new Resource($recordSet->fields[0]);
+			$sub = new RDFResource($recordSet->fields[0]);
 			else
-			$sub = new BlankNode($recordSet->fields[0]);
+			$sub = new RDFBlankNode($recordSet->fields[0]);
 
 			// predicate
-			$pred = new Resource($recordSet->fields[1]);
+			$pred = new RDFResource($recordSet->fields[1]);
 
 			// object
 			if ($recordSet->fields[6] == 'r')
-			$obj = new Resource($recordSet->fields[2]);
+			$obj = new RDFResource($recordSet->fields[2]);
 			elseif ($recordSet->fields[6] == 'b')
-			$obj = new BlankNode($recordSet->fields[2]);
+			$obj = new RDFBlankNode($recordSet->fields[2]);
 			else {
-				$obj = new Literal($recordSet->fields[2], $recordSet->fields[3]);
+				$obj = new RDFLiteral($recordSet->fields[2], $recordSet->fields[3]);
 				if ($recordSet->fields[4])
 				$obj->setDatatype($recordSet->fields[4]);
 			}
@@ -1058,9 +1058,9 @@ class DbModel extends Model{
 	* Create the dynamic part of an sql statement selecting triples with the
 	* given parameters ($subject, $predicate, $object).
 	*
-	* @param	object Resource	$subject
-	* @param	object Resource	$predicate
-	* @param	object Node	$object
+	* @param	object RDFResource	$subject
+	* @param	object RDFResource	$predicate
+	* @param	object RDFNode	$object
 	* @return  string
 	* @access	private
 	*/
@@ -1068,7 +1068,7 @@ class DbModel extends Model{
 
 		// conditions derived from the parameters passed to the function
 
-		$subject_is=is_a($subject,'BlankNode')?'b':(is_a($subject,'Resource')?'r':'l');
+		$subject_is=is_a($subject,'RDFBlankNode')?'b':(is_a($subject,'RDFResource')?'r':'l');
 		$sql='';
 		if ($subject != NULL)
 		$sql .= " AND subject='" .$subject->getLabel() ."'
@@ -1076,8 +1076,8 @@ class DbModel extends Model{
 		if ($predicate != NULL)
 		$sql .= " AND predicate='" .$predicate->getLabel() ."'";
 		if ($object != NULL) {
-			$object_is = is_a($object,'BlankNode')?'b':(is_a($object,'Resource')?'r':'l');
-			if (is_a($object, 'Resource'))
+			$object_is = is_a($object,'RDFBlankNode')?'b':(is_a($object,'RDFResource')?'r':'l');
+			if (is_a($object, 'RDFResource'))
 			$sql .= " AND object='" .$object->getLabel() ."'
                    AND object_is ='" .$object_is ."'";
 			else  {

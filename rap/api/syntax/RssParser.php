@@ -20,7 +20,8 @@
  * @access public
  **/
 
-class RssParser extends Object {
+class RssParser extends RDFObject
+{
 	var $type;
 	
 	/**
@@ -39,7 +40,7 @@ class RssParser extends Object {
 		}
 		
 		$model = ModelFactory::getMemModel();	
-		$bn = new Resource($url);
+		$bn = new RDFResource($url);
 		
 		$this->type = $rss->feed_type;
 		$version = $rss->feed_version;
@@ -77,14 +78,14 @@ class RssParser extends Object {
 	function image(&$model,&$rss,&$bnOrg,&$nmsp){		
 		if(count($rss->image)>0){
 			if(isset($rss->image['about'])){
-				$bn = new Resource($rss->image['about']);
+				$bn = new RDFResource($rss->image['about']);
 			}else if(isset($rss->image['url'])){
-				$bn = new Resource($rss->image['url']);
+				$bn = new RDFResource($rss->image['url']);
 			}else{
-				$bn = new BlankNode("image");
+				$bn = new RDFBlankNode('image');
 			}
-			$model->add(new Statement($bnOrg,new Resource($nmsp."image"),$bn));
-			$model->add(new Statement($bn,new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),new Resource($nmsp."image")));
+			$model->add(new Statement($bnOrg,new RDFResource($nmsp."image"),$bn));
+			$model->add(new Statement($bn,new RDFResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),new RDFResource($nmsp."image")));
 		}
 		foreach($rss->image as $key => $value){
 		$statement = null;	
@@ -96,7 +97,7 @@ class RssParser extends Object {
 						$this->sy($bn,$model,$value);
 					break;
 					default :
-						$statement = new Statement($bn,new Resource($nmsp.$key), new Literal($value));
+						$statement = new Statement($bn,new RDFResource($nmsp.$key), new RDFLiteral($value));
 					break;
 				}
 			if($statement != null){
@@ -115,25 +116,25 @@ class RssParser extends Object {
 	* @param $nmsp the
 	*/
 	function items(&$model,&$rss,&$bnOrg,&$nmsp){		
-		$items = new BlankNode("items");
-		$model->add(new Statement($bnOrg,new Resource($nmsp."items"),$items));
-		$model->add(new Statement($items,new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq")));
+		$items = new RDFBlankNode('items');
+		$model->add(new Statement($bnOrg,new RDFResource($nmsp."items"),$items));
+		$model->add(new Statement($items,new RDFResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),new RDFResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq")));
 		$i = 1;
 		foreach($rss->items as $outerKey => $outerValue){
 			if(isset($outerValue['about'])){
-				$bn = new Resource($outerValue['about']);
+				$bn = new RDFResource($outerValue['about']);
 			}else if(isset($outerValue['guid'])){
-				$bn = new Resource($outerValue['guid']);
+				$bn = new RDFResource($outerValue['guid']);
 			}else if(isset($outerValue['id'])){
-				$bn = new Resource($outerValue['id']);
+				$bn = new RDFResource($outerValue['id']);
 			}else{
 				$bn = new Blanknode("item".$i);
 			}
-			$model->add(new Statement($items,new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#_".$i),$bn));
+			$model->add(new Statement($items,new RDFResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#_".$i),$bn));
 			if($this->type == "Atom"){
-				$model->add(new Statement($bn,new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),new Resource("http://www.w3.org/2005/Atomentry")));
+				$model->add(new Statement($bn,new RDFResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),new RDFResource("http://www.w3.org/2005/Atomentry")));
 			}else{
-				$model->add(new Statement($bn,new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),new Resource("http://purl.org/rss/1.0/item")));
+				$model->add(new Statement($bn,new RDFResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),new RDFResource("http://purl.org/rss/1.0/item")));
 			}
 			foreach($outerValue as $key => $value){
 				$statement = null;
@@ -150,7 +151,7 @@ class RssParser extends Object {
 					break;
 					default :
 						if($value != null)
-						$statement = new Statement($bn,new Resource($nmsp.$key), new Literal($value));
+						$statement = new Statement($bn,new RDFResource($nmsp.$key), new RDFLiteral($value));
 					break;
 				}
 				if($statement != null){
@@ -173,7 +174,7 @@ class RssParser extends Object {
 		$model->addNamespace("dc","http://purl.org/dc/elements/1.1/");
 		foreach($dc as $key => $value){
 				$statement = null;
-				$statement = new Statement($node,new Resource("http://purl.org/dc/elements/1.1/".$key), new Literal($value));
+				$statement = new Statement($node,new RDFResource("http://purl.org/dc/elements/1.1/".$key), new RDFLiteral($value));
 			if($statement != null){
 				$model->add($statement);
 			}
@@ -191,7 +192,7 @@ class RssParser extends Object {
 		$model->addNamespace("sy","http://purl.org/rss/1.0/modules/syndication/");
 		foreach($sy as $key => $value){
 				$statement = null;
-				$statement = new Statement($node,new Resource("http://purl.org/rss/1.0/modules/syndication/".$key), new Literal($value));
+				$statement = new Statement($node,new RDFResource("http://purl.org/rss/1.0/modules/syndication/".$key), new RDFLiteral($value));
 			if($statement != null){
 				$model->add($statement);
 			}
@@ -210,7 +211,7 @@ class RssParser extends Object {
 	*/
 	function channel(&$model,&$rss,&$node,&$nmsp,$type){
 	 	// Channel
-	 	$statement = new Statement($node,new Resource('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), new Resource($nmsp.$type));
+	 	$statement = new Statement($node,new RDFResource('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), new RDFResource($nmsp.$type));
 		$model->add($statement);
 		
 	 	foreach($rss->channel as $key => $value){
@@ -229,7 +230,7 @@ class RssParser extends Object {
 					case "items_seq":
 					break;
 					default :
-						$statement = new Statement($node,new Resource($nmsp.$key), new Literal($value));
+						$statement = new Statement($node,new RDFResource($nmsp.$key), new RDFLiteral($value));
 					break;
 				}
 		if($statement != null){

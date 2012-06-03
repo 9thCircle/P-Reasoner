@@ -4,16 +4,16 @@
 // ----------------------------------------------------------------------------------
 
 /**
-* A ResModel provides an resource centric view on an underlying RDF model.
+* A ResModel provides a resource centric view on an underlying RDF model.
 * ResModels show information not as statements but as resources with
 * properties, similar to Jena models. ResModels may create Resources [URI
-* nodes and bnodes]. Creating a Resource does not make the Resource visible to
+* nodes and bnodes]. Creating a RDFResource does not make the RDFResource visible to
 * the model; Resources are only "in" Models if Statements about them are added
-* to the Model. Similarly the only way to "remove" a Resource from a Model is
+* to the Model. Similarly the only way to "remove" a RDFResource from a Model is
 * to remove all the Statements that mention it.
 * 
-* When a Resource or Literal is created by a Model, the Model is free to re-use an existing 
-* Resource or Literal object with the correct values, or it may create a fresh one.
+* When a RDFResource or RDFLiteral is created by a Model, the Model is free to re-use an existing 
+* RDFResource or RDFLiteral object with the correct values, or it may create a fresh one.
 *
 * @version  $Id: ResModel.php 562 2008-02-29 15:30:18Z cax $
 * @author Daniel Westphal <mail at d-westphal dot de>
@@ -54,13 +54,13 @@ class ResModel
 	* Create a new resource associated with this model. 
 	* If the uri string isn't set, this creates a bnode. 
 	* Otherwise it creates a URI node. 
-	* A URI resource is .equals() to any other URI Resource with the same URI 
+	* A URI resource is .equals() to any other URI RDFResource with the same URI 
 	* (even in a different model - be warned).
 	* 
-	* This method may return an existing Resource with the correct URI and model, 
+	* This method may return an existing RDFResource with the correct URI and model, 
 	* or it may construct a fresh one, as it sees fit.
 	*
-	* Operations on the result Resource may change this model. 
+	* Operations on the result RDFResource may change this model. 
 	*
    	* @param	string	$uri
    	* @return	object ResResource 
@@ -158,9 +158,9 @@ class ResModel
 	* Returns an NULL if nothing is found.
 	* You can define an offset to search.
 	*
-	* @param	object Node	$subject
-	* @param	object Node	$predicate
-	* @param	object Node	$object
+	* @param	object RDFNode	$subject
+	* @param	object RDFNode	$predicate
+	* @param	object RDFNode	$object
 	* @param	integer $offset
 	* @return	object Statement      
 	* @access	public
@@ -274,7 +274,7 @@ class ResModel
 	/**
 	* Determine if the node (ResResource / ResLiteral) $node appears in any statement of this model.
 	*
-	* @param	object Node	&$node
+	* @param	object RDFNode	&$node
 	* @return	boolean
 	* @access	public
 	*/	
@@ -690,9 +690,9 @@ class ResModel
 	}
 	
 	/** 
-	* converts a Resource,Blanknode,Literal into a ResResource, ResProperty, or ResLiteral
+	* converts a RDFResource,Blanknode,RDFLiteral into a ResResource, ResProperty, or ResLiteral
 	*
-	* @param	object Node	$node
+	* @param	object RDFNode	$node
 	* @param	boolean		$isProperty
 	* @return	object ResResource / ResProperty / ResLiteral
 	* @access	private
@@ -700,7 +700,7 @@ class ResModel
 	*/ 
 	function _node2ResNode($node, $isProperty = false)
 	{
-		if (is_a($node,'Literal'))
+		if (is_a($node,'RDFLiteral'))
 		{
 			$return= new ResLiteral($node->getLabel(),$node->getLanguage());
 			$return->setDatatype($node->getDatatype());
@@ -708,7 +708,7 @@ class ResModel
 
 			return $return;
 		}
-		if (is_a($node,'Resource'))
+		if (is_a($node,'RDFResource'))
 		{
 			if ($isProperty)
 			{
@@ -726,10 +726,10 @@ class ResModel
 	}
 	
 	/** 
-	* converts a ResResource, ResProperty, or ResLiteral into a Resource, Blanknode, or Literal
+	* converts a ResResource, ResProperty, or ResLiteral into a RDFResource, Blanknode, or RDFLiteral
 	*
 	* @param	object ResNode	$resNode
-	* @return	object Node
+	* @return	object RDFNode
 	* @access	private
 	* @throws phpErrpr
 	*/ 
@@ -739,17 +739,17 @@ class ResModel
 		{
 			if ($resNode->getIsAnon())	
 			{
-				$return=new BlankNode($resNode->getURI());
+				$return = new RDFBlankNode($resNode->getURI());
 			} else 
 			{
-				$return=new Resource($resNode->getURI());	
+				$return = new RDFResource($resNode->getURI());	
 			}	
 		return $return;	
 		}
 		
 		if (is_a($resNode,'ResLiteral'))
 		{
-			$literal=new Literal($resNode->getLabel(),$resNode->getLanguage());
+			$literal=new RDFLiteral($resNode->getLabel(),$resNode->getLanguage());
 			if ($resNode->getDatatype() != null)
 				$literal->setDatatype($resNode->getDatatype());
 			return $literal;
@@ -782,13 +782,13 @@ class ResModel
 	/**
 	* Perform an RDQL query on this MemModel.
 	* This method returns an associative array of variable bindings.
-	* The values of the query variables can either be RAP's objects (instances of Node)
+	* The values of the query variables can either be RAP's objects (instances of RDFNode)
 	* if $returnNodes set to TRUE, or their string serialization.
 	*
 	* @access	public
 	* @param string $queryString
 	* @param boolean $returnNodes
-	* @return  array   [][?VARNAME] = object Node  (if $returnNodes = TRUE)
+	* @return  array   [][?VARNAME] = object RDFNode  (if $returnNodes = TRUE)
 	*      OR  array   [][?VARNAME] = string
 	*
 	*/
@@ -801,13 +801,13 @@ class ResModel
 	/**
 	* Perform an RDQL query on this MemModel.
 	* This method returns an RdqlResultIterator of variable bindings.
-	* The values of the query variables can either be RAP's objects (instances of Node)
+	* The values of the query variables can either be RAP's objects (instances of RDFNode)
 	* if $returnNodes set to TRUE, or their string serialization.
 	*
 	* @access	public
 	* @param string $queryString
 	* @param boolean $returnNodes
-	* @return  object RdqlResultIterator = with values as object Node  (if $returnNodes = TRUE)
+	* @return  object RdqlResultIterator = with values as object RDFNode  (if $returnNodes = TRUE)
 	*      OR  object RdqlResultIterator = with values as strings if (if $returnNodes = FALSE)
 	*
 	*/

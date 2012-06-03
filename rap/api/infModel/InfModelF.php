@@ -4,22 +4,20 @@
 // ----------------------------------------------------------------------------------
 
 /**
-* A InfModelF extends the InfModel Class, with a forward chaining algorithm.  
-* If a new statement is added, it is enferd at 
-* once and all the entailed statements are added too. 
-* When adding or removing a statement, that produced a new inference rule, 
-* all entailed statements are discarded and the whole base model is infered 
-* again.
-* The InfModelF is safe for loops in Ontologies, that would cause infinite loops.
-*
-* @version  $Id: InfModelF.php 320 2006-11-21 09:38:51Z tgauss $
-* @author Daniel Westphal <mail at d-westphal dot de>
-
-*
-* @package infModel
-* @access	public
-**/
-
+ * A InfModelF extends the InfModel Class, with a forward chaining algorithm.  
+ * If a new statement is added, it is enferd at 
+ * once and all the entailed statements are added too. 
+ * When adding or removing a statement, that produced a new inference rule, 
+ * all entailed statements are discarded and the whole base model is infered 
+ * again.
+ * The InfModelF is safe for loops in Ontologies, that would cause infinite loops.
+ *
+ * @version  $Id: InfModelF.php 320 2006-11-21 09:38:51Z tgauss $
+ * @author Daniel Westphal <mail at d-westphal dot de>
+ *
+ * @package infModel
+ * @access	public
+ */
 class InfModelF extends InfModel 
 {
 	/**
@@ -62,7 +60,7 @@ class InfModelF extends InfModel
 			$this->profileAction('InfModelF::__construct', '', $start, $end);
 		}
 	}
-
+	
 	/**
 	* Adds a new triple to the MemModel without checking if the statement 
 	* is already in the MemModel.
@@ -90,7 +88,7 @@ class InfModelF extends InfModel
 				}
 			}
 			//apply the complete inference to the model, if the added statement was able to add a rule
-			if (in_array($statement->getLabelPredicate(),$this->supportedInference)) {
+			if (in_array($statement->getPredicate()->getLabel(), $this->supportedInference)) {
 				$this->applyInference();
 			}
 		}
@@ -130,7 +128,7 @@ class InfModelF extends InfModel
 						$this->infPos[] = key($this->triples);
 					}
 				}
-				if (in_array($statement->getLabelPredicate(), $this->supportedInference)) {
+				if (in_array($statement->getPredicate()->getLabel(), $this->supportedInference)) {
 					$this->applyInference();
 				}
 			}
@@ -208,7 +206,7 @@ class InfModelF extends InfModel
 		$return = array();
 		
 		//dont entail statements about the supported inference-schema
-		if (!in_array($statement->getLabelPredicate(),$this->supportedInference)) {
+		if (!in_array($statement->getPredicate()->getLabel(),$this->supportedInference)) {
 			//check only the rules, that were returned by the index
 			foreach ($this->_findRuleTriggerInIndex($statement) as $key ) {
 				$infRule=$this->infRules[$key];
@@ -356,7 +354,7 @@ class InfModelF extends InfModel
 		if($this->contains($statement)) {
 			$inferenceRulesWereTouched = FALSE;
 			//If the statement was able to add inference rules
-			if (in_array($statement->getLabelPredicate(),$this->supportedInference)) {
+			if (in_array($statement->getPredicate()->getLabel(), $this->supportedInference)) {
 				$statementPositions = $this->_removeFromInference($statement);
 				$inferenceRulesWereTouched = TRUE;
 			} else {
@@ -375,7 +373,7 @@ class InfModelF extends InfModel
 					if ($statementPosition != -1) {
 						$statementPositions[] = $statementPosition;							
 					}
-				} while ($statementPosition != -1);			
+				} while ($statementPosition !== -1);			
 			}
 			
 			//remove matching statements

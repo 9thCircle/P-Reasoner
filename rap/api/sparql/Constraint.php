@@ -1,5 +1,5 @@
 <?php
-require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
+
 // ---------------------------------------------
 // class: Constraint.php
 // ---------------------------------------------
@@ -15,8 +15,8 @@ require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
 *
 * @package sparql
 */
-Class Constraint extends Object{
-
+Class Constraint extends RDFObject
+{
     /**
     * The expression string.
     * @var string

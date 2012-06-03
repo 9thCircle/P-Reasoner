@@ -4,7 +4,7 @@ require_once RDFAPI_INCLUDE_DIR . 'util/profile.php';
 require_once RDFAPI_INCLUDE_DIR . 'util/profile_record.php';
 
 // ----------------------------------------------------------------------------------
-// Class: Object
+// Class: RDFObject
 // ----------------------------------------------------------------------------------
 
 /**
@@ -19,7 +19,7 @@ require_once RDFAPI_INCLUDE_DIR . 'util/profile_record.php';
  * @package utility
  *
  **/
-class Object
+class RDFObject
 {
 	//! Wether we are profiling
 	protected /*. bool .*/     $isProfiling  = FALSE;
@@ -36,7 +36,7 @@ class Object
 	 *	\brief		Returns TRUE, meaning that profiling is supported.
 	 *	@return		bool
 	 */
-	public function supportsProfiling()
+	public static function supportsProfiling()
 	{
 		return TRUE;
 	}

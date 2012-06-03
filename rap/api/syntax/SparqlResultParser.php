@@ -12,9 +12,8 @@
 * @package sparql
 */
 
-class SparqlResultParser extends Object {
-
-
+class SparqlResultParser extends RDFObject
+{
 	var $arrOutput = array();
 	var $resParser;
 	var $strXmlData;
@@ -122,7 +121,7 @@ class SparqlResultParser extends Object {
 	function tagData($parser, $tagData) {
 		switch($this->mode){
 			case 0 :
-			$this->arrOutput[$this->counter][$this->varname] = new Resource($tagData);
+			$this->arrOutput[$this->counter][$this->varname] = new RDFResource($tagData);
 			$this->mode = -1;
 			break;
 			case 1:
@@ -135,7 +134,7 @@ class SparqlResultParser extends Object {
 			}else{
 				$bn = $tagData;
 			}
-			$this->arrOutput[$this->counter][$this->varname] = new BlankNode($bn);
+			$this->arrOutput[$this->counter][$this->varname] = new RDFBlankNode($bn);
 			$this->mode = -1;
 			break;
 			case 3:
@@ -149,7 +148,7 @@ class SparqlResultParser extends Object {
 
 	function tagClosed($parser, $name) {
 		if ($this->mode == 1) {
-			$lit = new Literal($this->current_literal);
+			$lit = new RDFLiteral($this->current_literal);
 			if($this->lang)
 				$lit->setLanguage($this->lang);
 			if($this->dtype)

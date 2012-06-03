@@ -31,7 +31,7 @@ class DatasetDb extends Dataset
 	var $dbConnection;
 
 	/**
-	* Reference to the dbStore Object.
+	* Reference to the dbStore RDFObject.
 	*
 	* @var		$dbStore dbStore
 	* @access	private
@@ -327,13 +327,13 @@ class DatasetDb extends Dataset
 	 * Tells wether the Dataset contains a quad or
 	 * quads matching a pattern.
 	 *
-	 * @param Resource
-	 * @param Resource
-	 * @param Resource
-	 * @param Resource
+	 * @param RDFResource
+	 * @param RDFResource
+	 * @param RDFResource
+	 * @param RDFResource
 	 * @return boolean
 	 */
-	function containsQuad($graphName,$subject,$predicate,$object)
+	function containsQuad($graphName, $subject, $predicate, $object)
 	{
 		// static part of the sql statement
 		$sql = "SELECT count(*)
@@ -392,13 +392,13 @@ class DatasetDb extends Dataset
 	 * Finds Statements that match a quad pattern. The argument may contain
 	 * wildcards.
 	 *
-	 * @param Resource or null
-	 * @param Resource or null
-	 * @param Resource or null
-	 * @param Resource or null
+	 * @param RDFResource or null
+	 * @param RDFResource or null
+	 * @param RDFResource or null
+	 * @param RDFResource or null
 	 * @return IteratorFindQuadsDb
 	 */
-	function &findInNamedGraphs($graphName,$subject,$predicate,$object,$returnAsTriples =false )
+	function &findInNamedGraphs($graphName, RDFResource $subject = NULL, RDFResource $predicate = NULL, RDFResource $object = NULL, $returnAsTriples = FALSE)
 	{
 		// static part of the sql statement
 		$sql = "SELECT subject, predicate, object, l_language, l_datatype, subject_is, object_is, dataset_model.graphURI
@@ -425,12 +425,12 @@ class DatasetDb extends Dataset
 	 * Finds Statements that match a pattern in the default Graph. The argument may contain
 	 * wildcards.
 	 *
-	 * @param Resource or null
-	 * @param Resource or null
-	 * @param Resource or null
+	 * @param RDFResource or null
+	 * @param RDFResource or null
+	 * @param RDFResource or null
 	 * @return IteratorFindQuadsDb
 	 */
-	function &findInDefaultGraph($subject,$predicate,$object)
+	function &findInDefaultGraph(RDFResource $subject = NULL, RDFResource $predicate = NULL, RDFResource $object = NULL)
 	{
 		$defaultGraphID = (int)$this->dbConnection->GetOne("SELECT models.modelID FROM datasets, models WHERE datasets.datasetName ='".$this->setName."' AND datasets.defaultModelUri = models.modelURI");
 		// static part of the sql statement

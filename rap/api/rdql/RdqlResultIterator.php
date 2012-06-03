@@ -16,7 +16,8 @@
  * @access	public
  *
  */ 
- class RdqlResultIterator extends Object {
+ class RdqlResultIterator extends RDFObject
+ {
 
  	/**
 	* Reference to the Rdql result

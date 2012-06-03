@@ -1,6 +1,4 @@
 <?php
-##require_once RDFAPI_INCLUDE_DIR . 'constants.php';
-##require_once RDFAPI_INCLUDE_DIR . 'util/Object.php';
 
 // ----------------------------------------------------------------------------------
 // Class: DbStore
@@ -26,7 +24,7 @@
  */
 
 
-class DbStore extends Object
+class DbStore extends RDFObject
 {
     /**
     * Array with all supported database types

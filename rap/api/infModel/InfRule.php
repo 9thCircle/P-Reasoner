@@ -68,18 +68,18 @@ class InfRule
 	* The values can be NULL to match anything or be a node that has to 
 	* be matched.
 	*
-	* @param	object Node OR NULL	$subject
-   	* @param	object Node OR NULL	$predicate
-   	* @param	object Node OR NULL	$object
+	* @param	object RDFNode OR NULL	$nSubject
+   	* @param	object RDFNode OR NULL	$nPredicate
+   	* @param	object RDFNode OR NULL	$nObject
 	* @access	public
 	* @throws	PhpError
 	*/	
- 	public function setTrigger(Node $subject = NULL, Node $predicate = NULL, Node $object = NULL)
+ 	public function setTrigger(RDFNode $nSubject = NULL, RDFNode $nPredicate = NULL, RDFNode $nObject = NULL)
  	{
  		//set the trigger
-		$this->trigger['s'] = $subject;
-		$this->trigger['p'] = $predicate;
-		$this->trigger['o'] = $object;		
+		$this->trigger['s'] = $nSubject;
+		$this->trigger['p'] = $nPredicate;
+		$this->trigger['o'] = $nObject;		
  	} 
 	
  	/**
@@ -87,26 +87,17 @@ class InfRule
 	* The values can be NULL to match anything or be a node that has to 
 	* be matched.
 	*
-	* @param	object Node OR NULL	$subject
-   	* @param	object Node OR NULL	$predicate
-   	* @param	object Node OR NULL	$object
+	* @param	object RDFNode OR NULL	$nSubject
+   	* @param	object RDFNode OR NULL	$nPredicate
+   	* @param	object RDFNode OR NULL	$nObject
 	* @access	public
 	* @throws	PhpError
 	*/
-	public function setEntailment($subject, $predicate, $object)
+	public function setEntailment($nSubject, $nPredicate, $nObject)
 	{
-		/* This check is not really needed.
-		
-		if(!is_a($object,'Node') && !ereg('<[spo]>', $object)) 
-			trigger_error(RDFAPI_ERROR . '(class: Infrule; method: 
-				setEntailment): $object has to be ' . INF_TOK_SUBJECT . ',' . INF_TOK_PREDICATE . ',or <o> or of class Node'
-				, E_USER_ERROR);
-		*/
-		
-		
-		$this->entailment['s']  = $subject;	
-		$this->entailment['p']  = $predicate;
-		$this->entailment['o']  = $object;
+		$this->entailment['s']  = $nSubject;	
+		$this->entailment['p']  = $nPredicate;
+		$this->entailment['o']  = $nObject;
 	}
 	
  	/**
@@ -127,8 +118,7 @@ class InfRule
 		} elseif (($this->trigger['p'] ===  NULL || 
 		     $this->trigger['p']->equals($statement->getPredicate())) !== TRUE) {
 			return FALSE;
-		} elseif (($this->trigger['o'] ===  NULL || 
-		     ($this->trigger['o'] === ':r' && is_a($statement->getObject(), 'Literal') !== TRUE) ||
+		} elseif (($this->trigger['o'] ===  NULL ||
 		     $this->trigger['o']->equals($statement->getObject())) !== TRUE) {
 			return FALSE;
 		} else {
@@ -139,35 +129,32 @@ class InfRule
  
  	/**
 	* Checks, if this rule could entail a statement that matches
-	* a find of $subject,$predicate,$object.
+	* a find of $nSubject,$nPredicate,$nObject.
 	*
-   	* @param	object Statement 
+   	* @param	RDFNode		$nSubject
+	* @param	RDFNode		$nPredicate
+	* @param	RDFNode		$nObject
 	* @return 	boolean
 	* @access	public
 	* @throws	PhpError
 	*/ 	
- 	public function checkEntailment (Node $subject = NULL, Node $predicate = NULL, Node $object = NULL)
+ 	public function checkEntailment (RDFNode $nSubject = NULL, RDFNode $nPredicate = NULL, RDFNode $nObject = NULL)
  	{
-		//true, if $subject is null, the entailment's subject matches
-		//anything, or the $subject equals the entailment-subject.
- 		$matchesS=	$subject ===  NULL ||
-		 			!is_a($this->entailment['s'],'Node') ||
-		 			$this->entailment['s']->equals($subject);
-
-		//true, if $predicate is null, the entailment's predicate matches 
-		//anything, or the $predicate equals the entailment-predicate.		 			
-		 $matchesP=	$predicate ===  NULL ||
-		 			!is_a($this->entailment['p'],'Node') ||
-		 			$this->entailment['p']->equals($predicate);
-
-		//true, if $object is null, the entailment's object matches 
-		//anything, or the $object equals the entailment-object.		 					 			
-		$matchesO=	$object ===  NULL ||
-		 			!is_a($this->entailment['o'],'Node') ||
-		 			$this->entailment['o']->equals($object);
-  		
- 		//returns true, if ALL are true
- 		return $matchesS && $matchesP && $matchesO;
+		// returns TRUE if ALL 3 elements are NULL or match the entailment equivalent
+		return
+			(
+				$nSubject ===  NULL ||
+				!is_a($this->entailment['s'],'RDFNode') ||
+				$this->entailment['s']->equals($nSubject)
+			) && (
+				$nPredicate ===  NULL ||
+				!is_a($this->entailment['p'],'RDFNode') ||
+				$this->entailment['p']->equals($nPredicate)
+			) && (				 			
+				$nObject ===  NULL ||
+				!is_a($this->entailment['o'],'RDFNode') ||
+				$this->entailment['o']->equals($nObject)
+			);
 	}
 	
  	/**
@@ -185,54 +172,39 @@ class InfRule
  		//subject,predicate,or object into the subject of the 
  		//entailed statement. If the entailment's subject is a node, 
  		//add that node to the statement.	
-	 	switch ($this->entailment['s']) {
-			case INF_TOK_SUBJECT:
-				$entailedSubject=$statement->getSubject();
-			break;
-			case INF_TOK_PREDICATE:
-				$entailedSubject=$statement->getPredicate();
-			break;	
-			case INF_TOK_OBJECT:
-				$entailedSubject=$statement->getObject();
-			break;
-			default:
-				$entailedSubject=$this->entailment['s'];
+	 	$entailedSubject = $this->entailment['s'];
+		if ($entailedSubject === INF_TOK_SUBJECT) {
+			$entailedSubject = $statement->getSubject();
+		} elseif ($entailedSubject === INF_TOK_PREDICATE) {
+			$entailedSubject = $statement->getPredicate();
+		} elseif ($entailedSubject === INF_TOK_OBJECT) {
+			$entailedSubject = $statement->getObject();
 		}
 		
  		//if the entailment's predicate is INF_TOK_SUBJECT, INF_TOK_PREDICATE, or INF_TOK_OBJECT, put the 
  		//statements subject,predicate,or object into the predicate of 
  		//the entailed statement. If the entailment's predicate is a node, 
  		//add that node to the statement.			
-		switch ($this->entailment['p']) {
-			case INF_TOK_SUBJECT:
-				$entailedPredicate=$statement->getSubject();
-			break;
-			case INF_TOK_PREDICATE:
-				$entailedPredicate=$statement->getPredicate();
-			break;	
-			case INF_TOK_OBJECT:
-				$entailedPredicate=$statement->getObject();
-			break;
-			default:
-				$entailedPredicate=$this->entailment['p'];
+		$entailedPredicate = $this->entailment['p'];
+		if ($entailedPredicate === INF_TOK_SUBJECT) {
+			$entailedPredicate = $statement->getSubject();
+		} elseif ($entailedPredicate === INF_TOK_PREDICATE) {
+			$entailedPredicate = $statement->getPredicate();
+		} elseif ($entailedPredicate === INF_TOK_OBJECT) {
+			$entailedPredicate = $statement->getObject();
 		}
 		
  		//if the entailment's object is INF_TOK_SUBJECT, INF_TOK_PREDICATE, or INF_TOK_OBJECT, put the 
  		//statements subject,predicate,or object into the object of 
  		//the entailed statement. If the entailment's object is a node,
  		//add that node to the statement.			
-		switch ($this->entailment['o']) {
-			case INF_TOK_SUBJECT:
-				$entailedObject=$statement->getSubject();
-			break;
-			case INF_TOK_PREDICATE:
-				$entailedObject=$statement->getPredicate();
-			break;	
-			case INF_TOK_OBJECT:
-				$entailedObject=$statement->getObject();
-			break;
-			default:
-				$entailedObject=$this->entailment['o'];
+		$entailedObject = $this->entailment['o'];
+		if ($entailedObject === INF_TOK_SUBJECT) {
+				$entailedObject = $statement->getSubject();
+		} elseif ($entailedObject === INF_TOK_PREDICATE) {
+				$entailedObject = $statement->getPredicate();
+		} elseif ($entailedObject === INF_TOK_OBJECT) {
+				$entailedObject = $statement->getObject();
 		}
 		
 		//return the infered statement
@@ -243,53 +215,41 @@ class InfRule
 	* Returns a find-query that matches statements, whose entailed 
 	* statements would match the supplied find query.
 	*
-   	* @param	Node OR null $subject
-   	* @param	Node OR null $predicate
-   	* @param	Node OR null $object
+   	* @param	RDFNode OR null $nSubject
+   	* @param	RDFNode OR null $nPredicate
+   	* @param	RDFNode OR null $nObject
 	* @return 	array
 	* @access	public
 	* @throws	PhpError
 	*/  	 	
- 	public function getModifiedFind(Node $subject = NULL, Node $predicate = NULL, Node $object = NULL)
+ 	public function getModifiedFind(RDFNode $nSubject = NULL, RDFNode $nPredicate = NULL, RDFNode $nObject = NULL)
  	{			
  		$findSubject    = $this->trigger['s'];
  		$findPredicate  = $this->trigger['p'];
  		$findObject     = $this->trigger['o'];
  		
- 		switch ($this->entailment['s']) {
- 			case INF_TOK_SUBJECT:
- 			 	$findSubject    = $subject;
-		 	break;
- 			case INF_TOK_PREDICATE:
- 			 	$findPredicate  = $subject;
-		 	break;	
-		 	case INF_TOK_OBJECT:
-			 	$findObject     = $subject;
-		 	break;
- 		}
- 			
- 		switch ($this->entailment['p']) {
- 			case INF_TOK_SUBJECT:
- 			 	$findSubject    = $predicate;
-		 	break;
- 			case INF_TOK_PREDICATE:
- 			 	$findPredicate  = $predicate;
-		 	break;	
-		 	case INF_TOK_OBJECT:
-			 	$findObject     = $predicate;
-	 		break;
+ 		if ($this->entailment['s'] === INF_TOK_SUBJECT) {
+ 			 	$findSubject    = $nSubject;
+		} elseif ($this->entailment['s'] === INF_TOK_PREDICATE) {
+ 			 	$findPredicate  = $nSubject;
+		} elseif ($this->entailment['s'] === INF_TOK_OBJECT) {
+			 	$findObject     = $nSubject;
  		}
  		
- 		switch ($this->entailment['o']) {
- 			case INF_TOK_SUBJECT:
- 			 	$findSubject    = $object;
-		 	break;
- 			case INF_TOK_PREDICATE:
- 			 	$findPredicate  = $object;
-		 	break;	
-		 	case INF_TOK_OBJECT:
-			 	$findObject     = $object;
-		 	break;
+ 		if ($this->entailment['p'] === INF_TOK_SUBJECT) {
+		 	$findSubject    = $nPredicate;
+		} elseif ($this->entailment['p'] === INF_TOK_PREDICATE) {
+		 	$findPredicate  = $nPredicate;
+		} elseif ($this->entailment['p'] === INF_TOK_OBJECT) {
+		 	$findObject     = $nPredicate;
+ 		}
+ 		
+ 		if ($this->entailment['o'] === INF_TOK_SUBJECT) {
+		 	$findSubject    = $nObject;
+		} elseif ($this->entailment['o'] === INF_TOK_PREDICATE) {
+		 	$findPredicate  = $nObject;
+		} elseif ($this->entailment['o'] === INF_TOK_OBJECT) {
+		 	$findObject     = $nObject;
  		}
 		
  		return array('s' => $findSubject,

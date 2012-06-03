@@ -115,7 +115,7 @@ function str($string){
 }
 
 /**
-* Evaluates the lang() function. Returns lang tag of a Literal.
+* Evaluates the lang() function. Returns lang tag of a RDFLiteral.
 *
 * @param  String $string the string.
 * @return String the lang tag or false if there is no language tag.

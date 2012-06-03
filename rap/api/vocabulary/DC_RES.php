@@ -465,7 +465,7 @@ class DC_RES{
 
 	function SOUND()
 	{
-		return  new Resource(DCMITYPE_NS . 'Sound');
+		return  new RDFResource(DCMITYPE_NS . 'Sound');
 
 	}
 

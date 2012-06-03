@@ -18,8 +18,8 @@
  * @access	public
  *
  */ 
- class FindIterator extends Object
- {
+class FindIterator extends RDFObject
+{
 
  	/**
 	* Reference to the MemModel
@@ -58,7 +58,7 @@
     * @param    object  Object
 	* @access	public
     */
-    public function __construct(Model $model, Node $sub = NULL, Node $pred = NULL, Node $obj = NULL)
+    public function __construct(Model $model, RDFNode $sub = NULL, RDFNode $pred = NULL, RDFNode $obj = NULL)
 	{
 		$this->model       = $model;
 		$this->nSubject    = $sub;

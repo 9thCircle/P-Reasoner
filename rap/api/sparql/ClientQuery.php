@@ -14,8 +14,8 @@
 * @package sparql
 */
 
-class ClientQuery extends Object {
-
+class ClientQuery extends RDFObject
+{
 	var $default  = array();
 	var $named    = array();
 	var $prefixes = array();

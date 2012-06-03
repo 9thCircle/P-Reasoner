@@ -1,8 +1,7 @@
 <?php
-require_once RDFAPI_INCLUDE_DIR . 'model/Node.php';
 
 // ----------------------------------------------------------------------------------
-// Class: Literal
+// Class: RDFLiteral
 // ----------------------------------------------------------------------------------
 
 /**
@@ -10,7 +9,7 @@ require_once RDFAPI_INCLUDE_DIR . 'model/Node.php';
  * The literal supports the xml:lang and rdf:datatype property.
  * For XML datatypes see: http://www.w3.org/TR/xmlschema-2/
  *
- * @version  $Id: Literal.php 497 2007-08-13 05:14:26Z cweiske $
+ * @version  $Id: RDFLiteral.php 497 2007-08-13 05:14:26Z cweiske $
  * @author Chris Bizer <chris@bizer.de>
  * @author Daniel Westphal <dawe@gmx.de>
  *
@@ -18,7 +17,7 @@ require_once RDFAPI_INCLUDE_DIR . 'model/Node.php';
  * @access	public
  *
  */
- class Literal extends Node
+ class RDFLiteral extends RDFNode
  {
 
 	/**
@@ -131,15 +130,15 @@ require_once RDFAPI_INCLUDE_DIR . 'model/Node.php';
    */
 	public function equals($that)
 	{
-		if (($that == NULL) or !(is_a($that, 'Literal'))) {
+		if (is_a($that, 'RDFLiteral') === FALSE || $that === NULL) {
 			return FALSE;
 		}
 		
-		if ( ($this->label == $that->getLabel()) && ( ( ($this->lang == $that->getLanguage()) ||
-			($this->lang == NULL && $that->getLanguage() == NULL) )  &&
+		if ( ($this->label === $that->getLabel()) && ( ( ($this->lang === $that->getLanguage()) ||
+			($this->lang === NULL && $that->getLanguage() === NULL) )  &&
 			(
-			($this->dtype == $that->getDatatype() ||
-			($this->dtype == NULL && $that->getDatatype() == NULL)) ) ) ) {
+			($this->dtype === $that->getDatatype() ||
+			($this->dtype === NULL && $that->getDatatype() === NULL)) ) ) ) {
 			return TRUE;
 		}
 		
@@ -154,11 +153,11 @@ require_once RDFAPI_INCLUDE_DIR . 'model/Node.php';
    */
 	public function toString()
 	{
-		$dump = 'Literal("' . $this->label .'"';
-		if ($this->lang != NULL) {
+		$dump = 'RDFLiteral("' . $this->label .'"';
+		if ($this->lang !== NULL) {
 			$dump .= ', lang="' . $this->lang .'"';
 		}
-		if ($this->dtype != NULL) {
+		if ($this->dtype !== NULL) {
 			$dump .= ', datatype="' . $this->dtype .'"';
 		}
 		$dump .= ')';
@@ -169,14 +168,12 @@ require_once RDFAPI_INCLUDE_DIR . 'model/Node.php';
 
     /**
     *   Doing string magic in PHP5
-    *   @return string String representation of this Literal
+    *   @return string String representation of this RDFLiteral
     */
     public function __toString()
     {
         return $this->toString();
     }
-
-
-} // end: Literal
+} // end: RDFLiteral
 
 ?>

@@ -2,8 +2,7 @@
 // ---------------------------------------------
 // Class: SparqlParser
 // ---------------------------------------------
-require_once RDFAPI_INCLUDE_DIR . 'model/Literal.php';
-require_once RDFAPI_INCLUDE_DIR . 'model/Resource.php';
+
 require_once RDFAPI_INCLUDE_DIR . 'sparql/Constraint.php';
 require_once RDFAPI_INCLUDE_DIR . 'sparql/Query.php';
 require_once RDFAPI_INCLUDE_DIR . 'sparql/QueryTriple.php';
@@ -19,7 +18,7 @@ require_once RDFAPI_INCLUDE_DIR . 'sparql/SparqlParserException.php';
 *
 * @package sparql
 */
-class SparqlParser extends Object
+class SparqlParser extends RDFObject
 {
 
     /**
@@ -450,7 +449,7 @@ class SparqlParser extends Object
         $this->_fastForward();
         if(strtolower(current($this->tokens))!='named'){
             if($this->iriCheck(current($this->tokens))||$this->qnameCheck(current($this->tokens))){
-                $this->query->addFrom(new Resource(substr(current($this->tokens),1,-1)));
+                $this->query->addFrom(new RDFResource(substr(current($this->tokens),1,-1)));
             }else if($this->varCheck(current($this->tokens))){
                 $this->query->addFrom(current($this->tokens));
             }else{
@@ -460,7 +459,7 @@ class SparqlParser extends Object
         }else{
             $this->_fastForward();
             if($this->iriCheck(current($this->tokens))||$this->qnameCheck(current($this->tokens))){
-                $this->query->addFromNamed(new Resource(substr(current($this->tokens),1,-1)));
+                $this->query->addFromNamed(new RDFResource(substr(current($this->tokens),1,-1)));
             }else if($this->varCheck(current($this->tokens))){
                 $this->query->addFromNamed(current($this->tokens));
             }else{
@@ -576,11 +575,11 @@ class SparqlParser extends Object
 
 
     /**
-    * Checks if $token is a Literal.
+    * Checks if $token is a RDFLiteral.
     *
     * @param string $token The token
     *
-    * @return boolean TRUE if the token is a Literal false if not
+    * @return boolean TRUE if the token is a RDFLiteral false if not
     */
     protected function literalCheck($token)
     {
@@ -1235,9 +1234,9 @@ class SparqlParser extends Object
         $this->_fastForward();
 
         if($this->iriCheck($name)){
-            $name = new Resource(substr($name,1,-1));
+            $name = new RDFResource(substr($name,1,-1));
         }else if($this->qnameCheck($name)){
-            $name = new Resource($this->query->getFullUri($name));
+            $name = new RDFResource($this->query->getFullUri($name));
         }
         $this->parseGraphPattern(false,false,$name);
         if(current($this->tokens)=='.')
@@ -1340,7 +1339,7 @@ class SparqlParser extends Object
     *
     * @param  String $node
     *
-    * @return Node   The parsed RDF node
+    * @return RDFNode   The parsed RDF node
     * @throws SparqlParserException
     */
     protected function parseNode($node = false)
@@ -1374,14 +1373,14 @@ class SparqlParser extends Object
         if ($this->iriCheck($node)){
             $base = $this->query->getBase();
             if ($base!=null) {
-                $node = new Resource(substr(substr($base,0,-1).substr($node,1),1,-1));
+                $node = new RDFResource(substr(substr($base,0,-1).substr($node,1),1,-1));
             } else {
-                $node = new Resource(substr($node,1,-1));
+                $node = new RDFResource(substr($node,1,-1));
             }
             return $node;
         } else if ($this->qnameCheck($node)) {
             $node = $this->query->getFullUri($node);
-            $node = new Resource($node);
+            $node = new RDFResource($node);
             return $node;
         } else if ($this->literalCheck($node)) {
             $ch     = substr($node, 0, 1);
@@ -1428,7 +1427,7 @@ class SparqlParser extends Object
     /**
     * Checks if there is a datatype given and appends it to the node.
     *
-    * @param string $node Node to check
+    * @param string $node RDFNode to check
     *
     * @return void
     */
@@ -1438,7 +1437,7 @@ class SparqlParser extends Object
         switch (substr(current($this->tokens), 0, 1)) {
             case '^':
                 if (substr(current($this->tokens),0,2)=='^^') {
-                    $node = new Literal(substr($node,1,-1));
+                    $node = new RDFLiteral(substr($node,1,-1));
                     $node->setDatatype(
                         $this->query->getFullUri(
                             substr(current($this->tokens), 2)
@@ -1447,14 +1446,14 @@ class SparqlParser extends Object
                 }
                 break;
             case '@':
-                $node = new Literal(
+                $node = new RDFLiteral(
                     substr($node, $nSubstrLength, -$nSubstrLength),
                     substr(current($this->tokens), $nSubstrLength)
                 );
                 break;
             default:
                 prev($this->tokens);
-                $node = new Literal(substr($node, $nSubstrLength, -$nSubstrLength));
+                $node = new RDFLiteral(substr($node, $nSubstrLength, -$nSubstrLength));
                 break;
 
         }
@@ -1482,7 +1481,7 @@ class SparqlParser extends Object
 
 
     /**
-    * Checks if the Node is a typed Literal.
+    * Checks if the RDFNode is a typed RDFLiteral.
     *
     * @param String $node
     *
@@ -1493,27 +1492,27 @@ class SparqlParser extends Object
         $patternInt = "/^-?[0-9]+$/";
         $match = preg_match($patternInt,$node,$hits);
         if($match>0){
-            $node = new Literal($hits[0]);
+            $node = new RDFLiteral($hits[0]);
             $node->setDatatype(XML_SCHEMA.'integer');
             return true;
         }
         $patternBool = "/^(true|false)$/";
         $match = preg_match($patternBool,$node,$hits);
         if($match>0){
-            $node = new Literal($hits[0]);
+            $node = new RDFLiteral($hits[0]);
             $node->setDatatype(XML_SCHEMA.'boolean');
             return true;
         }
         $patternType = "/^a$/";
         $match = preg_match($patternType,$node,$hits);
         if($match>0){
-            $node = new Resource(RDF_NAMESPACE_URI.'type');
+            $node = new RDFResource(RDF_NAMESPACE_URI.'type');
             return true;
         }
         $patternDouble = "/^-?[0-9]+.[0-9]+[e|E]?-?[0-9]*/";
         $match = preg_match($patternDouble,$node,$hits);
         if($match>0){
-            $node = new Literal($hits[0]);
+            $node = new RDFLiteral($hits[0]);
             $node->setDatatype(XML_SCHEMA.'double');
             return true;
         }
@@ -1527,7 +1526,7 @@ class SparqlParser extends Object
     *
     * @param  TriplePattern $trp
     *
-    * @return Node          The first parsed label
+    * @return RDFNode          The first parsed label
     */
     protected function parseCollection(&$trp)
     {
@@ -1537,12 +1536,12 @@ class SparqlParser extends Object
         $i = 0;
         while (current($this->tokens)!=")") {
             if($i>0)
-            $trp[] = new QueryTriple($this->parseNode($tmpLabel),new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"),$this->parseNode($tmpLabel = $this->query->getBlanknodeLabel()));
-            $trp[] = new QueryTriple($this->parseNode($tmpLabel),new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"),$this->parseNode());
+            $trp[] = new QueryTriple($this->parseNode($tmpLabel),new RDFResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"),$this->parseNode($tmpLabel = $this->query->getBlanknodeLabel()));
+            $trp[] = new QueryTriple($this->parseNode($tmpLabel),new RDFResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"),$this->parseNode());
             $this->_fastForward();
             $i++;
         }
-        $trp[] = new QueryTriple($this->parseNode($tmpLabel),new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"),new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"));
+        $trp[] = new QueryTriple($this->parseNode($tmpLabel),new RDFResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"),new Resource("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"));
         return $firstLabel;
     }//protected function parseCollection(&$trp)
 

@@ -42,7 +42,7 @@ Class RdqlDbEngine extends RdqlEngine {
  *                               ['strEqExprs'][]['var'] = ?VARNAME
  *                                               ['operator'] = (eq | ne)
  *                                               ['value'] = string
- *                                               ['value_type'] = ('variable' | 'URI' | 'Literal')
+ *                                               ['value_type'] = ('variable' | 'URI' | 'RDFLiteral')
  *                                               ['value_lang'] = string
  *                                               ['value_dtype'] = string
  *                               ['numExpr']['vars'][] = ?VARNAME
@@ -73,7 +73,7 @@ Class RdqlDbEngine extends RdqlEngine {
  * @param   object  DbModel $dbModel
  * @param   array   &$parsedQuery  (the same format as $this->parsedQuery)
  * @param   boolean $returnNodes
- * @return  array   [][?VARNAME] = object Node  (if $returnNodes = TRUE)
+ * @return  array   [][?VARNAME] = object RDFNode  (if $returnNodes = TRUE)
  *      OR  array   [][?VARNAME] = string
  * @access  public
  */
@@ -279,7 +279,7 @@ Class RdqlDbEngine extends RdqlEngine {
                        $exprBoolVal = 'TRUE';
                     break;
 
-               case 'Literal':
+               case 'RDFLiteral':
 
                     if (!isset($this->rsIndexes[$expr['var']]['nType']) ||
                            $recordSet->fields[$this->rsIndexes[$expr['var']]['nType']] != 'l') {
@@ -289,10 +289,10 @@ Class RdqlDbEngine extends RdqlEngine {
                        break;
                     }
 
-                    $filterLiteral= new Literal($expr['value'],$expr['value_lang']);
+                    $filterLiteral= new RDFLiteral($expr['value'],$expr['value_lang']);
                     $filterLiteral->setDatatype($expr['value_dtype']);
 
-                    $resultLiteral=new Literal($recordSet->fields[$this->rsIndexes[$expr['var']]['value']]);
+                    $resultLiteral=new RDFLiteral($recordSet->fields[$this->rsIndexes[$expr['var']]['value']]);
                     $resultLiteral->setDatatype($recordSet->fields[$this->rsIndexes[$expr['var']]['l_dtype']]);
                     $resultLiteral->setLanguage($recordSet->fields[$this->rsIndexes[$expr['var']]['l_lang']]);
 
@@ -374,13 +374,13 @@ Class RdqlDbEngine extends RdqlEngine {
 
 
 /**
- * Convert variable values of $queryResult to objects (Node).
+ * Convert variable values of $queryResult to objects (RDFNode).
  *
  * @param   array  &$queryResult [][?VARNAME]['value']   = string
  *                                           ['nType']   = string
  *                                           ['l_lang']  = string
  *                                           ['l_dtype'] = string
- * @return  array  [][?VARNAME] = object Node
+ * @return  array  [][?VARNAME] = object RDFNode
  * @access	private
  */
  function toNodes(&$queryResult) {
@@ -396,11 +396,11 @@ Class RdqlDbEngine extends RdqlEngine {
    foreach ($queryResult as $n => $var)
      foreach ($var as $varname => $varProperties)
        if ($varProperties['nType'] == 'r')
-          $res[$n][$varname] = new Resource($varProperties['value']);
+          $res[$n][$varname] = new RDFResource($varProperties['value']);
        elseif ($varProperties['nType'] == 'b')
-          $res[$n][$varname] = new BlankNode($varProperties['value']);
+          $res[$n][$varname] = new RDFBlankNode($varProperties['value']);
        else {
-          $res[$n][$varname] = new Literal($varProperties['value'], $varProperties['l_lang']);
+          $res[$n][$varname] = new RDFLiteral($varProperties['value'], $varProperties['l_lang']);
           if ($varProperties['l_dtype'] != NULL)
              $res[$n][$varname]->setDataType($varProperties['l_dtype']);
        }

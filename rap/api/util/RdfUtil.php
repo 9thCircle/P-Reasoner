@@ -14,7 +14,7 @@
 * @package utility
 * @access	public
 **/
-class RDFUtil extends Object
+class RDFUtil extends RDFObject
 {
 	/**
 	 * Extracts the namespace prefix out of a URI.
@@ -44,7 +44,7 @@ class RDFUtil extends Object
 	/**
 	* Extracts the namespace prefix out of the URI of a Resource.
 	*
-	* @param	Object Resource	$resource
+	* @param	Object RDFResource	$resource
 	* @return	string
 	* @access	public
 	*/
@@ -56,7 +56,7 @@ class RDFUtil extends Object
 	/**
 	* Delivers the Localname (without the namespace prefix) out of the URI of a Resource.
 	*
-	* @param	Object Resource	$resource
+	* @param	Object RDFResource	$resource
 	* @return	string
 	* @access	public
 	*/
@@ -107,7 +107,7 @@ class RDFUtil extends Object
 			break;
 			
 			#default:
-			#$short_p = $statement->getLabelPredicate();
+			#$short_p = $statement->getPredicate()->getLabel();
 		}
 		return $short_p;
 	}
@@ -115,7 +115,7 @@ class RDFUtil extends Object
 	/**
 	* Tests if the URI of a resource belongs to the RDF syntax/model namespace.
 	*
-	* @param	Object Resource	$resource
+	* @param	Object RDFResource	$resource
 	* @return	boolean
 	* @access	public
 	*/
@@ -146,12 +146,12 @@ class RDFUtil extends Object
 	* Creates ordinal RDF resource out of an integer.
 	*
 	* @param	Integer	$num
-	* @return	object Resource
+	* @return	object RDFResource
 	* @access	public
 	*/
 	public static function createOrd($num)
 	{
-		return new Resource(RDF_NAMESPACE_URI . '_' . (string)$num);
+		return new RDFResource(RDF_NAMESPACE_URI . '_' . (string)$num);
 	}
 	
 	/**
@@ -201,7 +201,7 @@ class RDFUtil extends Object
 			echo self::chooseColor($statement->getSubject());
 			echo '">';
 			echo self::getNodeTypeName($statement->getSubject());
-			if(is_a($statement->subj,'Resource')){
+			if(is_a($statement->subj,'RDFResource')){
 				$ns = $statement->subj->getNamespace();
 				if(isset($nms[$ns])){
 					echo $nms[$ns].':'.self::getLocalName($statement->subj);
@@ -215,7 +215,7 @@ class RDFUtil extends Object
 			echo self::chooseColor($statement->getPredicate());
 			echo '">';
 			echo self::getNodeTypeName($statement->getPredicate());
-			if(is_a($statement->pred,'Resource')){
+			if(is_a($statement->pred,'RDFResource')){
 				$ns = $statement->pred->getNamespace();
 				if(isset($nms[$ns])){
 					echo $nms[$ns].':'.self::getLocalName($statement->pred);
@@ -228,7 +228,7 @@ class RDFUtil extends Object
 			echo INDENTATION . INDENTATION . '<td style="background-color:';
 			echo self::chooseColor($statement->getObject());
 			echo '">';
-			if (is_a($statement->getObject(), 'Literal')) {
+			if (is_a($statement->getObject(), 'RDFLiteral')) {
 				if ($statement->obj->getLanguage() != null) {
 					$lang = ' <strong>(xml:lang="' . $statement->obj->getLanguage() . '") </strong> ';
 				} ELSE $lang = '';
@@ -240,7 +240,7 @@ class RDFUtil extends Object
 				$dtype = '';
 			}
 			$label = $statement->obj->getLabel();
-			if(is_a($statement->obj,'Resource')){
+			if(is_a($statement->obj,'RDFResource')){
 				$ns = $statement->obj->getNamespace();
 				if(isset($nms[$ns])){
 					$label = $nms[$ns].':'.self::getLocalName($statement->obj);
@@ -263,15 +263,15 @@ class RDFUtil extends Object
 	* Chooses a node color.
 	* Used by RDFUtil::writeHTMLTable()
 	*
-	* @param	object Node	$node
-	* @return	object Resource
+	* @param	object RDFNode	$node
+	* @return	object RDFResource
 	* @access	private
 	*/
 	public static function chooseColor($node)
 	{
-		if (is_a($node, 'BlankNode')) {
+		if (is_a($node, 'RDFBlankNode')) {
 			return HTML_TABLE_BNODE_COLOR;
-		} elseif (is_a($node, 'Literal')) {
+		} elseif (is_a($node, 'RDFLiteral')) {
 			return HTML_TABLE_LITERAL_COLOR;
 		} elseif (RDFUtil::getNamespace($node) === RDF_NAMESPACE_URI ||
 				RDFUtil::getNamespace($node) === RDF_SCHEMA_URI ||
@@ -286,15 +286,15 @@ class RDFUtil extends Object
 	* Get Node Type.
 	* Used by RDFUtil::writeHTMLTable()
 	*
-	* @param	object Node	$node
-	* @return	object Resource
+	* @param	object RDFNode	$node
+	* @return	object RDFResource
 	* @access	private
 	*/
 	public static function getNodeTypeName($node)  {
-		if (is_a($node, "BlankNode")) {
+		if (is_a($node, 'RDFBlankNode')) {
 			return 'Blank Node: ';
-		} elseif (is_a($node, 'Literal')) {
-			return 'Literal: ';
+		} elseif (is_a($node, 'RDFLiteral')) {
+			return 'RDFLiteral: ';
 		} else {
 			if (RDFUtil::getNamespace($node) == RDF_NAMESPACE_URI ||
 			RDFUtil::getNamespace($node) == RDF_SCHEMA_URI ||
@@ -355,19 +355,19 @@ class RDFUtil extends Object
 	 * @access   public
 	 * @throws   PhpError
 	 */
-	 function visualizeGraph(&$model, $format = "input_dot", $short_prefix = TRUE)
+	 function visualizeGraph(&$model, $format = 'input_dot', $short_prefix = TRUE)
 	 {
 		 global $graphviz_param;
 		 $i = 0;
 		
 		 foreach ($model->triples as $key => $statement) {
-			 $subject   = $statement->getLabelSubject();
-			 $predicate = $statement->getLabelPredicate();
-			 $object    = $statement->getLabelObject();
+			 $subject   = $statement->getSubject()->getLabel();
+			 $predicate = $statement->getPredicate()->getLabel();
+			 $object    = $statement->getObject()->getLabel();
 
 			 // format subject
 			 if (!isset($attrib[$subject])) {
-				 if (is_a($statement->getSubject(),'BlankNode')) {
+				 if (is_a($statement->getSubject(),'RDFBlankNode')) {
 					 $attrib[$subject] = $graphviz_param['BLANKNODE_STYLE'];
 				 } else {
 					 if ($short_prefix == TRUE && RDFUtil::guessPrefix($subject, $model) != FALSE) {
@@ -378,8 +378,8 @@ class RDFUtil extends Object
 							 $prefix_array[$prefix] = RDFUtil::guessNamespace($subject);
 						 }
 					 }
-					 if (GRAPHVIZ_URI == TRUE) {
-						 $attrib[$subject] .= "URL=\"".$subject."\"";
+					 if (GRAPHVIZ_URI === TRUE) {
+						 $attrib[$subject] .= 'URL="'.$subject.'"';
 					 }
 				 }
 			 }
@@ -398,16 +398,16 @@ class RDFUtil extends Object
 		if (is_a($statement,'InfStatement')) {
 				 $predicate_label .= " ".$graphviz_param['INFERRED_STYLE'];
 			 } else {
-				 if (GRAPHVIZ_URI == TRUE) {
+				 if (GRAPHVIZ_URI === TRUE) {
 					 $predicate_label .= "URL=\"".$predicate."\"";
 				 }
 			 }
 
 			 // format object
 			 if (!isset($attrib[$object])) {
-				 if (is_a($statement->getObject(),'BlankNode')) {
+				 if (is_a($statement->getObject(),'RDFBlankNode')) {
 					 $attrib[$object] = $graphviz_param['BLANKNODE_STYLE'];
-				 } elseif (is_a($statement->getObject(),'Literal')) {
+				 } elseif (is_a($statement->getObject(),'RDFLiteral')) {
 					 $object_label = $object;
 					 $object = "literal".$i;
 					 $i++;
@@ -428,9 +428,9 @@ class RDFUtil extends Object
 			 }
 
 			 // fill graph array
-			 $graph[] = "\"".$subject."\" -> \"".$object."\" [".$predicate_label."];";
+			 $graph[] = '"'.$subject.'" -> "'.$object.'" ['.$predicate_label.'];';
 		 }
-
+		
 		 //generate DOT-file
 		 $dot = "digraph G { ".$graphviz_param['GRAPH_STYLE']."\n edge [".$graphviz_param['PREDICATE_STYLE']."]\n node [".$graphviz_param['RESOURCE_STYLE']."]\n";
 		 if (isset($attrib)) {
@@ -439,23 +439,23 @@ class RDFUtil extends Object
 			 }
 		 }
 		 if (!isset($graph)) {
-			 $dot .= "error [shape=box,label=\"No Statements found!\"]";
+			 $dot .= 'error [shape=box,label="No Statements found!"]';
 		 } else {
 			 $dot .= implode("\n", $graph);
 		 }
 		
 		 if (GRAPHVIZ_STAT == TRUE) {
-			$stat_label = "| ".$model->size()." Statements drawn";
+			$stat_label = "| ".$model->size().' Statements drawn';
 		 }
 		 if ((strstr($graphviz_param['GRAPH_STYLE'], 'rankdir="LR"') === FALSE) && (strstr($graphviz_param['GRAPH_STYLE'], 'rankdir=LR') === FALSE)) {
-			 $sep1 = "}";
-			 $sep2 = "";
+			 $sep1 = '}';
+			 $sep2 = '';
 		 } else {
-			 $sep1 = "";
-			 $sep2 = "}";
+			 $sep1 = '';
+			 $sep2 = '}';
 		 }
-
-		 if ($short_prefix == TRUE && isset($prefix_array)) {
+		
+		 if (($short_prefix && isset($prefix_array)) === TRUE) {
 			 $struct_label = "{ { Base URI: ".$model->getBaseURI()." $sep1 | { { ".implode("|", array_keys($prefix_array))." } | { ".implode("|", $prefix_array)." } } $stat_label } $sep2";
 		 } else {
 			 $struct_label = "{ { Base URI: ".$model->getBaseURI()."$sep1 ".$stat_label." } }";
@@ -465,7 +465,7 @@ class RDFUtil extends Object
 		 $dot .= " vocabulary [style=invis];\n struct -> vocabulary [style=invis];\n}";
 
 		 // if needed call dot.exe
-		 if (($format != "input_dot") && (defined('GRAPHVIZ_PATH')) && (strstr(GRAPHVIZ_FORMAT, $format) !== FALSE)) {
+		 if ($format !== "input_dot" && strstr(GRAPHVIZ_FORMAT, $format) !== FALSE) {
 			 mt_srand((double)microtime()*1000000);
 			 $filename=GRAPHVIZ_TEMP.md5(uniqid(mt_rand())).".dot";
 			 $file_handle = @fopen($filename, 'w');
@@ -474,8 +474,8 @@ class RDFUtil extends Object
 				 fwrite($file_handle, $dot);
 				 fclose($file_handle);
 			 }
-			 $dotinput = " -T".$format." ".$filename;
-
+			 $dotinput = ' -T'.$format.' '.$filename;
+			
 			 ob_start();
 		passthru(GRAPHVIZ_PATH.$dotinput);
 			 $output = ob_get_contents();
@@ -483,7 +483,7 @@ class RDFUtil extends Object
 			 unlink($filename);
 			 echo $output;
 			 return TRUE;
-		 } elseif ($format == "input_dot") {
+		 } elseif ($format === 'input_dot') {
 			 echo $dot;
 			 return TRUE;
 		 } else {

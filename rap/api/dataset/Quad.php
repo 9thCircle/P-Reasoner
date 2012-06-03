@@ -20,7 +20,7 @@ class Quad
 	/**
 	* Name of the NamedGraphMem.
 	*
-	* @var		Resource
+	* @var		RDFResource
 	* @access	private
 	*/
 	var $graphName;
@@ -37,18 +37,18 @@ class Quad
     * Constructor
 	* Creates a Quad from four Nodes.
  	*
-    * @param Resource 
-    * @param Resource  
-    * @param Resource  
-    * @param Resource   
+    * @param RDFResource 
+    * @param RDFResource  
+    * @param RDFResource  
+    * @param RDFResource   
 	* @access	public
     */		
 	function Quad($graphName,$subject,$predicate,$object)
 	{
-		if (!is_a($graphName, 'Resource')) 
+		if (!is_a($graphName, 'RDFResource')) 
 		{
 			$errmsg = RDFAPI_ERROR . 
-		          '(class: Quad; method: new): Resource expected as graphName.';
+		          '(class: Quad; method: new): RDFResource expected as graphName.';
 			trigger_error($errmsg, E_USER_ERROR); 
 		}
 		$this->statement=new Statement($subject,$predicate,$object);
@@ -58,7 +58,7 @@ class Quad
 	/**
     * Sets the graph name.
     *
-    * @param Resource  
+    * @param RDFResource  
 	* @access	public
     */	
 	function setGraphName($graphName)
@@ -69,7 +69,7 @@ class Quad
 	/**
     * Returns the graph name.
     *
-    * @return Resource
+    * @return RDFResource
 	* @access	public
     */
 	function getGraphName()
@@ -91,7 +91,7 @@ class Quad
 	/**
     * Returns the subject.
     *
-    * @return Resource
+    * @return RDFResource
 	* @access	public
     */
 	function getSubject()
@@ -102,7 +102,7 @@ class Quad
 	/**
     * Returns the predicate.
     *
-    * @return Resource
+    * @return RDFResource
 	* @access	public
     */
 	function getPredicate()
@@ -113,7 +113,7 @@ class Quad
 	/**
     * Returns the object.
     *
-    * @return Resource
+    * @return RDFResource
 	* @access	public
     */
 	function getObject()

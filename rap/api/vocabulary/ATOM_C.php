@@ -17,187 +17,187 @@ class ATOM{
 
 	function TYPE()
 	{
-		return  new Resource(ATOM_NS . 'type');
+		return  new RDFResource(ATOM_NS . 'type');
 
 	}
 
 	function MODE()
 	{
-		return  new Resource(ATOM_NS . 'mode');
+		return  new RDFResource(ATOM_NS . 'mode');
 
 	}
 
 	function NAME()
 	{
-		return  new Resource(ATOM_NS . 'name');
+		return  new RDFResource(ATOM_NS . 'name');
 
 	}
 
 	function URL()
 	{
-		return  new Resource(ATOM_NS . 'url');
+		return  new RDFResource(ATOM_NS . 'url');
 
 	}
 
 	function EMAIL()
 	{
-		return  new Resource(ATOM_NS . 'email');
+		return  new RDFResource(ATOM_NS . 'email');
 
 	}
 
 	function REL()
 	{
-		return  new Resource(ATOM_NS . 'rel');
+		return  new RDFResource(ATOM_NS . 'rel');
 
 	}
 
 	function HREF()
 	{
-		return  new Resource(ATOM_NS . 'href');
+		return  new RDFResource(ATOM_NS . 'href');
 
 	}
 
 	function TITLE()
 	{
-		return  new Resource(ATOM_NS . 'title');
+		return  new RDFResource(ATOM_NS . 'title');
 
 	}
 
 	function ATOM_CONSTRUCT()
 	{
-		return  new Resource(ATOM_NS . 'AtomConstruct');
+		return  new RDFResource(ATOM_NS . 'AtomConstruct');
 
 	}
 
 	function CONTENT()
 	{
-		return  new Resource(ATOM_NS . 'Content');
+		return  new RDFResource(ATOM_NS . 'Content');
 
 	}
 
 	function PERSON()
 	{
-		return  new Resource(ATOM_NS . 'Person');
+		return  new RDFResource(ATOM_NS . 'Person');
 
 	}
 
 	function VALUE()
 	{
-		return  new Resource(ATOM_NS . 'value');
+		return  new RDFResource(ATOM_NS . 'value');
 
 	}
 
 	function LINK()
 	{
-		return  new Resource(ATOM_NS . 'Link');
+		return  new RDFResource(ATOM_NS . 'Link');
 
 	}
 
 	function FEED()
 	{
-		return  new Resource(ATOM_NS . 'Feed');
+		return  new RDFResource(ATOM_NS . 'Feed');
 
 	}
 
 	function VERSION()
 	{
-		return  new Resource(ATOM_NS . 'version');
+		return  new RDFResource(ATOM_NS . 'version');
 
 	}
 
 	function LANG()
 	{
-		return  new Resource(ATOM_NS . 'lang');
+		return  new RDFResource(ATOM_NS . 'lang');
 
 	}
 
 	function AUTHOR()
 	{
-		return  new Resource(ATOM_NS . 'author');
+		return  new RDFResource(ATOM_NS . 'author');
 
 	}
 
 	function CONTRIBUTOR()
 	{
-		return  new Resource(ATOM_NS . 'contributor');
+		return  new RDFResource(ATOM_NS . 'contributor');
 
 	}
 
 	function TAGLINE()
 	{
-		return  new Resource(ATOM_NS . 'tagline');
+		return  new RDFResource(ATOM_NS . 'tagline');
 
 	}
 
 	function GENERATOR()
 	{
-		return  new Resource(ATOM_NS . 'generator');
+		return  new RDFResource(ATOM_NS . 'generator');
 
 	}
 
 	function COPYRIGHT()
 	{
-		return  new Resource(ATOM_NS . 'copyright');
+		return  new RDFResource(ATOM_NS . 'copyright');
 
 	}
 
 	function INFO()
 	{
-		return  new Resource(ATOM_NS . 'info');
+		return  new RDFResource(ATOM_NS . 'info');
 
 	}
 
 	function MODIFIED()
 	{
-		return  new Resource(ATOM_NS . 'modified');
+		return  new RDFResource(ATOM_NS . 'modified');
 
 	}
 
 	function ENTRY()
 	{
-		return  new Resource(ATOM_NS . 'Entry');
+		return  new RDFResource(ATOM_NS . 'Entry');
 
 	}
 
 	function HAS_CHILD()
 	{
-		return  new Resource(ATOM_NS . 'hasChild');
+		return  new RDFResource(ATOM_NS . 'hasChild');
 
 	}
 
 	function HAS_ENTRY()
 	{
-		return  new Resource(ATOM_NS . 'hasEntry');
+		return  new RDFResource(ATOM_NS . 'hasEntry');
 
 	}
 
 	function HAS_LINK()
 	{
-		return  new Resource(ATOM_NS . 'hasLink');
+		return  new RDFResource(ATOM_NS . 'hasLink');
 
 	}
 
 	function HAS_TITLE()
 	{
-		return  new Resource(ATOM_NS . 'hasTitle');
+		return  new RDFResource(ATOM_NS . 'hasTitle');
 
 	}
 
 	function ISSUED()
 	{
-		return  new Resource(ATOM_NS . 'issued');
+		return  new RDFResource(ATOM_NS . 'issued');
 
 	}
 
 	function CREATED()
 	{
-		return  new Resource(ATOM_NS . 'created');
+		return  new RDFResource(ATOM_NS . 'created');
 
 	}
 
 	function SUMMARY()
 	{
-		return  new Resource(ATOM_NS . 'summary');
+		return  new RDFResource(ATOM_NS . 'summary');
 	}
 }
 

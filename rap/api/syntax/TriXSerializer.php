@@ -100,7 +100,7 @@ class TriXSerializer
 		{
 			$serializedString.='<graph>';
 			$serializedString.='<uri>'.$graphName.'</uri>';
-			for($iterator = $this->graphSet->findInNamedGraphs(new Resource($graphName),null,null,null); $iterator->valid(); $iterator->next()) 
+			for($iterator = $this->graphSet->findInNamedGraphs(new RDFResource($graphName),null,null,null); $iterator->valid(); $iterator->next()) 
 			{
 				$serializedString.='<triple>';
 				
@@ -122,7 +122,7 @@ class TriXSerializer
 	/**
 	* Serialize node to a TriX string
 	*
-	* @param Node
+	* @param RDFNode
 	* @return   string
 	* @access	private
 	*/
@@ -130,13 +130,13 @@ class TriXSerializer
 	{
 		switch ($node)
 		{
-			case (is_a($node,'BlankNode')):
+			case (is_a($node,'RDFBlankNode')):
 				return ('<id>'.$node->getLabel().'</id>');
 			
-			case (is_a($node,'Resource')):
+			case (is_a($node,'RDFResource')):
 				return ('<uri>'.$node->getLabel().'</uri>');
 			
-			case (is_a($node,'Literal')):
+			case (is_a($node,'RDFLiteral')):
 			
 				if ($node->dtype!=null)
 					return ('<typedLiteral datatype="'.htmlentities($node->dtype).'">'.$node->getLabel().'</typedLiteral>');

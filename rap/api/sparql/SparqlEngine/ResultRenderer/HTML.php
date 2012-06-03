@@ -141,13 +141,13 @@ class SparqlEngine_ResultRenderer_HTML implements SparqlEngine_ResultRenderer
         if ($value === null) {
             $strCode = $this->getHtmlNull();
         }
-        if ($value instanceof Literal) {
+        if ($value instanceof RDFLiteral) {
             $strCode = $this->getHtmlLiteral(
                 $value->getLabel(),
                 $value->getLanguage(),
                 $value->getDatatype()
             );
-        } else if ($value instanceof Resource) {
+        } else if ($value instanceof RDFResource) {
             $strCode = $this->getHtmlResource($value->getURI());
         } else {
             $strCode = $this->getHtmlBlank();

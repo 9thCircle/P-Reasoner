@@ -698,14 +698,14 @@ class SparqlEngineDb_SqlGenerator
             return ' AND ' . $strTablePrefix . '.' . $strType . ' = ' . $value;
         }
 
-        if ($bject instanceof BlankNode) {
+        if ($bject instanceof RDFBlankNode) {
             //Blank node
             throw new SparqlEngineDb_SqlGeneratorException(
                 'FIXME: Querying for blank nodes not supported'
             );
 
-        } else if ($bject instanceof Resource) {
-            //Resource
+        } else if ($bject instanceof RDFResource) {
+            //RDFResource
             $r = ' AND ' . $strTablePrefix . '.' . $strType . ' = '
                 . $this->dbConn->qstr($bject->getURI());
             if ($strType !== 'predicate') {
@@ -714,8 +714,8 @@ class SparqlEngineDb_SqlGenerator
             }
             return $r;
 
-        } else if ($bject instanceof Literal) {
-            //Literal
+        } else if ($bject instanceof RDFLiteral) {
+            //RDFLiteral
             //I'm doubling Filter code here, but what the hell
             $strColDatatype = $strTablePrefix . '.l_datatype';
             if ($bject->dtype == 'http://www.w3.org/2001/XMLSchema#integer'

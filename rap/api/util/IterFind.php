@@ -60,21 +60,21 @@ class IterFind
 	var $findGraph;
 	
 	/**
-	* The subject Resource to search for
+	* The subject RDFResource to search for
 	* @var string 
 	* @access	private
 	*/	
 	var $findSubject;
 	
 	/**
-	* The predicate Resource to search for
+	* The predicate RDFResource to search for
 	* @var string 
 	* @access	private
 	*/	
 	var $findPredicate;
 	
 	/**
-	* The object Resource to search for
+	* The object RDFResource to search for
 	* @var string 
 	* @access	private
 	*/	
@@ -90,10 +90,10 @@ class IterFind
 	*
 	* 
     *
-    * @param $graph Resource
-    * @param $subject Resource
-    * @param $predicate Resource
-    * @param $object Resource
+    * @param $graph RDFResource
+    * @param $subject RDFResource
+    * @param $predicate RDFResource
+    * @param $object RDFResource
     * @param $returnAsQuads boolean
 	* @access	public
     */
@@ -154,7 +154,7 @@ class IterFind
 	function current()
 	{
 		if($this->returnAsQuads)
-		return new Quad(new Resource($this->findGraph->getGraphName()),$this->current->getSubject(),$this->current->getPredicate(),$this->current->getObject());
+		return new Quad(new RDFResource($this->findGraph->getGraphName()),$this->current->getSubject(),$this->current->getPredicate(),$this->current->getObject());
 		//else
 		return $this->current;
 	}

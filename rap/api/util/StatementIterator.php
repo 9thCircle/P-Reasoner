@@ -17,7 +17,7 @@
  * @access	public
  *
  */ 
- class StatementIterator extends Object
+ class StatementIterator extends RDFObject
  {
  	/**
 	* Reference to the MemModel

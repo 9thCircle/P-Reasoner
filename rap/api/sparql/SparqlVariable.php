@@ -1,12 +1,10 @@
 <?php
-require_once RDFAPI_INCLUDE_DIR . '/model/Node.php';
-require_once RDFAPI_INCLUDE_DIR . '/util/Object.php';
 
 /**
 *   Object representation of a SPARQL variable.
 *   @license http://www.gnu.org/licenses/lgpl.html LGPL
 */
-class SparqlVariable extends Object
+class SparqlVariable extends RDFObject
 {
     public $name;
 

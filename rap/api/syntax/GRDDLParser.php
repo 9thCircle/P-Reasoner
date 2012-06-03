@@ -7,7 +7,7 @@
 /**
  * A GRDDLParser. 
  * This class extracts rdf data from xhtml documents. It uses the PHP xsltprocessor.
- * Gleaning Resource Descriptions from Dialects of Languages (GRDDL):
+ * Gleaning RDFResource Descriptions from Dialects of Languages (GRDDL):
  * (http://www.w3.org/TR/grddl/)
  * 
  * @version  $Id: GRDDLParser.php 320 2006-11-21 09:38:51Z tgauss $
@@ -17,9 +17,8 @@
  * @access	public
  *
  */   
-class GRDDLParser extends Object{
-	
-	
+class GRDDLParser extends RDFObject
+{
 	/**
  	* Document link
  	* 

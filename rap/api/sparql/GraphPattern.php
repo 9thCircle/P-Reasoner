@@ -14,8 +14,8 @@
 * @package sparql
 */
 
-class GraphPattern extends Object{
-
+class GraphPattern extends RDFObject
+{
     /**
     * Graphname. 0 if its in the default graph.
     */

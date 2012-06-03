@@ -195,7 +195,7 @@ class SparqlEngineDb_ResultRenderer_PlainText implements SparqlEngineDb_ResultRe
     *   @param ADORecordSet $dbRecordSet    Record set returned from ADOConnection::Execute()
     *   @param string       $strVarBase     Prefix of the columns the recordset fields have.
     *
-    *   @return Resource   RDF triple subject resource object
+    *   @return RDFResource   RDF triple subject resource object
     */
     protected function createSubjectFromDbRecordSetPart(ADORecordSet $dbRecordSet, $strVarBase, $strVar)
     {
@@ -227,7 +227,7 @@ class SparqlEngineDb_ResultRenderer_PlainText implements SparqlEngineDb_ResultRe
     *   @param ADORecordSet $dbRecordSet    Record set returned from ADOConnection::Execute()
     *   @param string       $strVarBase     Prefix of the columns the recordset fields have.
     *
-    *   @return Resource   RDF triple predicate resource object
+    *   @return RDFResource   RDF triple predicate resource object
     */
     protected function createPredicateFromDbRecordSetPart(ADORecordSet $dbRecordSet, $strVarBase, $strVar)
     {
@@ -250,7 +250,7 @@ class SparqlEngineDb_ResultRenderer_PlainText implements SparqlEngineDb_ResultRe
     *   @param ADORecordSet $dbRecordSet    Record set returned from ADOConnection::Execute()
     *   @param string       $strVarBase     Prefix of the columns the recordset fields have.
     *
-    *   @return Resource   RDF triple object resource object
+    *   @return RDFResource   RDF triple object resource object
     */
     protected function createObjectFromDbRecordSetPart(ADORecordSet $dbRecordSet, $strVarBase, $strVar)
     {
@@ -302,13 +302,13 @@ class SparqlEngineDb_ResultRenderer_PlainText implements SparqlEngineDb_ResultRe
                 $obj  = $triple->getObject();
 
                 if (is_string($sub)  && $sub{1} == '_') {
-                    $sub  = new BlankNode("_bN".$bnode);
+                    $sub  = new RDFBlankNode("_bN".$bnode);
                 }
                 if (is_string($pred) && $pred{1} == '_') {
-                    $pred = new BlankNode("_bN".$bnode);
+                    $pred = new RDFBlankNode("_bN".$bnode);
                 }
                 if (is_string($obj)  && $obj{1} == '_') {
-                    $obj  = new BlankNode("_bN".$bnode);
+                    $obj  = new RDFBlankNode("_bN".$bnode);
                 }
 
 

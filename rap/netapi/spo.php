@@ -18,7 +18,6 @@
  * @todo Support typed literals.
  * @access	public
  */
-
 function spoQuery($model, $serializer, $remove = FALSE, $modelId = FALSE)
 {
   // Get SPO query from HTTP request
