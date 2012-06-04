@@ -174,7 +174,7 @@ class RdfSerializer extends RDFObject
 				unset($this->m_defaultNamespaces[RDF_SCHEMA_PREFIX]);
 			}
 			elseif (!SER_RDF_QNAMES)
-			$this->rdf_qnames = TRUE;
+				$this->rdf_qnames = TRUE;
 
 			$this->addNamespacePrefix(NULL, $xml_default_namespace);
 		}
@@ -182,35 +182,36 @@ class RdfSerializer extends RDFObject
 		//copy parsed namespaces
 		$nsps = array();
 		$nsps = $model->getParsedNamespaces();
-		foreach($this->m_defaultNamespaces as $prefix => $namespace){
-			if(!isset ($nsps[$namespace]))
-			$nsps[$namespace] = $prefix;
+		foreach($this->m_defaultNamespaces as $prefix => $namespace) {
+			if(!isset ($nsps[$namespace])) {
+				$nsps[$namespace] = $prefix;
+			}
 		}
-
+		
 		// define rdf prefix (qname or not)
-		if ($this->rdf_qnames){
+		if ($this->rdf_qnames) {
 			if(isset($nsps[RDF_NAMESPACE_URI])){
-				$this->rdf_qname_prefix = $nsps[RDF_NAMESPACE_URI].':';
-			}else{
+				$this->rdf_qname_prefix = $nsps[RDF_NAMESPACE_URI] . ':';
+			} else {
 				$this->rdf_qname_prefix = RDF_NAMESPACE_PREFIX . ':';
 			}
-
-		}else{
+		} else {
 			$this->rdf_qname_prefix = '';
 		}
+		
 		// check if model is empty
-		if ($model->size() == 0) return "<". $this->rdf_qname_prefix . RDF_RDF ." xmlns:rdf='".RDF_NAMESPACE_URI."' />";
-
+		if ($model->size() === 0) {
+			return '<'. $this->rdf_qname_prefix . RDF_RDF .' xmlns:rdf="'.RDF_NAMESPACE_URI.'"/>';
+		}
 		foreach($nsps as $ns => $pre) {
 			$this->m_namespaces[$pre] = $ns;
 		}
-
-
+		
 		// set base URI
 		if ($model->getBaseURI() === NULL)
-		$this->m_baseURI="opaque:uri";
+		$this->m_baseURI = 'opaque:uri';
 		else
-		$this->m_baseURI=$model->getBaseURI();
+		$this->m_baseURI = $model->getBaseURI();
 
 
 		if ($this->sort_model) {
@@ -358,10 +359,8 @@ class RdfSerializer extends RDFObject
 		$this->m_currentSubject       = NULL;
 
 		foreach($this->m_statements as $key => $statement) {
-			$subject = $statement->getSubject();
-			$predicate = $statement->getPredicate();
-			$object = $statement->getobject();
-
+			$statement->getSPO($subject, $predicate, $object);
+			
 			// write Group and update current subject if nessesary
 			if ($this->m_currentSubject === NULL || !$this->m_currentSubject->equals($subject)) {
 				$this->writeGroup();
@@ -558,21 +557,22 @@ class RdfSerializer extends RDFObject
 			$this->m_out .= $this->rdf_qname_prefix . RDF_NODEID;
 		} else {
 			$this->m_out .= $this->rdf_qname_prefix . RDF_RESOURCE;
-		};
-
+		}
+		
 		$this->m_out .= '="';
 		$relativizedURI = $this->relativizeURI($rebaseURI);
-		if (!($relativizedURI == $rebaseURI))
-		if (!is_a($object_node, 'RDFBlankNode'))
-		$this->m_out .= '#' . $relativizedURI;
-		else
-		$this->m_out .=  $relativizedURI;
-		else
-		$this->writeAbsoluteResourceReference($rebaseURI);
+		if (!($relativizedURI == $rebaseURI)) {
+			if (!is_a($object_node, 'RDFBlankNode')) {
+				$this->m_out .= '#' . $relativizedURI;
+			} else {
+				$this->m_out .=  $relativizedURI;
+			}
+		} else {
+			$this->writeAbsoluteResourceReference($rebaseURI);
+		}
 		$this->m_out .= '"';
 	}
-
-
+	
 	/**
 	* @param String $rebaseURI
 	* @access   private
@@ -595,10 +595,11 @@ class RdfSerializer extends RDFObject
 	*/
 	private function writeTextValue($textValue)
 	{
-		if ($this->getValueQuoteType($textValue) === USE_CDATA)
-		$this->writeEscapedCDATA($textValue);
-		else
-		$this->m_out .= $textValue;
+		if ($this->getValueQuoteType($textValue) === USE_CDATA) {
+			$this->writeEscapedCDATA($textValue);
+		} else {
+			$this->m_out .= $textValue;
+		}
 	}
 
 	/**
@@ -620,25 +621,31 @@ class RdfSerializer extends RDFObject
 		$hasBreaks = FALSE;
 		$whiteSpaceOnly = TRUE;
 		for ($i=0; $i<strlen($textValue); $i++) {
-			$c=$textValue{$i};
-			if ($c === '<' || $c === '>' || $c === '&')
-				return USE_CDATA;
-			if ($c === LINEFEED)
-			$hasBreaks = TRUE;
-			if ($c === '"' || $c=="\'") {
-				if ($quote === USE_ANY_QUOTE)
-				$quote=($c === '"') ? "\'" : "\"";
-				elseif ($c == $quote)
+			$c = $textValue{$i};
+			if ($c === '<' || $c === '>' || $c === '&') {
 				return USE_CDATA;
 			}
-			if ($c !== ' ')
-			$whiteSpaceOnly = FALSE;
+			if ($c === LINEFEED) {
+				$hasBreaks = TRUE;
+			}
+			if ($c === '"' || $c=='\'') {
+				if ($quote === USE_ANY_QUOTE) {
+					$quote=($c === '"') ? '\'' : '"';
+				} elseif ($c === $quote) {
+					return USE_CDATA;
+				}
+			}
+			if ($c !== ' ') {
+				$whiteSpaceOnly = FALSE;
+			}
 		}
-		if ($whiteSpaceOnly || $hasBreaks)
-		return USE_CDATA;
-		return $quote==USE_ANY_QUOTE ? '"' : $quote;
+		return $whiteSpaceOnly || $hasBreaks ?
+			USE_CDATA :
+			($quote === USE_ANY_QUOTE) ?
+				'"' :
+				$quote;
 	}
-
+	
 	/**
 	* @param object RDFNode $node
 	* @access   private
@@ -659,11 +666,13 @@ class RdfSerializer extends RDFObject
 	* @param STRING $elementName
 	* @access   private
 	*/
-	private function getElementText($elementName)  {
+	private function getElementText($elementName)
+	{
 		$namespace = RDFUtil::guessNamespace($elementName);
 		$localName = RDFUtil::guessName($elementName);
-		if ($namespace === "")
-		return $localName;
+		if ($namespace === '') {
+			return $localName;
+		}
 		$prefix=array_search($namespace, $this->m_namespaces);
 
 		if ($prefix === FALSE) {
@@ -676,7 +685,7 @@ class RdfSerializer extends RDFObject
 		} elseif ($prefix === NULL) {
 			return $localName;
 		} else {
-				return $prefix. ":" .$localName;
+				return $prefix. ':' .$localName;
 		}
 	}
 
@@ -690,16 +699,15 @@ class RdfSerializer extends RDFObject
 
 			if ($this->use_entities) {
 				$this->collectNamespace($value->getSubject());
-				if(!is_a($value->getObject(), 'RDFLiteral'))
-				$this->collectNamespace($value->getObject());
-
+				if(!is_a($value->getObject(), 'RDFLiteral')) {
+					$this->collectNamespace($value->getObject());
+				}
 			} else {
 
-				if  ($value->pred->getURI() === RDF_TYPE)
-				$this->collectNamespace($value->getObject());
-				elseif
-				(($value->pred->getURI() === RDFS_SUBCLASSOF) ||
-				($value->pred->getURI() === RDFS_SUBPROPERTYOF)) {
+				if  ($value->pred->getURI() === RDF_TYPE) {
+					$this->collectNamespace($value->getObject());
+				} elseif (($value->pred->getURI() === RDFS_SUBCLASSOF) ||
+				          ($value->pred->getURI() === RDFS_SUBPROPERTYOF)) {
 					$this->collectNamespace($value->getSubject());
 					$this->collectNamespace($value->getObject());
 				}
@@ -716,10 +724,10 @@ class RdfSerializer extends RDFObject
 	*/
 	function collectNamespace($resource)
 	{
-		$namespace=RDFUtil::getNamespace($resource);
+		$namespace = RDFUtil::getNamespace($resource);
 		if (!in_array($namespace, $this->m_namespaces) && $namespace !== '') {
 			$prefix = array_search( $namespace, $this->m_defaultNamespaces);
-			if ($prefix===FALSE)
+			if ($prefix === FALSE)
 			$prefix=$this->getNextNamespacePrefix();
 			$this->m_namespaces[$prefix] = $namespace;
 		}
@@ -731,8 +739,8 @@ class RdfSerializer extends RDFObject
 	private function getNextNamespacePrefix()
 	{
 		$this->m_nextAutomaticPrefixIndex++;
-		return GENERAL_PREFIX_BASE . $this->m_nextAutomaticPrefixIndex;
+		return GENERAL_PREFIX_BASE . (string)$this->m_nextAutomaticPrefixIndex;
 	}
-
 }
+
 ?>

@@ -101,6 +101,13 @@ class Statement extends RDFObject
 		return $this->obj;
 	}
 	
+	public function getSPO(&$s, &$p, &$o)
+	{
+		$s  = $this->subj;
+		$p  = $this->pred;
+		$o  = $this->obj;
+	}
+	
     /**
    * Retruns the hash code of the triple.	
    * @access	public 

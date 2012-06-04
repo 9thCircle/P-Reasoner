@@ -74,7 +74,7 @@ class InfRule
 	* @access	public
 	* @throws	PhpError
 	*/	
- 	public function setTrigger(RDFNode $nSubject = NULL, RDFNode $nPredicate = NULL, RDFNode $nObject = NULL)
+ 	public function setTrigger($nSubject = NULL, $nPredicate = NULL, $nObject = NULL)
  	{
  		//set the trigger
 		$this->trigger['s'] = $nSubject;
@@ -110,16 +110,18 @@ class InfRule
 	*/
  	public function checkTrigger(Statement $statement)
  	{
+		if ($this->trigger['o'] === INF_TOK_RESOURCE) echo '<p>xyzzy</p>';
  		// for each element, check if it equals the proper statement's element
  		// or it's NULL
 		if (($this->trigger['s'] ===  NULL || 
-		     $this->trigger['s']->equals($statement->getSubject())) !== TRUE) {
+		    $this->trigger['s']->equals($statement->getSubject())) !== TRUE) {
 			return FALSE;
 		} elseif (($this->trigger['p'] ===  NULL || 
-		     $this->trigger['p']->equals($statement->getPredicate())) !== TRUE) {
+		    $this->trigger['p']->equals($statement->getPredicate())) !== TRUE) {
 			return FALSE;
 		} elseif (($this->trigger['o'] ===  NULL ||
-		     $this->trigger['o']->equals($statement->getObject())) !== TRUE) {
+			($this->trigger['o'] === INF_TOK_RESOURCE && is_a($statement->getObject(), 'RDFResource')) ||
+		    (is_object($this->trigger['o']) && $this->trigger['o']->equals($statement->getObject()))) !== TRUE) {
 			return FALSE;
 		} else {
 			// if all are TRUE, return TRUE
@@ -138,21 +140,21 @@ class InfRule
 	* @access	public
 	* @throws	PhpError
 	*/ 	
- 	public function checkEntailment (RDFNode $nSubject = NULL, RDFNode $nPredicate = NULL, RDFNode $nObject = NULL)
+ 	public function checkEntailment(RDFNode $nSubject = NULL, RDFNode $nPredicate = NULL, RDFNode $nObject = NULL)
  	{
 		// returns TRUE if ALL 3 elements are NULL or match the entailment equivalent
 		return
 			(
 				$nSubject ===  NULL ||
-				!is_a($this->entailment['s'],'RDFNode') ||
+				is_string($this->entailment['s']) ||
 				$this->entailment['s']->equals($nSubject)
 			) && (
 				$nPredicate ===  NULL ||
-				!is_a($this->entailment['p'],'RDFNode') ||
+				is_string($this->entailment['p']) ||
 				$this->entailment['p']->equals($nPredicate)
 			) && (				 			
 				$nObject ===  NULL ||
-				!is_a($this->entailment['o'],'RDFNode') ||
+				is_string($this->entailment['o']) ||
 				$this->entailment['o']->equals($nObject)
 			);
 	}
@@ -218,10 +220,9 @@ class InfRule
    	* @param	RDFNode OR null $nSubject
    	* @param	RDFNode OR null $nPredicate
    	* @param	RDFNode OR null $nObject
-	* @return 	array
+	* @return 	mixed[string]
 	* @access	public
-	* @throws	PhpError
-	*/  	 	
+	*/
  	public function getModifiedFind(RDFNode $nSubject = NULL, RDFNode $nPredicate = NULL, RDFNode $nObject = NULL)
  	{			
  		$findSubject    = $this->trigger['s'];

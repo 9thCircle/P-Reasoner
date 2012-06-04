@@ -408,10 +408,10 @@ class Model extends RDFObject
 				
                 // findForward() Statements containing an eventually given blank node
                 // and add them to the result, if closure = true
-                if (is_a($statement->getObject(),'RDFBlankNode') && $closure == TRUE) {
+                if (is_a($statement->getObject(),'RDFBlankNode') && $closure === TRUE) {
                     $newModel = $model->findForward($statement->getObject(), NULL, NULL, $newModel);
                 }
-                if (is_a($statement->getSubject(),'RDFBlankNode') && $closure == TRUE) {
+                if (is_a($statement->getSubject(),'RDFBlankNode') && $closure === TRUE) {
                     $newModel = $model->findForward($statement->getSubject(), NULL, NULL, $newModel);
                 }
             }

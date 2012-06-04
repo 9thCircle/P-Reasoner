@@ -1182,14 +1182,12 @@ class MemModel extends Model
 			$sub   = $statement->getSubject();
 			$pos   = $sub->getLabel();
 		} elseif ($ind === 1) {
-			$sub   = $statement->getSubject();
-			$pred  = $statement->getPredicate();
-			$obj   = $statement->getObject();
+			$statement->getSPO($sub, $pred, $obj);
 			$pos   = $sub->getLabel().$pred->getLabel().$obj->getLabel();
 		} elseif ($ind === 2) {
 			$sub   = $statement->getSubject();
 			$pred  = $statement->getPredicate();
-			$pos   = $sub->getLabel().$pred->getLabel();
+			$pos   = $sub->getLabel() . $pred->getLabel();
 		} elseif ($ind === 3) {
 			$sub   = $statement->getSubject();
 			$obj   = $statement->getObject();

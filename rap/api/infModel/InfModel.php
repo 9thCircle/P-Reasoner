@@ -131,11 +131,18 @@ class InfModel extends MemModel
 		}
 		
 		#@ added by santec
-		//Rule: rdfs4a
-		if (INF_RES_RULE_RDFS4A) {
+		//Rule: rdfs4
+		if (INF_RES_RULE_RDFS4) {
+			// rdfs4a
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, NULL, NULL);
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDF_SCHEMA_URI.'Resource'));
+			$this->_addInfRule($infRule, 'base');
+			
+			// rdfs4b
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, NULL, INF_TOK_RESOURCE);
+			$infRule->setEntailment(INF_TOK_OBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDF_SCHEMA_URI.'Resource'));
 			$this->_addInfRule($infRule, 'base');
 		}
 		
@@ -489,8 +496,10 @@ class InfModel extends MemModel
 			
 			if ($trigger['o'] === NULL) {
 				$this->infRulesTriggerIndex['o'][INF_TOK_ANY][] = $infRulePosition;
+			} elseif (is_object($trigger['o']) === FALSE) {
+				$this->infRulesTriggerIndex['o'][$trigger['o']][] = $infRulePosition;
 			} else {
-				$this->infRulesTriggerIndex['o'][$trigger['o']->getLabel()][]=$infRulePosition;
+				@$this->infRulesTriggerIndex['o'][$trigger['o']->getLabel()][]=$infRulePosition;
 			}
 		} else {
 			//add to entailment Index if it is a BModel
@@ -555,6 +564,9 @@ class InfModel extends MemModel
 		$inIndexO = array();
 		if (isset($this->infRulesTriggerIndex['o'][INF_TOK_ANY])) {
 			$inIndexO =array_values($this->infRulesTriggerIndex['o'][INF_TOK_ANY]);
+		}
+		if (isset($this->infRulesTriggerIndex['o'][INF_TOK_RESOURCE])) {
+			$inIndexO = array_merge($inIndexO, $this->infRulesTriggerIndex['o'][INF_TOK_RESOURCE]);
 		}
 		if (isset($this->infRulesTriggerIndex['o'][$objectLabel])) {
 			$inIndexO = array_merge($inIndexO,array_values($this->infRulesTriggerIndex['o'][$objectLabel]));
@@ -640,10 +652,8 @@ class InfModel extends MemModel
 	protected final function _addInfRule(InfRule $infRule, $statementPosition)
 	{
 		//add the rule
-		$this->infRules[] = $infRule;			
-		//get the position of the added rule in the model
-		end($this->infRules);
-		$rulePosition = key($this->infRules);
+		$rulePosition = count($this->infRules);
+		$this->infRules[$rulePosition] = $infRule;
 		//add the information to the index, that this statement 
 		//added this rule.
 		$this->statementRuleIndex[$statementPosition][$rulePosition] = TRUE;

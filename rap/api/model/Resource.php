@@ -39,7 +39,7 @@ class RDFResource extends RDFNode
  	* @param string $localName
 	* @access	public
     */
-    public function RDFResource($namespace_or_uri , $localName = '')
+    public function RDFResource($namespace_or_uri, $localName = '')
 	{
 		$this->uri = $namespace_or_uri . $localName;
 	}

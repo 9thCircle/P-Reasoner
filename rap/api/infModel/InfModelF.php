@@ -206,22 +206,22 @@ class InfModelF extends InfModel
 		$return = array();
 		
 		//dont entail statements about the supported inference-schema
-		if (!in_array($statement->getPredicate()->getLabel(),$this->supportedInference)) {
+		if (!in_array($statement->getPredicate()->getLabel(), $this->supportedInference)) {
 			//check only the rules, that were returned by the index
 			foreach ($this->_findRuleTriggerInIndex($statement) as $key ) {
-				$infRule=$this->infRules[$key];
-	
-				$stateString=$key.serialize($statement);
+				$infRule = $this->infRules[$key];
+				
+				$stateString = $key . serialize($statement);
 				//If the statement wasn't infered before
-				if (!in_array($stateString,$infStatementsIndex)) {
-					$infStatementsIndex[]=$stateString;
+				if (!in_array($stateString, $infStatementsIndex)) {
+					$infStatementsIndex[] = $stateString;
 					//Check, if the Statements triggers this rule
 					if($infRule->checkTrigger($statement)) {
-						$infStatement=$infRule->entail($statement);
+						$infStatement = $infRule->entail($statement);
 						#if(!$this->contains($infStatement))
 						#{
-							$return[]=$infStatement;
-							$return=array_merge($return,
+							$return[] = $infStatement;
+							$return = array_merge($return,
 												$this->entailStatementRec($infStatement, 
 																			$infStatementsIndex));
 						#}

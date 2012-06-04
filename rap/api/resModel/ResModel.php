@@ -130,7 +130,7 @@ class ResModel
 	* @access	public
 	* @throws	PhpError
 	*/
-	function find($subject,$predicate, $object)
+	function find($subject, $predicate, $object)
 	{
 		$result=array();
 		//convert ResResources to Resources and Blanknodes

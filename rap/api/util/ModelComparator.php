@@ -30,8 +30,8 @@ class ModelComparator extends RDFObject
  	*/
  	function compare($thisModel, $thatModel){
  	
- 	$thisModeltriples = null;
- 	$thatModeltriples = null;
+ 	$thisModeltriples = NULL;
+ 	$thatModeltriples = NULL;
  	
  		if(is_a($thisModel,"DbModel")){
  			$thisModeltriples = 	$thisModel->getMemModel();
@@ -39,19 +39,19 @@ class ModelComparator extends RDFObject
  			$thisModeltriples = 	$thisModel;
  		}
  		
- 		if(is_a($thatModel,"DbModel")){
+ 		if(is_a($thatModel, 'DbModel')) {
  			$thatModeltriples = 	$thatModel->getMemModel();
  		}else{
  			$thatModeltriples = 	$thatModel;
  		}
- 			
+ 		
  		$sortArray1 = ModelComparator::buildSortArray($thisModeltriples->triples);
 		$sortArray2 = ModelComparator::buildSortArray($thatModeltriples->triples);	
 		
 		$renamedArray1 = ModelComparator::renameBlanks($sortArray1);
 		$renamedArray2 = ModelComparator::renameBlanks($sortArray2);
 		
-		return ModelComparator::compareTriples($renamedArray1,$renamedArray2);
+		return ModelComparator::compareTriples($renamedArray1, $renamedArray2);
  	}
  		
  	
@@ -73,17 +73,17 @@ class ModelComparator extends RDFObject
  			
  			if(is_a($orgSub,"Blanknode")){
  				$sub = $orgSub->getID();
- 				$triple->subj = new Blanknode("~");
+ 				$triple->subj = new Blanknode('~');
  			}
  			if(is_a($orgObj,"Blanknode")){
  				$obj = $orgObj->getID();
- 				$triple->obj = new Blanknode("~");
+ 				$triple->obj = new Blanknode('~');
  			}
  			$sortedArray[$index]['string']  = $triple->toString();
- 			$sortedArray[$index]['index']  = $index;
- 			$sortedArray[$index]['triple'] = $triple;
- 			$sortedArray[$index]['sub']    = $sub;
- 			$sortedArray[$index]['obj']    = $obj;	
+ 			$sortedArray[$index]['index']   = $index;
+ 			$sortedArray[$index]['triple']  = $triple;
+ 			$sortedArray[$index]['sub']     = $sub;
+ 			$sortedArray[$index]['obj']     = $obj;	
  		}
  		sort($sortedArray);
  		return $sortedArray;
@@ -100,7 +100,7 @@ class ModelComparator extends RDFObject
  	$i = 0;
  	$labelmap = Array();
  		
- 		foreach ($sortedArray as $value){	
+ 		foreach ($sortedArray as $value) {
  			//new label
  			if($value['sub']!=null){
  				$label = null;
@@ -132,7 +132,7 @@ class ModelComparator extends RDFObject
  		return $sortedArray;
  	
  	}
- 	
+	
  	/**
  	* Compares the Triples in the lists. 
  	*
@@ -141,7 +141,8 @@ class ModelComparator extends RDFObject
  	*
  	* @return boolean
  	*/
- 	function compareTriples($array1, $array2){
+ 	function compareTriples($array1, $array2)
+	{
  		foreach($array1 as $key => $value){
  			if(!$value['triple']->equals($array2[$key]['triple']))
  				return false;
@@ -149,10 +150,6 @@ class ModelComparator extends RDFObject
  		return true;
  	
  	}
- 	
- 
- }
- 
- 
- 
+}
+
  ?>
