@@ -351,7 +351,7 @@ define('INF_RES_OWL_SYMMETRIC',  TRUE);
 define('INF_RES_RULE_RDF1',      FALSE);
 
 define('INF_RES_RULE_RDFS12',    TRUE);
-define('INF_RES_RULE_RDFS4',     TRUE);
+define('INF_RES_RULE_RDFS4',     FALSE);
 define('INF_RES_RULE_RDFS6',     TRUE);
 define('INF_RES_RULE_RDFS8',     TRUE);
 define('INF_RES_RULE_RDFS10',    TRUE);

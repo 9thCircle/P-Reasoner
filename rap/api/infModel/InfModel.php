@@ -117,7 +117,7 @@ class InfModel extends MemModel
 		//Rule: rdf1
 		if (INF_RES_RULE_RDF1) {
 			$infRule = new InfRule();
-			$infRule->setTrigger(NULL, NULL, NULL);
+			$infRule->setTrigger(NULL, NULL, INF_TOK_RESOURCE);
 			$infRule->setEntailment(INF_TOK_PREDICATE, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDF_NAMESPACE_URI.RDF_PROPERTY));
 			$this->_addInfRule($infRule, 'base');
 		}

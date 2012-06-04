@@ -110,7 +110,6 @@ class InfRule
 	*/
  	public function checkTrigger(Statement $statement)
  	{
-		if ($this->trigger['o'] === INF_TOK_RESOURCE) echo '<p>xyzzy</p>';
  		// for each element, check if it equals the proper statement's element
  		// or it's NULL
 		if (($this->trigger['s'] ===  NULL || 
