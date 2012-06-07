@@ -23,6 +23,8 @@
  
 class InfRule 
 {
+	//! Name of the rule;  no functional purpose.
+	private $name = '';
 	
 	/**
 	* Array, that hold the trigger subject in key ['s'], the trigger 
@@ -53,12 +55,13 @@ class InfRule
    /**
     * Constructor
 	* 
-    * 
+    * @param	string		$name
 	* @access	public
     */	 	
- 	public function __construct()
+ 	public function __construct($name = '')
  	{
 		//initialising vars
+		$this->name        = $name;
 		$this->trigger     = array();
 		$this->entailment  = array();
  	}
@@ -120,6 +123,7 @@ class InfRule
 			return FALSE;
 		} elseif (($this->trigger['o'] ===  NULL ||
 			($this->trigger['o'] === INF_TOK_RESOURCE && is_a($statement->getObject(), 'RDFResource')) ||
+			($this->trigger['o'] === INF_TOK_LITERAL && is_a($statement->getObject(), 'RDFLiteral')) ||
 		    (is_object($this->trigger['o']) && $this->trigger['o']->equals($statement->getObject()))) !== TRUE) {
 			return FALSE;
 		} else {
@@ -266,5 +270,80 @@ class InfRule
  	{
  		return $this->entailment;
  	}
+	
+	// metadata
+	
+	public function getName()
+ 	{
+ 		return $this->name;
+ 	}
+	
+	public function getTriggerAsString()
+ 	{
+ 		$out = '';
+		
+		// subject
+		$e = $this->trigger['s'];
+		if ($e === NULL) {
+			$out .= '<subject>';
+		} else {
+			$out .= $e->getUri();
+		}
+		
+		$out .= ' ';
+		
+		// predicate
+		$e = $this->trigger['p'];
+		if ($e === NULL) {
+			$out .= '<predicate>';
+		} else {
+			$out .= $e->getUri();
+		}
+		
+		$out .= ' ';
+		
+		// predicate
+		$e = $this->trigger['p'];
+		if ($e === NULL) {
+			$out .= '<object>';
+		} elseif (is_string($e) === TRUE) {
+			if ($e === INF_TOK_RESOURCE) {
+				$out .= '<resource>';
+			} elseif ($e === INF_TOK_LITERAL) {
+				$out .= '<literal>';
+			}
+		} else {
+			$out .= $e->getUri();
+		}
+		
+		return $out;
+ 	}
+	
+	public function getEntailmentAsString()
+ 	{
+ 		$out = '';
+		$elems = array('s', 'p', 'o');
+		
+		foreach ($elems as $val) {
+			$val = $this->entailment[$val];
+			
+			if ($out !== '') {
+				$out .= ' ';
+			}
+			
+			if (is_object($val) === TRUE) {
+				$out .= $val->getUri();;
+			} elseif ($val === INF_TOK_SUBJECT) {
+				$out .= '<subject>';
+			} elseif ($val === INF_TOK_PREDICATE) {
+				$out .= '<predicate>';
+			} elseif ($val === INF_TOK_OBJECT) {
+				$out .= '<object>';
+			}
+		}
+		
+		return $out;
+ 	}
 }
+
 ?>

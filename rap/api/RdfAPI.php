@@ -326,7 +326,8 @@ $default_prefixes = array(
 define('INF_TOK_SUBJECT',    'S');
 define('INF_TOK_PREDICATE',  'P');
 define('INF_TOK_OBJECT',     'O');
-define('INF_TOK_RESOURCE',   'R');  // used with object; matches if it's a RDFResource
+define('INF_TOK_RESOURCE',   'R');  // used with object; matches if it's a RDFResource (including blank node)
+define('INF_TOK_LITERAL',    'L');  // used with object; matches if it's a RDFLiteral
 define('INF_TOK_ANY',        '*');  // match anything
 
 //activate / deactivate reasoning for the following schema constructs
@@ -350,11 +351,12 @@ define('INF_RES_OWL_SYMMETRIC',  TRUE);
 
 define('INF_RES_RULE_RDF1',      FALSE);
 
-define('INF_RES_RULE_RDFS12',    TRUE);
+define('INF_RES_RULE_RDFS1',     FALSE);
 define('INF_RES_RULE_RDFS4',     FALSE);
 define('INF_RES_RULE_RDFS6',     TRUE);
 define('INF_RES_RULE_RDFS8',     TRUE);
 define('INF_RES_RULE_RDFS10',    TRUE);
+define('INF_RES_RULE_RDFS12',    TRUE);
 define('INF_RES_RULE_RDFS13',    TRUE);
 
 // ----------------------------------------------------------------------------------

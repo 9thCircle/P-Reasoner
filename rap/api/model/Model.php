@@ -277,7 +277,7 @@ class Model extends RDFObject
     * until the final objects in the retrieved subgraphs are all named resources.
     * The method calls itself recursivly until the result is complete.
     * NULL input for subject, predicate or object will match anything.
-    * Inputparameters are ignored for recursivly found statements.
+    * Input parameters are ignored for recursivly found statements.
     * Returns a new MemModel or adds (without checking for duplicates)
     * the found statements to a given MemModel.
     * Returns an empty MemModel, if nothing is found.
@@ -298,18 +298,18 @@ class Model extends RDFObject
     */
     public function findForward(RDFNode $subject = NULL, RDFNode $predicate = NULL, RDFNode $object = NULL, &$newModel = NULL)
     {
-        if (!is_a($newModel, "MemModel")) {
+        if (!is_a($newModel, 'MemModel')) {
             $newModel = New MemModel;
         }
 		
-        if (is_a($this, "DbModel")) {
+        if (is_a($this, 'DbModel')) {
             $model = $this;
             $res   = $model->find($subject, $predicate, $object);
             $it    = $res->getStatementIterator();
-        } elseif (is_a($this, "MemModel")) {
+        } elseif (is_a($this, 'MemModel')) {
             $model = $this;
             $it    = $model->findAsIterator($subject, $predicate, $object);
-        } elseif (is_a($this, "ResModel")) {
+        } elseif (is_a($this, 'ResModel')) {
             $model = $this->model;
             $it    = $model->findAsIterator($subject, $predicate, $object);
         }
@@ -517,8 +517,22 @@ class Model extends RDFObject
             $this->queryParser = new SparqlParser();
         }
         return $this->queryParser->parse($query);
-    }//function _parseSparqlQuery($query)
-
-} // end: Model
+    }
+	
+	/**
+	 *	\brief		Abbreviate known namespaces with default prefixes.
+	 *	@param		string		$xml		XML code containing the namespaces to be replaced.
+	 *	@return		string
+	 */
+	function abbreviateNS($xml)
+    {
+		$xml = str_replace('http://www.w3.org/2001/XMLSchema',             'xsd:',   $xml);
+		$xml = str_replace('http://www.w3.org/XML/1998/namespace',         'xml:',   $xml);
+		$xml = str_replace('http://www.w3.org/2000/01/rdf-schema#',        'rdfs:',  $xml);
+		$xml = str_replace('http://www.w3.org/1999/02/22-rdf-syntax-ns#',  'rdfs:',  $xml);
+		
+		return $xml;
+	}
+}
 
 ?>

@@ -39,7 +39,13 @@ class Statement extends RDFObject
 	* @access	private
 	*/		
     public $obj = NULL;
-
+	
+	//! If TRUE, S, P, & O are validated when a new Statement is created.
+	//! This is safer. But if FALSE, performances are slightly better.
+	public static $validate = TRUE;
+	
+	
+	
   /**
    * The parameters to constructor are instances of classes and not just strings
    *
@@ -50,25 +56,32 @@ class Statement extends RDFObject
    */
    public function __construct(RDFNode $subj, RDFNode $pred, RDFNode $obj)
    {
-		if (is_a($subj, 'RDFResource') !== TRUE) {
-			$errmsg = RDFAPI_ERROR . 
-					  '(class: Statement; method: new): RDFResource expected as subject. Found: ' . get_class($subj);
-			trigger_error($errmsg, E_USER_ERROR); 
+		if (self::$validate !== TRUE) {
+			$this->pred  = $pred;
+			$this->subj  = $subj;
+			$this->obj   = $obj;
+			return;
+		} else {
+			if (is_a($subj, 'RDFResource') !== TRUE) {
+				$errmsg = RDFAPI_ERROR . 
+						  '(class: Statement; method: new): RDFResource expected as subject. Found: ' . get_class($subj);
+				trigger_error($errmsg, E_USER_ERROR); 
+			}
+			if ((is_a($pred, 'RDFResource') && !is_a($pred, 'RDFBlankNode')) !== TRUE) {
+				$errmsg = RDFAPI_ERROR . 
+						  '(class: Statement; method: new): RDFResource expected as predicate, no blank node allowed.';
+				trigger_error($errmsg, E_USER_ERROR); 
+			}
+			if ((is_a($obj, 'RDFResource') || is_a($obj, 'RDFLiteral')) !== TRUE) {
+				$errmsg = RDFAPI_ERROR . 
+						  '(class: Statement; method: new): RDFResource or RDFLiteral expected as object.';
+				trigger_error($errmsg, E_USER_ERROR); 
+			}
+			
+			$this->pred  = $pred;
+			$this->subj  = $subj;
+			$this->obj   = $obj;
 		}
-		if ((is_a($pred, 'RDFResource') && !is_a($pred, 'RDFBlankNode')) !== TRUE) {
-			$errmsg = RDFAPI_ERROR . 
-					  '(class: Statement; method: new): RDFResource expected as predicate, no blank node allowed.';
-			trigger_error($errmsg, E_USER_ERROR); 
-		}
-		if ((is_a($obj, 'RDFResource') || is_a($obj, 'RDFLiteral')) !== TRUE) {
-			$errmsg = RDFAPI_ERROR . 
-					  '(class: Statement; method: new): RDFResource or RDFLiteral expected as object.';
-			trigger_error($errmsg, E_USER_ERROR); 
-		}
-		
-		$this->pred  = $pred;
-		$this->subj  = $subj;
-		$this->obj   = $obj;
 	}
 
   /**

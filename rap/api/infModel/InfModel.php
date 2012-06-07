@@ -80,13 +80,13 @@ class InfModel extends MemModel
 		//call the memmodel constructor method
 		parent::MemModel($baseURI);
 		//initialise vars
-		$this->infRulesTriggerIndex['s']  = array();
-		$this->infRulesTriggerIndex['p']  = array();
-		$this->infRulesTriggerIndex['o']  = array();
-		$this->infRulesEntailIndex['s']   = array();
-		$this->infRulesEntailIndex['p']   = array();
-		$this->infRulesEntailIndex['o']   = array();
-		$this->infRules                   = array();
+		$this->infRulesTriggerIndex['s']  =
+		$this->infRulesTriggerIndex['p']  =
+		$this->infRulesTriggerIndex['o']  =
+		$this->infRulesEntailIndex['s']   =
+		$this->infRulesEntailIndex['p']   =
+		$this->infRulesEntailIndex['o']   =
+		$this->infRules                   =
 		$this->statementRuleIndex         = array();
 		//arraylist of predicate labels that shall add inference rules 
 		//to the model
@@ -116,7 +116,7 @@ class InfModel extends MemModel
 		#@ added by santec
 		//Rule: rdf1
 		if (INF_RES_RULE_RDF1) {
-			$infRule = new InfRule();
+			$infRule = new InfRule('rdf1');
 			$infRule->setTrigger(NULL, NULL, INF_TOK_RESOURCE);
 			$infRule->setEntailment(INF_TOK_PREDICATE, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDF_NAMESPACE_URI.RDF_PROPERTY));
 			$this->_addInfRule($infRule, 'base');
@@ -124,9 +124,18 @@ class InfModel extends MemModel
 		
 		//Rule: rdfs12
 		if (INF_RES_RULE_RDFS12) {
-			$infRule = new InfRule();
+			$infRule = new InfRule('rdfs12');
 			$infRule->setTrigger(NULL, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDF_SCHEMA_URI.'ContainerMembershipProperty'));
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDFS_SUBPROPERTYOF), new RDFResource(RDF_SCHEMA_URI.'member'));
+			$this->_addInfRule($infRule, 'base');
+		}
+		
+		#@ added by santec
+		//Rule: rdfs1
+		if (INF_RES_RULE_RDFS1) {
+			$infRule = new InfRule('rdfs1');
+			$infRule->setTrigger(NULL, NULL, INF_TOK_LITERAL);
+			$infRule->setEntailment(INF_TOK_OBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDFS_LITERAL));
 			$this->_addInfRule($infRule, 'base');
 		}
 		
@@ -134,13 +143,13 @@ class InfModel extends MemModel
 		//Rule: rdfs4
 		if (INF_RES_RULE_RDFS4) {
 			// rdfs4a
-			$infRule = new InfRule();
+			$infRule = new InfRule('rdfs4a');
 			$infRule->setTrigger(NULL, NULL, NULL);
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDF_SCHEMA_URI.'Resource'));
 			$this->_addInfRule($infRule, 'base');
 			
 			// rdfs4b
-			$infRule = new InfRule();
+			$infRule = new InfRule('rdfs4b');
 			$infRule->setTrigger(NULL, NULL, INF_TOK_RESOURCE);
 			$infRule->setEntailment(INF_TOK_OBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDF_SCHEMA_URI.'Resource'));
 			$this->_addInfRule($infRule, 'base');
@@ -148,7 +157,7 @@ class InfModel extends MemModel
 		
 		//Rule: rdfs6
 		if (INF_RES_RULE_RDFS6) {
-			$infRule = new InfRule();
+			$infRule = new InfRule('rdfs6');
 			$infRule->setTrigger(NULL, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDF_NAMESPACE_URI.RDF_PROPERTY));
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDFS_SUBPROPERTYOF), INF_TOK_SUBJECT);
 			$this->_addInfRule($infRule, 'base');
@@ -156,7 +165,7 @@ class InfModel extends MemModel
 		
 		//Rule: rdfs8
 		if (INF_RES_RULE_RDFS8) {
-			$infRule = new InfRule();
+			$infRule = new InfRule('rdfs8');
 			$infRule->setTrigger(NULL, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDFS_CLASS));
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDFS_SUBCLASSOF), new RDFResource(RDFS_RESOURCE));
 			$this->_addInfRule($infRule, 'base');
@@ -165,7 +174,7 @@ class InfModel extends MemModel
 		
 		//Rule: rdfs10
 		if (INF_RES_RULE_RDFS10) {
-			$infRule = new InfRule();
+			$infRule = new InfRule('rdfs10');
 			$infRule->setTrigger(NULL, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDFS_CLASS));
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDFS_SUBCLASSOF), INF_TOK_SUBJECT);
 			$this->_addInfRule($infRule, 'base');
@@ -173,7 +182,7 @@ class InfModel extends MemModel
 		
 		//Rule: rdfs13
 		if (INF_RES_RULE_RDFS13) {
-			$infRule = new InfRule();
+			$infRule = new InfRule('rdfs13');
 			$infRule->setTrigger(NULL, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), new RDFResource(RDFS_DATATYPE));
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDFS_SUBCLASSOF), new RDFResource(RDFS_LITERAL));
 			$this->_addInfRule($infRule, 'base');
@@ -568,6 +577,9 @@ class InfModel extends MemModel
 		if (isset($this->infRulesTriggerIndex['o'][INF_TOK_RESOURCE])) {
 			$inIndexO = array_merge($inIndexO, $this->infRulesTriggerIndex['o'][INF_TOK_RESOURCE]);
 		}
+		if (isset($this->infRulesTriggerIndex['o'][INF_TOK_LITERAL])) {
+			$inIndexO = array_merge($inIndexO, $this->infRulesTriggerIndex['o'][INF_TOK_LITERAL]);
+		}
 		if (isset($this->infRulesTriggerIndex['o'][$objectLabel])) {
 			$inIndexO = array_merge($inIndexO,array_values($this->infRulesTriggerIndex['o'][$objectLabel]));
 		}
@@ -659,6 +671,37 @@ class InfModel extends MemModel
 		$this->statementRuleIndex[$statementPosition][$rulePosition] = TRUE;
 		//add informations to index over trigger & entailment
 		$this->_addInfruleToIndex($infRule, $rulePosition);
+	}
+	
+	public final function rulesTable()
+	{
+		$out =  '<table border="1" cellspacing="0" cellpadding="3">';
+		
+		$out .= "\t" . '<thead>' . "\n";
+		$out .= "\t\t" . '<tr>' . "\n";
+		$out .= "\t\t" . '<td><strong>Rule Name</strong></td>' . "\n";
+		$out .= "\t\t" . '<td><strong>If Statement contains</strong></td>' . "\n";
+		$out .= "\t\t" . '<td><strong>Then add</strong></td>' . "\n";
+		$out .= "\t\t" . '</tr>' . "\n";
+		$out .= "\t" . '</thead>' . "\n";
+		
+		foreach ($this->infRules as $rule) {
+			$trigger  = $rule->getTriggerAsString();
+			$trigger  = Model::abbreviateNS($trigger);
+			
+			$entailment  = $rule->getEntailmentAsString();
+			$entailment  = Model::abbreviateNS($entailment);
+			
+			$out .= "\t" . '<tr>' . "\n";
+			$out .= "\t\t" . '<td>' . $rule->getName() . '</td>' . "\n";
+			$out .= "\t\t" . '<td>' . htmlspecialchars($trigger) . '</td>' . "\n";
+			$out .= "\t\t" . '<td>' . htmlspecialchars($entailment) . '</td>' . "\n";
+			$out .= "\t" . '</tr>' . "\n";
+		}
+		
+		$out .= '</table>';
+		
+		return $out;
 	}
 }
 
