@@ -524,12 +524,13 @@ class Model extends RDFObject
 	 *	@param		string		$xml		XML code containing the namespaces to be replaced.
 	 *	@return		string
 	 */
-	function abbreviateNS($xml)
+	public static function abbreviateNS($xml)
     {
-		$xml = str_replace('http://www.w3.org/2001/XMLSchema',             'xsd:',   $xml);
-		$xml = str_replace('http://www.w3.org/XML/1998/namespace',         'xml:',   $xml);
+		$xml = str_replace('http://www.w3.org/2001/XMLSchema#',            'xsd:',   $xml);
+		$xml = str_replace('http://www.w3.org/XML/1998/namespace#',        'xml:',   $xml);
 		$xml = str_replace('http://www.w3.org/2000/01/rdf-schema#',        'rdfs:',  $xml);
-		$xml = str_replace('http://www.w3.org/1999/02/22-rdf-syntax-ns#',  'rdfs:',  $xml);
+		$xml = str_replace('http://www.w3.org/1999/02/22-rdf-syntax-ns#',  'rdf:',   $xml);
+		$xml = str_replace('http://www.w3.org/2002/07/owl#',               'owl:',   $xml);
 		
 		return $xml;
 	}

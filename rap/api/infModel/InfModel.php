@@ -109,11 +109,14 @@ class InfModel extends MemModel
 		if (INF_RES_OWL_INVERSEOF) {
 			$this->supportedInference[] = OWL_INVERSE_OF;
 		}
+		//@ added by santec
 		if (INF_RES_OWL_SYMMETRIC) {
 			$this->supportedInference[] = OWL_SYMMETRIC;
 		}
 		
-		#@ added by santec
+		// Add Base Rules
+		
+		//@ added by santec
 		//Rule: rdf1
 		if (INF_RES_RULE_RDF1) {
 			$infRule = new InfRule('rdf1');
@@ -130,7 +133,7 @@ class InfModel extends MemModel
 			$this->_addInfRule($infRule, 'base');
 		}
 		
-		#@ added by santec
+		//@ added by santec
 		//Rule: rdfs1
 		if (INF_RES_RULE_RDFS1) {
 			$infRule = new InfRule('rdfs1');
@@ -139,7 +142,7 @@ class InfModel extends MemModel
 			$this->_addInfRule($infRule, 'base');
 		}
 		
-		#@ added by santec
+		//@ added by santec
 		//Rule: rdfs4
 		if (INF_RES_RULE_RDFS4) {
 			// rdfs4a
@@ -211,26 +214,27 @@ class InfModel extends MemModel
 	}
 	
 	/**
-	* This function analyses the statement's predicate and adds the 
-	* matching infrule to the model.
+	* This function analyses the statement's predicate and adds Dynamic Rules
+	* to the Model.
 	*
    	* @param	object Statement	$statement
    	* @access	private
    	*/
-	protected final function _addToInference(Statement $statement)
+	private function _addToInference(Statement $statement)
 	{
 		$predicateLabel = $statement->getPredicate()->getLabel();
 		//get the position of the the statement in the model
-		end($this->triples);
-		$statementPosition = key($this->triples);
+		//end($this->triples);
+		//$statementPosition = key($this->triples);
+		$statementPosition = count($this->triples);
 		
 		if ($predicateLabel === RDFS_SUBPROPERTYOF) {
 			//create a new rule
-			$infRule=new InfRule();
+			$infRule = new InfRule();
 			//set the trigger to match all statements, having a 
 			//predicate, that matches the subject of the statement that 
 			//created this rule.
-			$infRule->setTrigger(null,$statement->getSubject(),null);
+			$infRule->setTrigger(NULL, $statement->getSubject(), NULL);
 			//set the infrule to return a statement, having the same 
 			//subject and object as the statement, that asked for an 
 			//entailment, and having the object of the statement, 
@@ -238,34 +242,34 @@ class InfModel extends MemModel
 			$infRule->setEntailment(INF_TOK_SUBJECT, $statement->getObject(), INF_TOK_OBJECT);
 			//add the infule to Model, Statement/Rule-Index, 
 			//and Rule/Trigger (or Rule/Entailment) index
-			$this->_addInfRule($infRule,$statementPosition);
+			$this->_addInfRule($infRule, $statementPosition);
 		} elseif ($predicateLabel === RDFS_SUBCLASSOF) {
-			$infRule=new InfRule();
+			$infRule = new InfRule();
 			$infRule->setTrigger(null,new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getSubject());
-			$infRule->setEntailment(INF_TOK_SUBJECT,new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getObject());
+			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), $statement->getObject());
 			$this->infRules[]=$infRule;
 			$this->_addInfRule($infRule,$statementPosition);
 		} elseif ($predicateLabel === RDFS_DOMAIN) {
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,$statement->getSubject(),null);
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, $statement->getSubject(), NULL);
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), $statement->getObject());
 			$this->infRules[]=$infRule;
 			$this->_addInfRule($infRule,$statementPosition);
 		} elseif ($predicateLabel === RDFS_RANGE) {
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,$statement->getSubject(),null);
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, $statement->getSubject(), NULL);
 			$infRule->setEntailment(INF_TOK_OBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getObject());
 			$this->infRules[]=$infRule;
 			$this->_addInfRule($infRule,$statementPosition);
 		} elseif ($predicateLabel === OWL_INVERSE_OF) {
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,$statement->getSubject(),null);
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, $statement->getSubject(), NULL);
 			$infRule->setEntailment(INF_TOK_OBJECT, $statement->getObject(), INF_TOK_SUBJECT);
 			$this->infRules[]=$infRule;
 			$this->_addInfRule($infRule,$statementPosition);
 			
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,$statement->getObject(),null);
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL,$statement->getObject(), NULL);
 			$infRule->setEntailment(INF_TOK_OBJECT, $statement->getSubject(), INF_TOK_SUBJECT);
 			$this->infRules[]=$infRule;			
 			$this->_addInfRule($infRule,$statementPosition);
@@ -276,33 +280,33 @@ class InfModel extends MemModel
 			$this->infRules[] = $infRule;
 			$this->_addInfRule($infRule,$statementPosition);
 		} elseif ($predicateLabel === OWL_SAME_AS) {
-			$infRule=new InfRule();
-			$infRule->setTrigger($statement->getSubject(),null,null);
+			$infRule = new InfRule();
+			$infRule->setTrigger($statement->getSubject(), NULL, NULL);
 			$infRule->setEntailment($statement->getObject(), INF_TOK_PREDICATE, INF_TOK_OBJECT);
 			$this->_addInfRule($infRule,$statementPosition);
 			
-			$infRule=new InfRule();
-			$infRule->setTrigger($statement->getObject(),null,null);
+			$infRule = new InfRule();
+			$infRule->setTrigger($statement->getObject(), NULL, NULL);
 			$infRule->setEntailment($statement->getSubject(), INF_TOK_PREDICATE, INF_TOK_OBJECT);
 			$this->_addInfRule($infRule,$statementPosition);
 			
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,$statement->getSubject(),null);
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL,$statement->getSubject(), NULL);
 			$infRule->setEntailment(INF_TOK_SUBJECT, $statement->getObject(), INF_TOK_OBJECT);
 			$this->_addInfRule($infRule,$statementPosition);
 			
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,$statement->getObject(),null);
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, $statement->getObject(), NULL);
 			$infRule->setEntailment(INF_TOK_SUBJECT, $statement->getSubject(), INF_TOK_OBJECT);
 			$this->_addInfRule($infRule,$statementPosition);
 			
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,null,$statement->getSubject());
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, NULL, $statement->getSubject());
 			$infRule->setEntailment(INF_TOK_SUBJECT, INF_TOK_PREDICATE, $statement->getObject());
 			$this->_addInfRule($infRule,$statementPosition);
 			
-			$infRule=new InfRule();
-			$infRule->setTrigger(null,null,$statement->getObject());
+			$infRule = new InfRule();
+			$infRule->setTrigger(NULL, NULL, $statement->getObject());
 			$infRule->setEntailment(INF_TOK_SUBJECT, INF_TOK_PREDICATE, $statement->getSubject());
 			$this->_addInfRule($infRule,$statementPosition);
 		}
@@ -325,7 +329,7 @@ class InfModel extends MemModel
 			$statementPosition = $this->findFirstMatchOff($statement->getSubject(),
 													$statement->getPredicate(),
 													$statement->getObject(),
-													$statementPosition+1);						
+													$statementPosition + 1);						
 			if ($statementPosition !== -1) {
 				//if it added any rules
 				if (isset ($this->statementRuleIndex[$statementPosition])) {
@@ -484,7 +488,7 @@ class InfModel extends MemModel
 	* @param	integer	$infRulePosition
 	* @access	private
 	*/
-	protected final function _addInfruleToIndex(infRule $infRule, &$infRulePosition)
+	private function _addInfruleToIndex(infRule $infRule, &$infRulePosition)
 	{
 		//Add the rule only to the trigger index, if it is a InfFModel
 		if (is_a($this, 'InfModelF')) {
@@ -661,7 +665,7 @@ class InfModel extends MemModel
 	* @param	integer	$statementPosition
 	* @access	private
 	*/
-	protected final function _addInfRule(InfRule $infRule, $statementPosition)
+	private final function _addInfRule(InfRule $infRule, $statementPosition)
 	{
 		//add the rule
 		$rulePosition = count($this->infRules);
@@ -673,9 +677,15 @@ class InfModel extends MemModel
 		$this->_addInfruleToIndex($infRule, $rulePosition);
 	}
 	
+	/**
+	 *	\brief		Returns a HTML table showing enabled Rules, their Triggers and their Entailments.
+	 *	@return		string
+	 */
 	public final function rulesTable()
 	{
-		$out =  '<table border="1" cellspacing="0" cellpadding="3">';
+		/*. RDFResource .*/  $trigger     =
+		/*. RDFResource .*/  $entailment  = NULL;
+		/*. string .*/ $out =  '<table border="1" cellspacing="0" cellpadding="3">';
 		
 		$out .= "\t" . '<thead>' . "\n";
 		$out .= "\t\t" . '<tr>' . "\n";
@@ -686,20 +696,45 @@ class InfModel extends MemModel
 		$out .= "\t" . '</thead>' . "\n";
 		
 		foreach ($this->infRules as $rule) {
-			$trigger  = $rule->getTriggerAsString();
-			$trigger  = Model::abbreviateNS($trigger);
+			$trigger  = $rule->getTriggerAsString(TRUE);
+			$entailment  = $rule->getEntailmentAsString(TRUE);
 			
-			$entailment  = $rule->getEntailmentAsString();
-			$entailment  = Model::abbreviateNS($entailment);
-			
-			$out .= "\t" . '<tr>' . "\n";
-			$out .= "\t\t" . '<td>' . $rule->getName() . '</td>' . "\n";
-			$out .= "\t\t" . '<td>' . htmlspecialchars($trigger) . '</td>' . "\n";
-			$out .= "\t\t" . '<td>' . htmlspecialchars($entailment) . '</td>' . "\n";
-			$out .= "\t" . '</tr>' . "\n";
+			$out .= "\t"    . '<tr>' . "\n";
+			$out .= "\t\t"  . '<td><strong>' . $rule->getName()  . '</strong></td>' . "\n";
+			$out .= "\t\t"  . '<td>' . $trigger          . '</td>' . "\n";
+			$out .= "\t\t"  . '<td>' . $entailment       . '</td>' . "\n";
+			$out .= "\t"    . '</tr>' . "\n";
 		}
 		
-		$out .= '</table>';
+		$out .= '</table>' . "\n";
+		
+		return $out;
+	}
+	
+	/**
+	 *	\brief		Returns a HTML table showing enabled Inferences.
+	 *	@return		string
+	 */
+	public final function inferencesTable()
+	{
+		/*. string .*/ $out =  '<table border="1" cellspacing="0" cellpadding="3">';
+		
+		$out .= "\t" . '<thead>' . "\n";
+		$out .= "\t\t" . '<tr>' . "\n";
+		$out .= "\t\t" . '<td><strong>Inference</strong></td>' . "\n";
+		$out .= "\t\t" . '</tr>' . "\n";
+		$out .= "\t" . '</thead>' . "\n";
+		
+		foreach ($this->supportedInference as $inf) {
+			$inf = '<span style="color: darkgreen;">' . 
+			       str_replace(':', '</span>:<span style="color: brown;">', Model::abbreviateNS($inf)) . 
+				   '</span>';
+			$out .= "\t"    . '<tr>' . "\n";
+			$out .= "\t\t"  . '<td>' . $inf . '</td>' . "\n";
+			$out .= "\t"    . '</tr>' . "\n";
+		}
+		
+		$out .= '</table>' . "\n";
 		
 		return $out;
 	}

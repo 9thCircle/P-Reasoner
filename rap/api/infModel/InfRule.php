@@ -278,68 +278,125 @@ class InfRule
  		return $this->name;
  	}
 	
-	public function getTriggerAsString()
+	public function getTriggerAsString($isHTML = FALSE)
  	{
  		$out = '';
 		
-		// subject
-		$e = $this->trigger['s'];
-		if ($e === NULL) {
-			$out .= '<subject>';
-		} else {
-			$out .= $e->getUri();
-		}
-		
-		$out .= ' ';
-		
-		// predicate
-		$e = $this->trigger['p'];
-		if ($e === NULL) {
-			$out .= '<predicate>';
-		} else {
-			$out .= $e->getUri();
-		}
-		
-		$out .= ' ';
-		
-		// predicate
-		$e = $this->trigger['p'];
-		if ($e === NULL) {
-			$out .= '<object>';
-		} elseif (is_string($e) === TRUE) {
-			if ($e === INF_TOK_RESOURCE) {
-				$out .= '<resource>';
-			} elseif ($e === INF_TOK_LITERAL) {
-				$out .= '<literal>';
+		if ($isHTML !== FALSE) {
+			// subject
+			$e = $this->trigger['s'];
+			if ($e === NULL) {
+				$out .= '<span style="color: blue;">&lt;subject&gt;</span>&nbsp;&nbsp;&nbsp;';
+			} else {
+				$out .= '<span style="color: darkgreen;">' . 
+				        str_replace(':', '</span>:<span style="color: brown;">', Model::abbreviateNS($e->getUri())) . 
+						'</span>&nbsp;&nbsp;&nbsp;';
+			}
+			
+			// predicate
+			$e = $this->trigger['p'];
+			if ($e === NULL) {
+				$out .= '<span style="color: blue;">&lt;predicate&gt;</span>&nbsp;&nbsp;&nbsp;';
+			} else {
+				$out .= '<span style="color: darkgreen;">' . 
+				        str_replace(':', '</span>:<span style="color: brown;">', Model::abbreviateNS($e->getUri())) . 
+						'</span>&nbsp;&nbsp;&nbsp;';
+			}
+			
+			// predicate
+			$e = $this->trigger['o'];
+			if ($e === NULL) {
+				$out .= '<span style="color: blue;">&lt;object&gt;</span>&nbsp;&nbsp;&nbsp;';
+			} elseif (is_string($e) === TRUE) {
+				if ($e === INF_TOK_RESOURCE) {
+					$out .= '<span style="color: blue;">&lt;resource&gt;</span>&nbsp;&nbsp;&nbsp;';
+				} elseif ($e === INF_TOK_LITERAL) {
+					$out .= '<span style="color: blue;">&lt;literal&gt;</span>&nbsp;&nbsp;&nbsp;';
+				}
+			} else {
+				$out .= '<span style="color: darkgreen;">' . 
+				        str_replace(':', '</span>:<span style="color: brown;">', Model::abbreviateNS($e->getUri())) . 
+						'</span>&nbsp;&nbsp;&nbsp;';
 			}
 		} else {
-			$out .= $e->getUri();
+			// subject
+			$e = $this->trigger['s'];
+			if ($e === NULL) {
+				$out .= '<subject>';
+			} else {
+				$out .= $e->getUri();
+			}
+			
+			$out .= '   ';
+			
+			// predicate
+			$e = $this->trigger['p'];
+			if ($e === NULL) {
+				$out .= '<predicate>';
+			} else {
+				$out .= $e->getUri();
+			}
+			
+			$out .= '   ';
+			
+			// predicate
+			$e = $this->trigger['p'];
+			if ($e === NULL) {
+				$out .= '<object>';
+			} elseif (is_string($e) === TRUE) {
+				if ($e === INF_TOK_RESOURCE) {
+					$out .= '<resource>';
+				} elseif ($e === INF_TOK_LITERAL) {
+					$out .= '<literal>';
+				}
+			} else {
+				$out .= $e->getUri();
+			}
 		}
 		
 		return $out;
  	}
 	
-	public function getEntailmentAsString()
+	public function getEntailmentAsString($isHTML = FALSE)
  	{
- 		$out = '';
-		$elems = array('s', 'p', 'o');
+ 		/*. string .*/       $out = '';
+		/*. string .*/       $tmp = '';
+		/*. string[int] .*/  $elems = array('s', 'p', 'o');
 		
 		foreach ($elems as $val) {
 			$val = $this->entailment[$val];
 			
 			if ($out !== '') {
-				$out .= ' ';
+				if ($isHTML !== FALSE) {
+					$out .= '&nbsp;&nbsp;&nbsp;';
+				} else {
+					$out .= '   ';
+				}
 			}
 			
 			if (is_object($val) === TRUE) {
-				$out .= $val->getUri();;
-			} elseif ($val === INF_TOK_SUBJECT) {
-				$out .= '<subject>';
-			} elseif ($val === INF_TOK_PREDICATE) {
-				$out .= '<predicate>';
-			} elseif ($val === INF_TOK_OBJECT) {
-				$out .= '<object>';
+				$tmp = $val->getUri();
+				
+				if ($isHTML !== FALSE) {
+					$tmp = Model::abbreviateNS($tmp);
+					$tmp = str_replace(':', '</span>:<span style="color: brown">', $tmp);
+					$tmp = '<span style="color: darkgreen;">' . Model::abbreviateNS($tmp) . '</span>';
+				}
+			} else {
+				if ($val === INF_TOK_SUBJECT) {
+					$tmp = '<subject>';
+				} elseif ($val === INF_TOK_PREDICATE) {
+					$tmp = '<predicate>';
+				} elseif ($val === INF_TOK_OBJECT) {
+					$tmp = '<object>';
+				}
+				
+				if ($isHTML !== FALSE) {
+					$tmp = '<span style="color: blue;">' . htmlspecialchars($tmp) . '</span>';
+				}
 			}
+			
+			$out .= $tmp;
 		}
 		
 		return $out;
