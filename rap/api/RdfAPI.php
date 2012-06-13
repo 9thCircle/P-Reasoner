@@ -398,7 +398,10 @@ $graphviz_param = array(
 
 
 // Include Constants and base RDFObject
-include_once RDFAPI_INCLUDE_DIR . PACKAGE_UTILITY;
-include_once RDFAPI_INCLUDE_DIR . PACKAGE_MODEL;
+include_once __DIR__ . '/' . PACKAGE_UTILITY;
+include_once __DIR__ . '/' . PACKAGE_MODEL;
+
+require_once __DIR__ . '/' . 'util/profile.php';
+require_once __DIR__ . '/' . 'util/profile_record.php';
 
 ?>

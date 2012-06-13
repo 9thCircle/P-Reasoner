@@ -244,18 +244,30 @@ class InfModel extends MemModel
 			//and Rule/Trigger (or Rule/Entailment) index
 			$this->_addInfRule($infRule, $statementPosition);
 		} elseif ($predicateLabel === RDFS_SUBCLASSOF) {
+			// rdfs9
 			$infRule = new InfRule();
-			$infRule->setTrigger(null,new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getSubject());
+			$infRule->setTrigger(NULL, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), $statement->getSubject());
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), $statement->getObject());
-			$this->infRules[]=$infRule;
+			$this->infRules[] = $infRule;
 			$this->_addInfRule($infRule,$statementPosition);
+			
+			// rdfs11
+			if (is_a($statement->getObject(), 'Resource')) {
+				$infRule = new InfRule();
+				$infRule->setTrigger($statement->getObject(), RDFS_SUBCLASSOF, NULL);
+				$infRule->setEntailment($statement->getSubject(), RDFS_SUBCLASSOF, INF_TOK_OBJECT);
+				$this->infRules[] = $infRule;
+				$this->_addInfRule($infRule,$statementPosition);
+			}
 		} elseif ($predicateLabel === RDFS_DOMAIN) {
+			// rdfs2
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, $statement->getSubject(), NULL);
 			$infRule->setEntailment(INF_TOK_SUBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE), $statement->getObject());
 			$this->infRules[]=$infRule;
 			$this->_addInfRule($infRule,$statementPosition);
 		} elseif ($predicateLabel === RDFS_RANGE) {
+			// rdfs3
 			$infRule = new InfRule();
 			$infRule->setTrigger(NULL, $statement->getSubject(), NULL);
 			$infRule->setEntailment(INF_TOK_OBJECT, new RDFResource(RDF_NAMESPACE_URI.RDF_TYPE),$statement->getObject());

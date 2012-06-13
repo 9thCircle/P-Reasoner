@@ -28,7 +28,7 @@ class RDFResource extends RDFNode
 	* @var		string
 	* @access	private
 	*/
-    private $uri = '';
+    protected $uri = '';
 	
 	
    /**
@@ -51,7 +51,7 @@ class RDFResource extends RDFNode
    */
 	public function getURI()
 	{
-			return $this->uri;
+		return $this->uri;
 	}
 
 	/**
@@ -61,7 +61,7 @@ class RDFResource extends RDFNode
 	 */
     public function getLabel()
 	{
-    	return $this->getURI();
+    	return $this->uri;
     }
 
   /**
@@ -108,7 +108,7 @@ class RDFResource extends RDFNode
 			return TRUE;
 	    }
 		
-	    if ($that === NULL || (is_a($that, 'RDFResource') === FALSE) || is_a($that, 'RDFBlankNode')) {
+	    if ($that === NULL || is_a($that, 'RDFResource') !== TRUE) {
 			return FALSE;
 	    }
 		

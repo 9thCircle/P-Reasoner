@@ -35,8 +35,7 @@ class RDFBlankNode extends RDFResource
 		
         if (is_a($namespace_or_uri_or_model, 'Model')) {
 			// generate identifier
-			$id = $namespace_or_uri_or_model->getUniqueResourceURI(BNODE_PREFIX);
-			$this->uri = $id;
+			$this->uri = $namespace_or_uri_or_model->getUniqueResourceURI(BNODE_PREFIX);
 		} else {
 			// set identifier
 			$this->uri = $namespace_or_uri_or_model . $localName;
@@ -53,18 +52,7 @@ class RDFBlankNode extends RDFResource
 	{
 		return $this->uri;
 	}
-
-  /**
-   * Returns the ID of the blank node.
-   *
-   * @return 	string
-   * @access	public  
-   */	
-	public function getLabel()
-	{
-		return $this->uri;
-	}
-
+	
   /**
    * Dumps bNode.
    *
@@ -73,7 +61,7 @@ class RDFBlankNode extends RDFResource
    */  
 	public function toString()
 	{
-		return 'bNode("' . $this->uri . '")';
+		return 'RDFBlankNode("' . $this->uri . '")';
 	}
 	
   /**
@@ -89,7 +77,8 @@ class RDFBlankNode extends RDFResource
 	    if ($this === $that) {
 	      return TRUE;
 	    }
-        if ($that === NULL || is_a($that, 'RDFBlankNode') !== TRUE) {
+		
+        if ($that === NULL || get_class($that) !== 'RDFBlankNode') {
 	      return FALSE;
 	    }
 	    
@@ -104,6 +93,6 @@ class RDFBlankNode extends RDFResource
     {
         return $this->toString();
     }
-} // end: RDFBlankNode 
+}
 
 ?>

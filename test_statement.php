@@ -18,6 +18,8 @@ $subClassOf      = OWL_RES::INVERSE_OF();
 // define classes
 
 $game       = new RDFResource(NS . 'Game');
+$ktulu      = new RDFResource(NS . 'CallOfChtulhu');
+$ktulu2     = new RDFResource(NS . 'CallOfChtulhu2');
 $person     = new RDFResource(NS . 'Person');
 $master     = new RDFResource(NS . 'Master');
 $player     = new RDFResource(NS . 'Player');
@@ -29,13 +31,16 @@ $pPlays           = new RDFResource(NS . 'Plays');
 $pPlayedBy        = new RDFResource(NS . 'IsPlayedBy');
 $pDirects         = new RDFResource(NS . 'Directs');
 $pDirectedBy      = new RDFResource(NS . 'IsDirectedBy');
-$pPartecipates    = new RDFResource(NS . 'Parecipates');
+$pPartecipates    = new RDFResource(NS . 'Partecipates');
 $pPartecipatedBy  = new RDFResource(NS . 'IsPartecipatedBy');
 $pKnows           = new RDFResource(NS . 'Knows');
 
 
 // define taxonomies (RDF triples)
 // and add them to infModel
+
+$infModel->add(new Statement($ktulu,   $subClassOf,  $game));
+$infModel->add(new Statement($ktulu2,  $subClassOf,  $ktulu));
 
 $infModel->add(new Statement($master,  $subClassOf,  $person));
 $infModel->add(new Statement($player,  $subClassOf,  $person));
